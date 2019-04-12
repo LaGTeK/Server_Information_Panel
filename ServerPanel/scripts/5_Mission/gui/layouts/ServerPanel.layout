@@ -1,0 +1,453 @@
+PanelWidgetClass ServerPanelMenu {
+ visible 0
+ disabled 0
+ color 0 0 0 0
+ position 0 -0.05
+ size 1795 908
+ halign center_ref
+ valign center_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 1
+ vexactsize 1
+ scriptclass "ServerPanelMenu"
+ {
+  PanelWidgetClass Background {
+   color 0 0 0 0.6275
+   position 0 0
+   size 1 908
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 1
+   style rover_sim_colorable
+   {
+    PanelWidgetClass title_wrapper {
+     visible 1
+     color 0 0 0 0.7843
+     position 0 0
+     size 1 70
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass title_text {
+       position 0 0
+       size 1 1
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Normal
+       text "Server Panel Information"
+       font "gui/fonts/Metron48"
+       "exact text" 1
+       "text halign" center
+       "text valign" center
+      }
+     }
+    }
+    ButtonWidgetClass btn_cancel {
+     position 15 15
+     size 180 50
+     halign left_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style MenuDefault
+     text "CANCEL"
+     text_proportion 0.8
+    }
+    ButtonWidgetClass btn_website {
+     position 240 15
+     size 200 50
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style MenuDefault
+     text "XXX"
+     text_proportion 0.7
+    }
+    ButtonWidgetClass btn_discord {
+     position 20 15
+     size 200 50
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style MenuDefault
+     text "XXX"
+     text_proportion 0.7
+     switch normal
+    }
+    MultilineTextWidgetClass text_name {
+     ignorepointer 1
+     position 15 80
+     size 1315 50
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "XXX"
+     "exact text" 1
+     text_proportion 0.8
+     "text valign" center
+     wrap 0
+    }
+    PanelWidgetClass PanelPlayerInformation {
+     ignorepointer 1
+     position 1335 80
+     size 450 750
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style rover_sim_black
+     {
+      TextWidgetClass PlayerInformationTitle {
+       ignorepointer 1
+       keepsafezone 0
+       color 0.7216 0.2667 0.2667 1
+       position 0 0
+       size 450 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style Bold
+       text "Player Informations"
+       "text halign" center
+       "text valign" center
+      }
+      TextWidgetClass Health {
+       ignorepointer 1
+       position 10 103
+       size 205 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "Health : "
+       "text halign" right
+       "text valign" center
+      }
+      TextWidgetClass txt_health {
+       ignorepointer 1
+       position 225 103
+       size 215 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "XXX"
+       "text valign" center
+      }
+      TextWidgetClass Blood {
+       ignorepointer 1
+       position 10 155
+       size 205 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "Blood : "
+       "text halign" right
+       "text valign" center
+      }
+      TextWidgetClass txt_blood {
+       ignorepointer 1
+       position 225 155
+       size 215 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "XXX"
+       "exact text" 0
+       "text valign" center
+      }
+      TextWidgetClass TextWidget4 {
+       ignorepointer 1
+       position 10 208
+       size 86 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "Pos."
+       "text valign" center
+      }
+      TextWidgetClass txt_position {
+       ignorepointer 1
+       position 104 208
+       size 335 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "XXX"
+       "exact text" 0
+       text_proportion 0.9
+       "text valign" center
+      }
+      PanelWidgetClass PanelWidget0 {
+       ignorepointer 1
+       color 0.298 0.298 0.298 1
+       position 0 263
+       size 448 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style editor_selection
+       {
+        TextWidgetClass OnlinePlayerTitle {
+         ignorepointer 1
+         color 0.7216 0.2667 0.2667 1
+         position 0 0
+         size 448 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         text "Online Players"
+         "text color" 0.7216 0.2667 0.2667 1
+         "exact text" 0
+         "text halign" center
+         "text valign" center
+        }
+       }
+      }
+      TextWidgetClass txt_Nickname {
+       ignorepointer 1
+       position 10 51.63
+       size 430 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "XXX"
+       "text halign" center
+       "text valign" center
+      }
+      TextListboxWidgetClass Player_List {
+       ignorepointer 0
+       position 10 315
+       size 435 430
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style Default
+       "no focus" 1
+       "title visible" 0
+       lines 15
+      }
+      ImageWidgetClass ImagePlayerInfo {
+       visible 1
+       ignorepointer 1
+       position 0 105
+       size 450 645
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       imageTexture "{1C4C349D0F4C7458}ServerPanel/scripts/5_Mission/gui/imageset/PlayerInfo.edds"
+       mode opaque
+       "src alpha" 0
+       "no wrap" 0
+       stretch 1
+      }
+     }
+    }
+    ButtonWidgetClass btn_close_widget {
+     position 1730.60999 10.7183
+     size 48 48
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     {
+      ImageWidgetClass btn_close0 {
+       ignorepointer 1
+       position 0.74 0.74
+       size 48 48
+       halign right_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       image0 "set:dayz_gui image:Close"
+       mode blend
+       "src alpha" 1
+      }
+     }
+    }
+    FrameWidgetClass SPTabber {
+     ignorepointer 1
+     position 0 0
+     size 1795 908
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     priority 1
+     draggable 0
+     scriptclass "TabberUI"
+     {
+      WrapSpacerWidgetClass TabBar {
+       ignorepointer 1
+       color 0.2588 0.2588 0.2588 1
+       position 15 135
+       size 1315 48
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style DayZDefaultPanel
+       {
+        GridSpacerWidgetClass SPTab_Control_Container {
+         ignorepointer 1
+         position 14.9974 140
+         size 1315 50
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Colorable
+         Padding 0
+         Margin 0
+         Columns 4
+         Rows 1
+         {
+          ButtonWidgetClass ButtonTab_Description {
+           position 10 10
+           size 48 48
+           hexactpos 1
+           vexactpos 1
+           hexactsize 1
+           vexactsize 1
+           text "DESCRIPTION"
+           text_proportion 0.8
+          }
+          ButtonWidgetClass ButtonTab_Rules {
+           position 10 10
+           size 48 48
+           hexactpos 1
+           vexactpos 1
+           hexactsize 1
+           vexactsize 1
+           text "RULES"
+           text_proportion 0.8
+          }
+          ButtonWidgetClass ButtonTab_2 {
+           position 10 10
+           size 48 48
+           hexactpos 1
+           vexactpos 1
+           hexactsize 1
+           vexactsize 1
+           text "XXX"
+           text_proportion 0.8
+          }
+          ButtonWidgetClass ButtonTab_3 {
+           position 10 10
+           size 48 48
+           hexactpos 1
+           vexactpos 1
+           hexactsize 1
+           vexactsize 1
+           text "XXX"
+           text_proportion 0.8
+          }
+         }
+        }
+       }
+      }
+      TextListboxWidgetClass Tab_0 {
+       visible 1
+       ignorepointer 0
+       position 15 190
+       size 1315 640
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       scaled 1
+       style Default
+       lines 30
+       "highlight row" 0
+       font "gui/fonts/Metron"
+      }
+      TextListboxWidgetClass Tab_1 {
+       visible 1
+       ignorepointer 0
+       position 15 190
+       size 1315 640
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style Default
+       lines 30
+       "highlight row" 0
+       font "gui/fonts/Metron"
+      }
+      TextListboxWidgetClass Tab_2 {
+       visible 1
+       ignorepointer 0
+       position 15 190
+       size 1315 640
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style Default
+       lines 30
+       "highlight row" 0
+       font "gui/fonts/Metron"
+      }
+      TextListboxWidgetClass Tab_3 {
+       visible 1
+       ignorepointer 0
+       position 15 190
+       size 1315 640
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       style Default
+       lines 30
+       "highlight row" 0
+       font "gui/fonts/Metron"
+      }
+     }
+    }
+    ButtonWidgetClass btn_donate {
+     position 460 15
+     size 200 50
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style MenuDefault
+     text "XXX"
+     text_proportion 0.7
+    }
+   }
+  }
+ }
+}
