@@ -41,16 +41,33 @@ class ServerPanelBase {
 	}
 
 	void OnServerReady() {
-		GetConfig().reloadTab();
+		GetConfig().reloadConfig();
+		GetConfig().reloadTab();		
+
 		sServerDescription = GetConfig().GetDescriptionData();
 		sServerRules = GetConfig().GetRulesData();
-		sServerTab2 = GetConfig().GetTab2Data();
-		sServerTab3 = GetConfig().GetTab3Data();
+
+		string buttonTab2Name = GetConfig().GetButtonTab2Name();; 
+		string buttonTab3Name = GetConfig().GetButtonTab3Name();
+
+		if (buttonTab2Name == "") {
+			sServerTab2 = NULL;
+		}
+		else {
+			sServerTab2 = GetConfig().GetTab2Data();
+		}
+		if (buttonTab3Name == "") {
+			sServerTab3 = NULL;
+		}
+		else {
+			sServerTab3 = GetConfig().GetTab3Data();
+		}
+		
 		ServerPanelBase.Log("ServerPanelI", "SERVER READY");
 	}
 
 	void OnClientReady() {
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
+		//GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
 		ServerPanelBase.Log("ServerPanelI", "CLIENT READY");
 	}
 

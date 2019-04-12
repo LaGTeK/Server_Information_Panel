@@ -27,7 +27,7 @@ modded class MissionGameplay {
 		if ( !m_ServerPanelMenu ) {
 			m_ServerPanelMenu = new ref ServerPanelMenu;
 			m_ServerPanelMenu.Init();
-			//GetRPCManager().AddRPC( "ServerPanelI", "SyncKey", m_ServerPanelMenu, SingeplayerExecutionType.Client );
+			GetRPCManager().AddRPC( "ServerPanelI", "SyncKey", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncButtons", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncSNameTabs", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncTab", m_ServerPanelMenu, SingeplayerExecutionType.Client );
