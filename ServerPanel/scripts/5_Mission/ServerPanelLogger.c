@@ -3,7 +3,6 @@ class ServerPanelLogger {
 	private bool defaultIO = true;
 
 	void ServerPanelLogger() {
-		FindFP();
 	}
 
 	void Log(string module, string txt) {
@@ -22,53 +21,54 @@ class ServerPanelLogger {
 		}
 	}
 
-	private void FindFP() {
-		string temp_path = "";
-		/*if (GetCLIParam("spanelDir", temp_path)) {
-			Log("ServerPanelLogger", "INFO: Will try to create log file SP_Log.txt in custom directory: " + temp_path);
-			SetDir(temp_path);
-		}*/
-		/*if (defaultIO) {
-			temp_path = "$profile:ServerPanel\\";
-			Log("ServerPanelLogger", "INFO: Will try to create log file SP_Log.txt in profile directory: " + temp_path);
-			SetDir(temp_path);
-		}*/
+	void SwitchToCustomIO() {
+		string tempPath = "";
+		string realProfiles = ServerPanelBase.GetConfig().GetProfilesPath();
+		if (!defaultIO) return;
+
 		if (defaultIO) {
-			temp_path = "$profile:";
-			Log("ServerPanelLogger", "INFO: Will try to create log file SP_Log.txt in profile root: " + temp_path);
-			SetDir(temp_path);
+			tempPath = "$profile:";
+			if (realProfiles != "") Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + realProfiles);
+				else Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + tempPath);
+			SetDir(tempPath);
 		}
-		//if (defaultIO) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
+		if (defaultIO) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
 	}
 
 	private void SetDir(string fPath) {
-		string tPath = fPath + "SP_Log.txt";
+		string tPath = fPath + "ServerPanel_" + GetDate(true) + ".log";
 		if (!FileExist(fPath)) MakeDirectory(fPath);
 
 		FileHandle logFile = OpenFile(tPath, FileMode.APPEND);
 		if (logFile != 0) {
+			Log("ServerPanelLogger", "INFO: Switching to logfile: " + tPath);
+			defaultIO = false;
 			file_path = tPath;
 			FPrintln(logFile, "---------------------------------------------");
 			FPrintln(logFile, "ServerPanel log started at " + GetDate());
 			FPrintln(logFile, "");
-			FPrintln(logFile, "Will use script.log");
 			CloseFile(logFile);
 		} else {
 			if (FileExist(tPath)) {
 				Log("ServerPanelLogger", "INFO: Can't write to file " + tPath);
 			} else {
-				Log("ServerPanelLogger", "INFO: Can't create file " + tPath + " (try creating one manually)");
+				Log("ServerPanelLogger", "INFO: Can't create file " + tPath + " (files per directory limit exceeded?)");
 			}
 		}
 	}
 
-	static string GetDate() {
+	static private string GetDate(bool fileFriendly = false) {
 		int year, month, day, hour, minute, second;
 
 		GetYearMonthDay(year, month, day);
 		GetHourMinuteSecond(hour, minute, second);
 
 		string date = day.ToStringLen(2) + "." + month.ToStringLen(2) + "." + year.ToStringLen(4) + " " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2) + ":" + second.ToStringLen(2);
+		if (fileFriendly) {
+			date.Replace(" ", "_");
+			date.Replace(".", "-");
+			date.Replace(":", "-");
+		}
 
 		return date;
 	}

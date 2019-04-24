@@ -8,6 +8,8 @@ class ServerPanelConfig {
 	static const string TAB3_PATH = "$profile:\\ServerPanel\\ServerTab3.txt";
 	static const string PROFILE_PATH = "$profile:\\ServerPanel\\";
 	private string CFG_PATH = "$saves:";
+	private string CFG_PATH_SERVER = "$profile:";
+	protected string realProfilesPath = "";
 
 	private string SERVERNAME ="Server Panel";
 	private string BUTTON1NAME;
@@ -20,31 +22,45 @@ class ServerPanelConfig {
 	private string BUTTONTAB3NAME;
 	private int SPMENUKEY = KeyCode.KC_PAUSE;
 	private int PLAYERINFO = 1;
+	protected bool DEFAULTIOFLAG = false;
 	//private int PLAYERSTAT;
 	//private int SPMENUKEY;
 	private ref TStringArray sServerDescription = new TStringArray;
 	private ref TStringArray sServerRules = new TStringArray;
 	private ref TStringArray sServerTab2 = new TStringArray;
 	private ref TStringArray sServerTab3 = new TStringArray;
+	
 
 	void ServerPanelConfig() {
-		/*if (GetGame().IsMultiplayer() && GetGame().IsServer()) {
-			CFG_PATH = PROFILE_PATH;
-			reloadConfig();
-			if (!FileExist("$profile:\\ServerPanel\\")) MakeDirectory(PROFILE_PATH);
-			if (FileExist(SP_CONFIG_PATH)) {
-				reloadConfig();
+		if (GetGame().IsMultiplayer() && GetGame().IsServer()) {
+			if (!GetCLIParam("profiles", realProfilesPath)) ServerPanelBase.Log( "ServerPanelConfig", "WARN: \"-profiles=<FOLDERNAME>\" launch parameter is NOT set!!!" );
+				else ServerPanelBase.Log( "ServerPanelConfig", "INFO: Profile dir is: " + realProfilesPath);
+
+			CFG_PATH = CFG_PATH_SERVER;
+
+			if (!FileExist(CFG_PATH + "ServerPanel\\")) MakeDirectory(CFG_PATH + "\\ServerPanel\\");
+			if (FileExist(CFG_PATH + "ServerPanel\\")) {
+				if (FileExist(CFG_PATH + "ServerPanelNew.cfg")) CopyFile(CFG_PATH + "ServerPanelNew.cfg", CFG_PATH + "ServerPanel\\ServerPanelNew.cfg");
+				if (FileExist(CFG_PATH + "ServerPanelConfig.json")) CopyFile(CFG_PATH + "ServerPanelConfig.json", CFG_PATH + "ServerPanel\\ServerPanelConfig.json");
+				DeleteFile(CFG_PATH + "ServerPanelNew.cfg");
+				DeleteFile(CFG_PATH + "ServerPanelConfig.json");
+
+				CFG_PATH += "ServerPanel\\";
+			} else {
+				if (realProfilesPath != "") ServerPanelBase.Log( "ServerPanelConfig", "WARN: Can't create ServerPanel subfolder (" + realProfilesPath + "\\ServerPanel\\), please create one manually!" );
+					else ServerPanelBase.Log( "ServerPanelConfig", "WARN: Can't create ServerPanel subfolder (" + CFG_PATH + "ServerPanel\\), please create one manually!" );
 			}
-			else {
-				readOldConfig();
-			}
-		}*/
+		}
+
+		if (realProfilesPath != "") ServerPanelBase.Log( "ServerPanelConfig", "INFO: Config files will be loaded from: " + realProfilesPath );
+			else ServerPanelBase.Log( "ServerPanelConfig", "INFO: Config files will be loaded from: " + CFG_PATH );
 		reloadTab();
-		//reloadKey();
 		reloadConfig();
+
 	}
 
-	void ~ServerPanelConfig() {
+	string GetProfilesPath() {
+		return realProfilesPath;
 	}
 
 	string GetServerName() {
@@ -79,6 +95,9 @@ class ServerPanelConfig {
 	}
 	int GetPlayerInfo() {
 		return PLAYERINFO;
+	}
+	bool IsDefaultIO() {
+		return DEFAULTIOFLAG;
 	}
 	ref TStringArray GetDescriptionData(){
 		return sServerDescription;
@@ -206,6 +225,7 @@ class ServerPanelConfig {
 		newSPConfigData.ButtonTab2Name = "TEST1";
 		newSPConfigData.ButtonTab3Name = "TEST2";		
 		newSPConfigData.PlayerInfo = 1;
+		newSPConfigData.UseScriptLog = DEFAULTIOFLAG;
 
 		JsonFileLoader<SPJsonConfig>.JsonSaveFile(SP_CONFIG_PATH, newSPConfigData);
 	}
@@ -236,6 +256,7 @@ class ServerPanelConfig {
 		newSPConfigData.ButtonTab2Name = BUTTONTAB2NAME;
 		newSPConfigData.ButtonTab3Name = BUTTONTAB3NAME;		
 		newSPConfigData.PlayerInfo = PLAYERINFO;
+		newSPConfigData.UseScriptLog = DEFAULTIOFLAG;
 
 		JsonFileLoader<SPJsonConfig>.JsonSaveFile(SP_CONFIG_PATH, newSPConfigData);
 	}
@@ -382,6 +403,7 @@ class ServerPanelConfig {
 		BUTTONTAB2NAME = newSPConfigData.ButtonTab2Name;
 		BUTTONTAB3NAME = newSPConfigData.ButtonTab3Name;
 		PLAYERINFO = newSPConfigData.PlayerInfo;
+		DEFAULTIOFLAG = newSPConfigData.UseScriptLog;
 	}
 
 	/*void reloadKey()	{

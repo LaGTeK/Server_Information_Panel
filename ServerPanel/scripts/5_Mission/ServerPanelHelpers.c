@@ -19,6 +19,7 @@ class SPanelPlayer {
 class SPJsonConfig {
 	string ServerName, Button1Name, Button1Link, Button2Name, Button2Link, Button3Name, Button3Link, ButtonTab2Name, ButtonTab3Name;
 	int PlayerInfo;
+	bool UseScriptLog;
 };
 
 class SPJsonKeyConfig {

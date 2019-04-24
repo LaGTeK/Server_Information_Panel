@@ -12,6 +12,9 @@ class ServerPanelBase {
 	int playerInfo, SPmenuKey;
 
 	void ServerPanelBase() {
+		if (!GetConfig().IsDefaultIO()) {
+			GetLogger().SwitchToCustomIO();
+		}
 		//GetRPCManager().AddRPC( "ServerPanelI", "SyncKeyRequest", this, SingeplayerExecutionType.Client );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncButtonRequest", this, SingeplayerExecutionType.Client );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncSNameTabsRequest", this, SingeplayerExecutionType.Client );
