@@ -56,15 +56,11 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab3List.Show(false);
 		m_ImagePlayerInfo.Show(false);
 
-		m_TitlePanel.SetText( "Server Panel Information by LaGTeK" + GetDate());
-
 		return layoutRoot;
 	}
 
 	void ServerPanelMenu()	{
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncKeyRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
+		m_TitlePanel.SetText( "Server Panel Information by LaGTeK" + GetDate());
 	}
 
 	override void OnShow()	{
@@ -77,10 +73,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetMission().PlayerControlEnable();
 		
 		//GetRPCManager().SendRPC( "ServerPanelI", "SyncMenuKeyRequest", new Param1< int >( 0 ), true, NULL );
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabsRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabsRequest", new Param1< int >( 0 ), true, NULL );
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
 
 		//PlayerBase player = GetGame().GetPlayer();
 	}
@@ -292,8 +288,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 			sUpTime = Math.Round(playerDataC[0]/1000);
 		}
-
-		m_TitlePanel.SetText("ServerPanel by LaGTeK | " + GetDate());
 
 		if (layoutRoot.IsVisible()) {
 			int y =1;

@@ -13,7 +13,7 @@ PanelWidgetClass ServerPanelMenu {
  scriptclass "ServerPanelMenu"
  {
   PanelWidgetClass Background {
-   color 0 0 0 0.6275
+   color 0 0 0 0.8627
    position 0 0
    size 1 908
    hexactpos 1
