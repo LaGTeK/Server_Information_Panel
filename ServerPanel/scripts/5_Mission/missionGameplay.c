@@ -4,11 +4,8 @@ modded class MissionGameplay {
 
 	void MissionGameplay() {
 		ServerPanelBase.Log("ServerPanelI", "ServerPanel Loaded Client side");
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncKey", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabsRequest", new Param1< int >( 0 ), true, NULL );
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
 		
 	}
 
@@ -26,14 +23,15 @@ modded class MissionGameplay {
 	private ref ServerPanelMenu GetServerPanelMenu() {
 		if ( !m_ServerPanelMenu ) {
 			m_ServerPanelMenu = new ref ServerPanelMenu;
+			if (m_ServerPanelMenu != NULL)
+			{
 			m_ServerPanelMenu.Init();
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncKey", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncButtons", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncSNameTabs", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncTab", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncPlayers", m_ServerPanelMenu, SingeplayerExecutionType.Client );
-
-			
+			}
 		}
 		return m_ServerPanelMenu;
 	}
@@ -58,5 +56,20 @@ modded class MissionGameplay {
 				break;
 			}
 		}
+	}
+
+	void ShowPanelRemote( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
+	{
+        //Answer call only when client...MissionGameplay runs client only anyway but still add it :P
+        if (type == CallType.Client)
+        {
+        	//Check if sender is still connected to not trigger an Null pointers
+        	if (sender != NULL){
+        		//Show menu ( you can call another function from here to show menu if you have made a custom one )
+        		//you might need to make a loop to check if player's screen is not black or has another GUI....then display yours
+        		GetGame().GetUIManager().ShowScriptedMenu( GetServerPanelMenu() , NULL );
+				PlayerControlEnable();
+        	}
+        }
 	}
 };
