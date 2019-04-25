@@ -26,7 +26,7 @@ On server:
 If u put some comment, they will be displayed to players
 
 ## Old installation
-
+- `UseScriptLog` param has been added, u have to set it up manualy in ur json file
 -   `ServerName.txt` & `ServerConfigNew.cfg` are not used used anymore, these files should be deleted and remplaced with `ServerPanelConfig.json` automaticatly
 
 <!--# How to Change default MenuKey
