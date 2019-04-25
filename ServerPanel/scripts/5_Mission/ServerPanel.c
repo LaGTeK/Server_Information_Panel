@@ -8,14 +8,12 @@ class ServerPanelBase {
 	ref TStringArray sServerTab2 = new TStringArray;
 	ref TStringArray sServerTab3 = new TStringArray;
 
-	//string btn1name, btn2name, btn1link, btn2link, btn3link, btn3name, buttonTab2Name, buttonTab3Name, sServerName;
 	int playerInfo, SPmenuKey;
 
 	void ServerPanelBase() {
 		if (!GetConfig().IsDefaultIO()) {
 			GetLogger().SwitchToCustomIO();
 		}
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncKeyRequest", this, SingeplayerExecutionType.Client );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncButtonRequest", this, SingeplayerExecutionType.Client );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncSNameTabsRequest", this, SingeplayerExecutionType.Client );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncTabsRequest", this, SingeplayerExecutionType.Client );
@@ -44,8 +42,8 @@ class ServerPanelBase {
 	}
 
 	void OnServerReady() {
-		GetConfig().reloadConfig();
-		GetConfig().reloadTab();		
+		//GetConfig().reloadConfig();
+		//GetConfig().reloadTab();		
 
 		sServerDescription = GetConfig().GetDescriptionData();
 		sServerRules = GetConfig().GetRulesData();
@@ -70,24 +68,14 @@ class ServerPanelBase {
 	}
 
 	void OnClientReady() {
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
+		
 		ServerPanelBase.Log("ServerPanelI", "CLIENT READY");
 	}
-
-	/*void SyncKeyRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-
-		if (type == CallType.Server && sender != NULL) {
-			GetConfig().reloadKey();
-			ref Param1<int> m_KeyBTN =  new Param1 <int> (GetConfig().GetSPMenuKey());
-			GetRPCManager().SendRPC( "ServerPanelI", "SyncKey", m_KeyBTN , true, sender );
-			ServerPanelBase.Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - Key sync");
-		}
-	}*/
 
 	void SyncButtonRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 
 		if (type == CallType.Server && sender != NULL) {
-			GetConfig().reloadConfig();
+			//GetConfig().reloadConfig();
 			ref Param6<string, string, string, string, string, string> m_DataBTN =  new Param6 <string, string, string, string, string, string> (GetConfig().GetButton1Name(), GetConfig().GetButton1Link(), GetConfig().GetButton2Name(), GetConfig().GetButton2Link(), GetConfig().GetButton3Name(), GetConfig().GetButton3Link());
 			GetRPCManager().SendRPC( "ServerPanelI", "SyncButtons", m_DataBTN , true, sender );
 			ServerPanelBase.Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - Button sync");
@@ -97,7 +85,7 @@ class ServerPanelBase {
 	void SyncSNameTabsRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 
 		if (type == CallType.Server && sender != NULL){
-			GetConfig().reloadConfig();
+			//GetConfig().reloadConfig();
 			ref Param4<string, string, string, int> m_DataTAB =  new Param4 <string, string, string, int> (GetConfig().GetServerName(), GetConfig().GetButtonTab2Name(), GetConfig().GetButtonTab3Name(), GetConfig().GetPlayerInfo());
 			GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabs", m_DataTAB, true, sender );
 			ServerPanelBase.Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - NameTabs sync");
