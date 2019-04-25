@@ -1,6 +1,6 @@
 class ServerPanelConfig {
 	static const string SP_OLD_CONFIG_PATH = "$profile:\\ServerPanel\\ServerPanelNew.cfg";
-	static const string SP_CONFIGKEY_PATH = "$profile:\\ServerPanel\\ServerPanelKey.json";
+	static const string SP_CONFIGKEY_PATH = "$saves:ServerPanelKey.json";
 	static const string SP_CONFIG_PATH = "$profile:\\ServerPanel\\ServerPanelConfig.json";
 	static const string DESCRIPTION_PATH = "$profile:\\ServerPanel\\ServerDescription.txt";
 	static const string RULES_PATH = "$profile:\\ServerPanel\\ServerRules.txt";
@@ -50,13 +50,16 @@ class ServerPanelConfig {
 				if (realProfilesPath != "") ServerPanelBase.Log( "ServerPanelConfig", "WARN: Can't create ServerPanel subfolder (" + realProfilesPath + "\\ServerPanel\\), please create one manually!" );
 					else ServerPanelBase.Log( "ServerPanelConfig", "WARN: Can't create ServerPanel subfolder (" + CFG_PATH + "ServerPanel\\), please create one manually!" );
 			}
+		reloadTab();
+		reloadConfig();
 		}
 
 		if (realProfilesPath != "") ServerPanelBase.Log( "ServerPanelConfig", "INFO: Config files will be loaded from: " + realProfilesPath );
-			else ServerPanelBase.Log( "ServerPanelConfig", "INFO: Config files will be loaded from: " + CFG_PATH );
-		reloadTab();
-		reloadConfig();
-
+		else ServerPanelBase.Log( "ServerPanelConfig", "INFO: Config files will be loaded from: " + CFG_PATH );
+		if (GetGame().IsMultiplayer() && GetGame().IsClient()) {
+			reloadKey();
+		}
+		
 	}
 
 	string GetProfilesPath() {
@@ -230,15 +233,15 @@ class ServerPanelConfig {
 		JsonFileLoader<SPJsonConfig>.JsonSaveFile(SP_CONFIG_PATH, newSPConfigData);
 	}
 
-	/*private void createDefaultKey()	{
+	private void createDefaultKey()	{
 		ServerPanelBase.Log( "ServerPanelConfig", "Creating ServerPanelKey.json" );
 
 		ref SPJsonKeyConfig newSPConfigKey = new SPJsonKeyConfig();
 
-		newSPConfigKey.SPMenuKey = "KC_PAUSE";
+		newSPConfigKey.SPMenuKey = "KC_PAUSE";		
 
 		JsonFileLoader<SPJsonKeyConfig>.JsonSaveFile(SP_CONFIGKEY_PATH, newSPConfigKey);
-	}*/
+	}
 
 	private void createOldDefaultCFG()	{
 
@@ -359,17 +362,18 @@ class ServerPanelConfig {
 	}
 
 	void reloadTab(){
+		if (GetGame().IsMultiplayer() && GetGame().IsServer()) {
+			if (!FileExist(DESCRIPTION_PATH)) CreateNewServerDescription(PROFILE_PATH);
+			if (!FileExist(RULES_PATH)) CreateNewServerRules(PROFILE_PATH);
+			if (!FileExist(TAB3_PATH)) CreateNewServerTab3(PROFILE_PATH);
+			if (!FileExist(TAB2_PATH)) CreateNewServerTab2(PROFILE_PATH);
 
-		if (!FileExist(DESCRIPTION_PATH)) CreateNewServerDescription(PROFILE_PATH);
-		if (!FileExist(RULES_PATH)) CreateNewServerRules(PROFILE_PATH);
-		if (!FileExist(TAB3_PATH)) CreateNewServerTab3(PROFILE_PATH);
-		if (!FileExist(TAB2_PATH)) CreateNewServerTab2(PROFILE_PATH);
-
-		if (FileExist(DESCRIPTION_PATH) && FileExist(RULES_PATH) && FileExist(TAB2_PATH) && FileExist(TAB3_PATH)) {
-			getDescriptionContent();
-			getRulesContent();
-			getTab2Content();
-			getTab3Content();
+			if (FileExist(DESCRIPTION_PATH) && FileExist(RULES_PATH) && FileExist(TAB2_PATH) && FileExist(TAB3_PATH)) {
+				getDescriptionContent();
+				getRulesContent();
+				getTab2Content();
+				getTab3Content();
+			}
 		}
 	}
 
@@ -406,7 +410,7 @@ class ServerPanelConfig {
 		DEFAULTIOFLAG = newSPConfigData.UseScriptLog;
 	}
 
-	/*void reloadKey()	{
+	void reloadKey()	{
 		ref SPJsonKeyConfig newSPConfigKey;
 
 		if (FileExist(SP_CONFIGKEY_PATH)) {
@@ -419,19 +423,23 @@ class ServerPanelConfig {
 			JsonFileLoader<SPJsonKeyConfig>.JsonLoadFile(SP_CONFIGKEY_PATH, newSPConfigKey);
 		}
 
-		//if (GetGame().IsClient() || !GetGame().IsMultiplayer()) { //TO BE CHANGED v0.6 - GUI CFG
+		if (GetGame().IsClient() || !GetGame().IsMultiplayer()) { //TO BE CHANGED v0.6 - GUI CFG
 		string tempKeyCode;
 		for (int i = 0; i < 126; ++i) {
 			tempKeyCode = typename.EnumToString(KeyCode, i);
 			if (newSPConfigKey.SPMenuKey == tempKeyCode) {
 				SPMENUKEY = i;
+				ServerPanelBase.Log( "ServerPanelConfig", "INFO: Menu key set to " + SPMENUKEY.ToString() );
 				ServerPanelBase.Log( "ServerPanelConfig", "INFO: Menu key set to " + tempKeyCode );
 				break;
 			}
 		}
 		if ((SPMENUKEY == KeyCode.KC_PAUSE) && (newSPConfigKey.SPMenuKey != "KC_PAUSE"))
-			ServerPanelBase.Log( "ServerPanelConfig", "WARN: Cannot set menu key to " + newSPConfigKey.SPMenuKey + " - unknown keycode" );
-	}*/
+		ServerPanelBase.Log( "ServerPanelConfig", "WARN: Cannot set menu key to " + newSPConfigKey.SPMenuKey + " - unknown keycode" );
+		if ((SPMENUKEY == KeyCode.KC_PAUSE) && (newSPConfigKey.SPMenuKey == "KC_PAUSE"))
+		ServerPanelBase.Log( "ServerPanelConfig", "Menu key is set to " + newSPConfigKey.SPMenuKey );
+		}
+	}
 
 	private void CreateNewServerTab2(string dPath) {
 		if (!FileExist(dPath + "ServerTab2.txt")) {
