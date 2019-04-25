@@ -5,8 +5,7 @@ modded class MissionGameplay {
 	void MissionGameplay() {
 		ServerPanelBase.Log("ServerPanelI", "ServerPanel Loaded Client side");
 
-		GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
-		
+		//GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
 	}
 
     void ~MissionGameplay()	{
@@ -26,7 +25,8 @@ modded class MissionGameplay {
 			if (m_ServerPanelMenu != NULL)
 			{
 			m_ServerPanelMenu.Init();
-			GetRPCManager().AddRPC( "ServerPanelI", "SyncKey", m_ServerPanelMenu, SingeplayerExecutionType.Client );
+			GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", m_ServerPanelMenu, SingeplayerExecutionType.Client );
+			//GetRPCManager().AddRPC( "ServerPanelI", "SyncKey", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncButtons", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncSNameTabs", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 			GetRPCManager().AddRPC( "ServerPanelI", "SyncTab", m_ServerPanelMenu, SingeplayerExecutionType.Client );
@@ -67,6 +67,7 @@ modded class MissionGameplay {
         	if (sender != NULL){
         		//Show menu ( you can call another function from here to show menu if you have made a custom one )
         		//you might need to make a loop to check if player's screen is not black or has another GUI....then display yours
+				ServerPanelBase.Log("ServerPanelI", "ShowPanelRemote");
         		GetGame().GetUIManager().ShowScriptedMenu( GetServerPanelMenu() , NULL );
 				PlayerControlEnable();
         	}

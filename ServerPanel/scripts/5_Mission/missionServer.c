@@ -6,7 +6,6 @@ modded class MissionServer {
 	}
 
     void ~MissionServer() {
-        
 	}
 
 	private ref ServerPanelBase GetServerPanelBase() {
@@ -20,6 +19,5 @@ modded class MissionServer {
 		super.OnInit();
 		ServerPanelBase.Log("ServerPanelI", "SERVER PANEL INIT");
 		GetServerPanelBase().OnServerReady();
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncMenuKeyRequest", this, SingeplayerExecutionType.Client );
 	}
 };

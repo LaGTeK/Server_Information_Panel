@@ -5,9 +5,7 @@ modded class DayZGame {
 	}
 
 	void DisplayPanel() {
-		GetRPCManager().SendRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", NULL, true);
-		//GetRPCManager().SendRPC( "ServerPanelI", "RPC_ServerPanelMenu", new Param1< bool >( true ), true, NULL );
-		//UIManager UIMgr = GetGame().GetUIManager();
-		//UIMgr.ShowScriptedMenu( GetServerPanelMenu() , NULL )
+			Print("DisplayPanel");
+			GetRPCManager().SendRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", new Param1< int >( 0 ), true, NULL);
 	}
 }

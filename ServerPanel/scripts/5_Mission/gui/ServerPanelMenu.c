@@ -1,11 +1,11 @@
 class ServerPanelMenu extends UIScriptedMenu {
 	PlayerBase Player;
 	private Widget m_WidgetRoot;
-	protected ButtonWidget m_BtnCancel, m_BtnRight, m_BtnLeft, m_BtnClose, m_BtnDonate, m_btnDescription, m_btnRules, m_btnTabTitle2, m_btnTabTitle3;
-	protected TextListboxWidget m_PlayersList, m_DescriptionList, m_RulesList, m_Tab2List, m_Tab3List;
-	protected MultilineTextWidget m_ServerName;
-	protected ImageWidget m_ImagePlayerInfo;
-	protected TextWidget m_TitlePanel, m_PlayerTitle, m_TextPlayerNickname, m_TextPlayerBlood, m_TextPlayerHealth, m_TextPlayerPos, m_tabTitle2, m_tabTitle3;
+	private ButtonWidget m_BtnCancel, m_BtnRight, m_BtnLeft, m_BtnClose, m_BtnDonate, m_btnDescription, m_btnRules, m_btnTabTitle2, m_btnTabTitle3;
+	private TextListboxWidget m_PlayersList, m_DescriptionList, m_RulesList, m_Tab2List, m_Tab3List;
+	private MultilineTextWidget m_ServerName;
+	private ImageWidget m_ImagePlayerInfo;
+	private TextWidget m_TitlePanel, m_PlayerTitle, m_TextPlayerNickname, m_TextPlayerBlood, m_TextPlayerHealth, m_TextPlayerPos, m_tabTitle2, m_tabTitle3;
 	private string m_Link1, m_Link2, m_Link3, m_Tab1name, m_Tab2name;
 	private int SPMENUKEY;
 
@@ -37,13 +37,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_btnTabTitle2 = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ) );
 		m_btnTabTitle3 = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ) );
 
-
-		//HTML Element
-		/*Class.CastTo(m_DescriptionList, layoutRoot.FindAnyWidget("Tab_0"));
-		Class.CastTo(m_RulesList, layoutRoot.FindAnyWidget("Tab_1"));
-		Class.CastTo(m_Tab2List, layoutRoot.FindAnyWidget("Tab_2"));
-		Class.CastTo(m_Tab3List, layoutRoot.FindAnyWidget("Tab_3"));*/
-
 		m_ServerName = MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ) );
 		m_DescriptionList = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_0" ) );
 		m_RulesList = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_1" ) );
@@ -59,8 +52,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 		return layoutRoot;
 	}
 
-	void ServerPanelMenu()	{
-		m_TitlePanel.SetText( "Server Panel Information by LaGTeK" + GetDate());
+	void ServerPanelMenu()	{	
+		//GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
 	}
 
 	override void OnShow()	{
@@ -71,14 +64,13 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetInput().ChangeGameFocus(1);
 
 		GetGame().GetMission().PlayerControlEnable();
-		
-		//GetRPCManager().SendRPC( "ServerPanelI", "SyncMenuKeyRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabsRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
 
-		//PlayerBase player = GetGame().GetPlayer();
+		m_TitlePanel.SetText( "Server Panel Information by LaGTeK" + GetDate());
+		
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabsRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
 	}
 
 	override void OnHide()	{
@@ -100,21 +92,20 @@ class ServerPanelMenu extends UIScriptedMenu {
 		return date;
 	}
 
-	/*void SyncKey( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		Param1<int> SyncKey;
-		int SPMenuKey;
-
-		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
-			if ( !ctx.Read( SyncKey ) ) {
-				ServerPanelBase.Log("ServerPanelFile", "Name sync files read error - possible version mismatch");
-				return;
-			}
-			SPMenuKey = SyncKey.param1;
-
-		}
-		SPMENUKEY = SPMenuKey;
-
-		ServerPanelBase.Log("ServerPanelFile: SPMENUKEY = ", SPMENUKEY.ToString());
+	/*void ShowPanelRemote( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
+	{
+        //Answer call only when client...MissionGameplay runs client only anyway but still add it :P
+        if (type == CallType.Client)
+        {
+        	//Check if sender is still connected to not trigger an Null pointers
+        	if (sender != NULL){
+        		//Show menu ( you can call another function from here to show menu if you have made a custom one )
+        		//you might need to make a loop to check if player's screen is not black or has another GUI....then display yours
+				ServerPanelBase.Log("ServerPanelI", "ShowPanelRemote");
+        		GetGame().GetUIManager().ShowScriptedMenu( GetServerPanelMenu() , NULL );
+				PlayerControlEnable();
+        	}
+        }
 	}*/
 
 	void SyncButtons( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
@@ -146,7 +137,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Link3 = sbtn3link;
 
 		if (layoutRoot.IsVisible()) {
-
+			
 			if (m_Link1 != "" && sbtn1name != "") {
 				m_BtnRight.SetText(sbtn1name);
 				m_BtnRight.Show(true);
@@ -173,12 +164,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 	void SyncSNameTabs( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 		Param4<string, string, string, int> SyncSNameTabS;
-		string sServerName;
-		string sTab1name;
-		string sTab2name;
-		int splayerInfo;
-		int SPMenuKey;
-
+		string sServerName = "";
+		string sTab1name = "";
+		string sTab2name = "";
+		int sPlayerInfo;
 
 		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
 			if ( !ctx.Read( SyncSNameTabS ) ) {
@@ -188,17 +177,16 @@ class ServerPanelMenu extends UIScriptedMenu {
 			sServerName = SyncSNameTabS.param1;
 			sTab1name = SyncSNameTabS.param2;
 			sTab2name = SyncSNameTabS.param3;
-			splayerInfo = SyncSNameTabS.param4;
+			sPlayerInfo = SyncSNameTabS.param4;
 
 		}
 		m_Tab1name = sTab1name;
 		m_Tab2name = sTab2name;
 
-
 		if (layoutRoot.IsVisible()) {
 			m_ServerName.SetText(sServerName);
 
-			if (splayerInfo == 0)
+			if (sPlayerInfo == 0)
 			{
 				m_ImagePlayerInfo.Show(true);
 				m_PlayerTitle.Show(false);
@@ -207,15 +195,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TextPlayerPos.Show(false);
 				m_PlayersList.Show(false);
 			}
-
-			if (m_Tab2name != "") {
-				m_tabTitle3.SetText(m_Tab2name);
-				m_btnTabTitle3.SetText(m_Tab2name);
-				m_btnTabTitle3.Show(true);
-			}
-			else{
-				m_btnTabTitle3.Show(false);
-			}
 			if (m_Tab1name != "") {
 				m_tabTitle2.SetText(m_Tab1name);
 				m_btnTabTitle2.SetText(m_Tab1name);
@@ -223,6 +202,14 @@ class ServerPanelMenu extends UIScriptedMenu {
 			}
 			else{
 				m_btnTabTitle2.Show(false);
+			}
+			if (m_Tab2name != "") {
+				m_tabTitle3.SetText(m_Tab2name);
+				m_btnTabTitle3.SetText(m_Tab2name);
+				m_btnTabTitle3.Show(true);
+			}
+			else{
+				m_btnTabTitle3.Show(false);
 			}
 		}
 	}
@@ -250,12 +237,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 		int i;
 
 		if (layoutRoot.IsVisible()) {
-			//m_DescriptionList.SetText( new Param1<string>(ssServerDesc));
 			for ( i = 0; i < ssServerDesc.Count(); ++i ) {
 				m_DescriptionList.AddItem(ssServerDesc.Get(i), new Param1<string>(ssServerDesc.Get(i)), 0);
-				//sTest.Insert(ssServerDesc.Get(i));
 			}
-			//m_DescriptionList.SetText(sTest.ToString());
 
 			for ( i = 0; i < ssServerRules.Count(); ++i ) {
 				m_RulesList.AddItem(ssServerRules.Get(i), new Param1<string>(ssServerRules.Get(i)), 0);
@@ -311,14 +295,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 			return;
 		}
 	}
-
-	/*void OnKeyPress( int key ) {
-		UIManager UIMgr = GetGame().GetUIManager();
-		if (key == SPMENUKEY) {
-			if (!UIMgr.IsMenuOpen(MENU_INGAME)) UIMgr.CloseAll();
-			return;
-		}
-	}*/
 
 	override bool OnClick( Widget w, int x, int y, int button )	{
 		super.OnClick(w, x, y, button);
