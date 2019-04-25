@@ -12,7 +12,7 @@
 On server:
 
 -   Copy file `LaGTeK.bikey` from `ServerPanel\keys` into server `keys` folder
--   Copy folder `ServerPanel` from mod folder to `[ServerProfilesFolder]`. Default server profiles dir is `%LocalAppData%\DayZ\`
+-   Copy folder `ServerPanel` from mod folder to `[ServerProfilesFolder]`.
 -   Customize your informations from `ServerDescription.txt` and `ServerRules.txt`
     (You are now able to add what u want, i've tried with some special character and only `|` and `#` can't be used ! ) Don't put more than 110 chars per line !
 -   You can now add some Tabs like About or Crafting tab, Customize your informations from `ServerTab2.txt` file, and `ServerTab3.txt`
