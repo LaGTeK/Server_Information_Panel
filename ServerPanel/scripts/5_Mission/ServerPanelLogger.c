@@ -26,13 +26,13 @@ class ServerPanelLogger {
 		string realProfiles = ServerPanelBase.GetConfig().GetProfilesPath();
 		if (!defaultIO) return;
 
-		if (defaultIO) {
+		if (defaultIO==false) {
 			tempPath = "$profile:";
 			if (realProfiles != "") Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + realProfiles);
 				else Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + tempPath);
 			SetDir(tempPath);
 		}
-		if (defaultIO) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
+		if (defaultIO==true) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
 	}
 
 	private void SetDir(string fPath) {
