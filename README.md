@@ -20,36 +20,22 @@ On server:
 -   `ServerPanelConfig.json` is now used to configure your buttons, links and ur Server Name, Don't leave any blank space in Button name & Button Link, follow the exemple. U Can now add more buttons and Tabs are now here. U can also hide player information, it will show just ingame name and a magnific picture :)
 -   U can also leave link blank, the button will disapear, same for tabs
 
-## Be Careful from file structure change At next update
-
-### !!! Comment are not allowed anymore in config files !!!
-If u put some comment, they will be displayed to players
-
-## Old installation
-
+### Old installation
+- `UseScriptLog` param has been added, u have to set it up manualy in ur json file (Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanelConfig.json))
 -   `ServerName.txt` & `ServerConfigNew.cfg` are not used used anymore, these files should be deleted and remplaced with `ServerPanelConfig.json` automaticatly
 
-<!--# How to Change default MenuKey
 
--   Default menu key is `*` for AZERTY Keyboards or  `\` for QWERTY Keyboards
+## Q: Can i change default menu key ?
 
-## Server Owners
+A: Sure, U can now change default menu key client side with editing `ServerPanelKey.json` file in your `Documents` folder (`C:\Users\%username%\Documents`).
 
--   U can now change default menu key with editing `ServerPanel.cfg` file in your `profile` folder.
+```SPmenuKey = "KC_PAUSE";```
 
-##### Q: Can i change default menu key ?
-
-A: Sure, use ServerPanel.cfg file in Documents\\DayZ folder (copy it there from ServerPanel addon files if it wasn't created for some reason). You need to edit line
-
-```SPmenuKey = "KC_BACKSLASH";```
-
-!!! Remove quote symbols if you have any !!!
-
-And change ```KC_BACKSLASH``` (which stands for ```\``` on keyboard) to any key you want.
+And change `KC_PAUSE` (which stands for `PAUSE|BREAK` key on keyboard) to any key you want.
 [Here is full list of available keys](https://github.com/DannyDog/DayZSAEnfScript/blob/master/dta/scripts.pbo/1_Core/proto/EnSystem.c#L156).
 
 Example of resulting line:
-* ```SPmenuKey = KC_BACKSLASH;```-->
+* ```SPmenuKey = KC_BACKSLASH;```
 
 This is WIP, It's my first mod and I work on this in my spare time. I will my best try to bring updates frequently!
 
