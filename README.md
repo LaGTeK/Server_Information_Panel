@@ -6,7 +6,7 @@
 
 -   Make sure that you have installed [Community Framework](https://github.com/Jacob-Mango/DayZ-Community-Framework) by Jacob_Mango, Arkensor and Kegan Hollern
 -   Download latest release
--   Add RPCFramework and ServerPanel to your game and server launch options. For example:
+-   Add `Community Framework` and `Server_Information_Panel` to your game and server launch options. For example:
     `-mod=@Community-Framework;@Server_Information_Panel;`
 
 On server:
