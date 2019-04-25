@@ -29,13 +29,13 @@ On server:
 
 A: Sure, U can now change default menu key client side with editing `ServerPanelKey.json` file in your `Documents` folder (`C:\Users\%username%\Documents`).
 
-```SPmenuKey = "KC_PAUSE";```
+```"SPMenuKey": "KC_NUMPAD6"```
 
 And change `KC_PAUSE` (which stands for `PAUSE|BREAK` key on keyboard) to any key you want.
 [Here is full list of available keys](https://github.com/DannyDog/DayZSAEnfScript/blob/master/dta/scripts.pbo/1_Core/proto/EnSystem.c#L156).
 
 Example of resulting line:
-* ```SPmenuKey = KC_BACKSLASH;```
+* ```"SPMenuKey": "KC_BACKSLASH"```
 
 This is WIP, It's my first mod and I work on this in my spare time. I will my best try to bring updates frequently!
 
