@@ -8,12 +8,14 @@ class ServerPanelLogger {
 	void Log(string module, string txt) {
 		if (defaultIO) {
 			Print(GetDate() + " [" + module + "]: " + txt);
-		} else {
+		} 
+		else {
 			FileHandle logFile = OpenFile(file_path, FileMode.APPEND);
 			if (logFile != 0) {
 				FPrintln(logFile, GetDate() + " [" + module + "]: " + txt);
 				CloseFile(logFile);
-			} else {
+			} 
+			else {
 				defaultIO = true;
 				Log("ServerPanelLogger", "WARN: !!! Falling back to scripts.txt, can't write to " + file_path);
 				Log(module, txt);
@@ -26,13 +28,13 @@ class ServerPanelLogger {
 		string realProfiles = ServerPanelBase.GetConfig().GetProfilesPath();
 		if (!defaultIO) return;
 
-		if (defaultIO==false) {
+		if (defaultIO) {
 			tempPath = "$profile:";
 			if (realProfiles != "") Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + realProfiles);
 				else Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + tempPath);
 			SetDir(tempPath);
 		}
-		if (defaultIO==true) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
+		if (defaultIO) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
 	}
 
 	private void SetDir(string fPath) {
@@ -48,10 +50,12 @@ class ServerPanelLogger {
 			FPrintln(logFile, "ServerPanel log started at " + GetDate());
 			FPrintln(logFile, "");
 			CloseFile(logFile);
-		} else {
+		} 
+		else {
 			if (FileExist(tPath)) {
 				Log("ServerPanelLogger", "INFO: Can't write to file " + tPath);
-			} else {
+			} 
+			else {
 				Log("ServerPanelLogger", "INFO: Can't create file " + tPath + " (files per directory limit exceeded?)");
 			}
 		}
