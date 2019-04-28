@@ -10,7 +10,8 @@ static PlayerBase SPGetPlayerById (int plyId) {
 				result = PlayerBase.Cast(players.Get(i));
 			}
 		}
-	} else {
+	} 
+	else {
 		result = PlayerBase.Cast(GetGame().GetPlayer());
 	}
 
