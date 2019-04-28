@@ -1,35 +1,34 @@
 class ServerPanelConfig {
-	static const string SP_OLD_CONFIG_PATH = "$profile:\\ServerPanel\\ServerPanelNew.cfg";
-	static const string SP_CONFIGKEY_PATH = "$saves:ServerPanelKey.json";
-	static const string SP_CONFIG_PATH = "$profile:\\ServerPanel\\ServerPanelConfig.json";
-	static const string DESCRIPTION_PATH = "$profile:\\ServerPanel\\ServerDescription.txt";
-	static const string RULES_PATH = "$profile:\\ServerPanel\\ServerRules.txt";
-	static const string TAB2_PATH = "$profile:\\ServerPanel\\ServerTab2.txt";
-	static const string TAB3_PATH = "$profile:\\ServerPanel\\ServerTab3.txt";
-	static const string PROFILE_PATH = "$profile:\\ServerPanel\\";
-	private string CFG_PATH = "$saves:";
-	private string CFG_PATH_SERVER = "$profile:";
-	protected string realProfilesPath = "";
-
-	private string SERVERNAME ="Server Panel";
-	private string BUTTON1NAME;
-	private string BUTTON1LINK;
-	private string BUTTON2NAME;
-	private string BUTTON2LINK;
-	private string BUTTON3NAME;
-	private string BUTTON3LINK;
-	private string BUTTONTAB2NAME;
-	private string BUTTONTAB3NAME;
-	private int SPMENUKEY = KeyCode.KC_PAUSE;
-	private int PLAYERINFO = 1;
-	protected bool DEFAULTIOFLAG = false;
-	//private int PLAYERSTAT;
-	//private int SPMENUKEY;
-	private ref TStringArray sServerDescription = new TStringArray;
-	private ref TStringArray sServerRules = new TStringArray;
-	private ref TStringArray sServerTab2 = new TStringArray;
-	private ref TStringArray sServerTab3 = new TStringArray;
-	
+	static const string SP_OLD_CONFIG_PATH 			= "$profile:\\ServerPanel\\ServerPanelNew.cfg";
+	static const string SP_CONFIGKEY_PATH 			= "$saves:ServerPanelKey.json";
+	static const string SP_OLD_JSON_CONFIG_PATH		= "$profile:\\ServerPanel\\ServerPanelConfig.json";
+	static const string SP_CONFIG_PATH				= "$profile:\\ServerPanel\\ServerPanel.json";
+	static const string DESCRIPTION_PATH 			= "$profile:\\ServerPanel\\ServerDescription.txt";
+	static const string RULES_PATH 					= "$profile:\\ServerPanel\\ServerRules.txt";
+	static const string TAB2_PATH 					= "$profile:\\ServerPanel\\ServerTab2.txt";
+	static const string TAB3_PATH 					= "$profile:\\ServerPanel\\ServerTab3.txt";
+	static const string PROFILE_PATH 				= "$profile:\\ServerPanel\\";
+	private string CFG_PATH 						= "$saves:";
+	private string CFG_PATH_SERVER 					= "$profile:";
+	private string realProfilesPath 				= "";
+	private 	string SERVERNAME 					="Welcome on MyDAyZ server !! - Hosted By MyDayZ.eu";
+	private 	string BUTTON1NAME					="DISCORD";
+	private 	string BUTTON1LINK					="https://discord.gg/KAgNn6K";
+	private 	string BUTTON2NAME					="WEBSITE";
+	private 	string BUTTON2LINK					="https://mydayz.eu";
+	private 	string BUTTON3NAME					="DONATE";
+	private 	string BUTTON3LINK					="https://www.paypal.me/MyDayZ";
+	private 	string BUTTONTAB0NAME				="DESCRIPTION";
+	private 	string BUTTONTAB1NAME				="RULES";
+	private 	string BUTTONTAB2NAME				="TAB2";
+	private 	string BUTTONTAB3NAME				="TAB3";
+	private 	int SPMENUKEY 						= KeyCode.KC_PAUSE;
+	private 	int PLAYERINFO 						= 1;
+	private 	bool DEFAULTIOFLAG 					= false;
+	private ref TStringArray sServerDescription 	= new TStringArray;
+	private ref TStringArray sServerRules 			= new TStringArray;
+	private ref TStringArray sServerTab2 			= new TStringArray;
+	private ref TStringArray sServerTab3 			= new TStringArray;
 
 	void ServerPanelConfig() {
 		if (GetGame().IsMultiplayer() && GetGame().IsServer()) {
@@ -38,12 +37,14 @@ class ServerPanelConfig {
 
 			CFG_PATH = CFG_PATH_SERVER;
 
-			if (!FileExist(CFG_PATH + "ServerPanel\\")) MakeDirectory(CFG_PATH + "\\ServerPanel\\");
+			//if (!FileExist(CFG_PATH + "ServerPanel\\")) MakeDirectory(CFG_PATH + "\\ServerPanel\\");
 			if (FileExist(CFG_PATH + "ServerPanel\\")) {
-				if (FileExist(CFG_PATH + "ServerPanelNew.cfg")) CopyFile(CFG_PATH + "ServerPanelNew.cfg", CFG_PATH + "ServerPanel\\ServerPanelNew.cfg");
+				/*if (FileExist(CFG_PATH + "ServerPanelNew.cfg")) CopyFile(CFG_PATH + "ServerPanelNew.cfg", CFG_PATH + "ServerPanel\\ServerPanelNew.cfg");
 				if (FileExist(CFG_PATH + "ServerPanelConfig.json")) CopyFile(CFG_PATH + "ServerPanelConfig.json", CFG_PATH + "ServerPanel\\ServerPanelConfig.json");
+				if (FileExist(CFG_PATH + "ServerPanel.json")) CopyFile(CFG_PATH + "ServerPanel.json", CFG_PATH + "ServerPanel\\ServerPanel.json");
 				DeleteFile(CFG_PATH + "ServerPanelNew.cfg");
 				DeleteFile(CFG_PATH + "ServerPanelConfig.json");
+				DeleteFile(CFG_PATH + "ServerPanel.json");*/
 
 				CFG_PATH += "ServerPanel\\";
 			} else {
@@ -65,7 +66,6 @@ class ServerPanelConfig {
 	string GetProfilesPath() {
 		return realProfilesPath;
 	}
-
 	string GetServerName() {
 		return SERVERNAME;
 	}
@@ -86,6 +86,12 @@ class ServerPanelConfig {
 	}
 	string GetButton3Link() {
 		return BUTTON3LINK;
+	}
+	string GetButtonTab0Name() {
+		return BUTTONTAB0NAME;
+	}
+	string GetButtonTab1Name() {
+		return BUTTONTAB1NAME;
 	}
 	string GetButtonTab2Name() {
 		return BUTTONTAB2NAME;
@@ -218,19 +224,60 @@ class ServerPanelConfig {
 
 		ref SPJsonConfig newSPConfigData = new SPJsonConfig();
 
-		newSPConfigData.ServerName = "Welcome on MyDAyZ server !! - Hosted By MyDayZ.eu";
-		newSPConfigData.Button1Name = "DISCORD";
-		newSPConfigData.Button1Link = "https://mydayz.eu";
-		newSPConfigData.Button2Name = "WEBSITE";
-		newSPConfigData.Button2Link = "https://mydayz.eu";
-		newSPConfigData.Button3Name = "DONATE";
-		newSPConfigData.Button3Link = "https://paypal.com";
-		newSPConfigData.ButtonTab2Name = "TEST1";
-		newSPConfigData.ButtonTab3Name = "TEST2";		
-		newSPConfigData.PlayerInfo = 1;
-		newSPConfigData.UseScriptLog = DEFAULTIOFLAG;
+		newSPConfigData.ServerName 		= SERVERNAME ;
+		newSPConfigData.Button1Name 	= BUTTON1NAME;
+		newSPConfigData.Button1Link 	= BUTTON1LINK;
+		newSPConfigData.Button2Name 	= BUTTON2NAME;
+		newSPConfigData.Button2Link 	= BUTTON2LINK;
+		newSPConfigData.Button3Name 	= BUTTON3NAME;
+		newSPConfigData.Button3Link 	= BUTTON3LINK;
+		newSPConfigData.ButtonTab0Name 	= BUTTONTAB0NAME;
+		newSPConfigData.ButtonTab1Name 	= BUTTONTAB1NAME;	
+		newSPConfigData.ButtonTab2Name 	= BUTTONTAB2NAME;
+		newSPConfigData.ButtonTab3Name 	= BUTTONTAB3NAME;		
+		newSPConfigData.PlayerInfo 		= PLAYERINFO;
+		newSPConfigData.UseScriptLog 	= DEFAULTIOFLAG;
 
 		JsonFileLoader<SPJsonConfig>.JsonSaveFile(SP_CONFIG_PATH, newSPConfigData);
+	}
+
+	private void createDefaultCFGFromJson()	{
+		ref SPOldJsonConfig oldSPConfigData = new SPOldJsonConfig();
+		ref SPJsonConfig newSPConfigData = new SPJsonConfig();
+
+		JsonFileLoader<SPOldJsonConfig>.JsonLoadFile(SP_OLD_JSON_CONFIG_PATH, oldSPConfigData);
+
+		SERVERNAME 		= oldSPConfigData.ServerName;
+		BUTTON1NAME 	= oldSPConfigData.Button1Name;
+		BUTTON1LINK 	= oldSPConfigData.Button1Link;
+		BUTTON2NAME 	= oldSPConfigData.Button2Name;
+		BUTTON2LINK 	= oldSPConfigData.Button2Link;
+		BUTTON3NAME 	= oldSPConfigData.Button3Name;
+		BUTTON3LINK 	= oldSPConfigData.Button3Link;
+		BUTTONTAB2NAME 	= oldSPConfigData.ButtonTab2Name;
+		BUTTONTAB3NAME 	= oldSPConfigData.ButtonTab3Name;
+		PLAYERINFO 		= oldSPConfigData.PlayerInfo;
+
+		ServerPanelBase.Log( "ServerPanelConfig", "Creating ServerPanel.json from ServerPanelConfig.json" );
+
+		newSPConfigData.ServerName 		= SERVERNAME ;
+		newSPConfigData.Button1Name 	= BUTTON1NAME;
+		newSPConfigData.Button1Link 	= BUTTON1LINK;
+		newSPConfigData.Button2Name 	= BUTTON2NAME;
+		newSPConfigData.Button2Link 	= BUTTON2LINK;
+		newSPConfigData.Button3Name 	= BUTTON3NAME;
+		newSPConfigData.Button3Link 	= BUTTON3LINK;
+		newSPConfigData.ButtonTab0Name 	= BUTTONTAB0NAME;
+		newSPConfigData.ButtonTab1Name 	= BUTTONTAB1NAME;	
+		newSPConfigData.ButtonTab2Name 	= BUTTONTAB2NAME;
+		newSPConfigData.ButtonTab3Name 	= BUTTONTAB3NAME;		
+		newSPConfigData.PlayerInfo 		= PLAYERINFO;
+		newSPConfigData.UseScriptLog 	= DEFAULTIOFLAG;
+
+		JsonFileLoader<SPJsonConfig>.JsonSaveFile(SP_CONFIG_PATH, newSPConfigData);
+
+		DeleteFile(SP_OLD_JSON_CONFIG_PATH);
+		ServerPanelBase.Log( "ServerPanelConfig", "Deleting old json config file ServerPanelConfig.json" );
 	}
 
 	private void createDefaultKey()	{
@@ -249,17 +296,19 @@ class ServerPanelConfig {
 
 		ref SPJsonConfig newSPConfigData = new SPJsonConfig();
 
-		newSPConfigData.ServerName = SERVERNAME;
-		newSPConfigData.Button1Name = BUTTON1NAME;
-		newSPConfigData.Button1Link = BUTTON1LINK;
-		newSPConfigData.Button2Name = BUTTON2NAME;
-		newSPConfigData.Button2Link = BUTTON2LINK;
-		newSPConfigData.Button3Name = BUTTON3NAME;
-		newSPConfigData.Button3Link = BUTTON3LINK;
-		newSPConfigData.ButtonTab2Name = BUTTONTAB2NAME;
-		newSPConfigData.ButtonTab3Name = BUTTONTAB3NAME;		
-		newSPConfigData.PlayerInfo = PLAYERINFO;
-		newSPConfigData.UseScriptLog = DEFAULTIOFLAG;
+		newSPConfigData.ServerName 		= SERVERNAME;
+		newSPConfigData.Button1Name 	= BUTTON1NAME;
+		newSPConfigData.Button1Link 	= BUTTON1LINK;
+		newSPConfigData.Button2Name 	= BUTTON2NAME;
+		newSPConfigData.Button2Link 	= BUTTON2LINK;
+		newSPConfigData.Button3Name 	= BUTTON3NAME;
+		newSPConfigData.Button3Link 	= BUTTON3LINK;
+		newSPConfigData.ButtonTab2Name 	= BUTTONTAB0NAME;
+		newSPConfigData.ButtonTab3Name 	= BUTTONTAB1NAME;
+		newSPConfigData.ButtonTab2Name 	= BUTTONTAB2NAME;
+		newSPConfigData.ButtonTab3Name 	= BUTTONTAB3NAME;		
+		newSPConfigData.PlayerInfo 		= PLAYERINFO;
+		newSPConfigData.UseScriptLog 	= DEFAULTIOFLAG;
 
 		JsonFileLoader<SPJsonConfig>.JsonSaveFile(SP_CONFIG_PATH, newSPConfigData);
 	}
@@ -272,12 +321,9 @@ class ServerPanelConfig {
 		bool skipLine = false;
 		FileHandle configTab2File = OpenFile(TAB2_PATH, FileMode.READ);
 		if (configTab2File != 0) {
-			while (configTab2File>0)
-			{
+			while (configTab2File>0)	{
 				char_count = FGets(configTab2File,sLine);
-
-				if (char_count == -1 || serverTab2Counter > 8000)
-				{
+				if (char_count == -1 || serverTab2Counter > 8000)	{
 					break;
 				}
 				serverTab2.Insert(sLine);
@@ -296,12 +342,10 @@ class ServerPanelConfig {
 		bool skipLine = false;
 		FileHandle configTab3File = OpenFile(TAB3_PATH, FileMode.READ);
 		if (configTab3File != 0) {
-			while (configTab3File>0)
-			{
+			while (configTab3File>0)	{
 				char_count = FGets(configTab3File,sLine);
 
-				if (char_count == -1 || serverTab3Counter > 8000)
-				{
+				if (char_count == -1 || serverTab3Counter > 8000)	{
 					break;
 				}
 				serverTab3.Insert(sLine);
@@ -320,12 +364,10 @@ class ServerPanelConfig {
 		bool skipLine = false;
 		FileHandle configDescriptionFile = OpenFile(DESCRIPTION_PATH, FileMode.READ);
 		if (configDescriptionFile != 0) {
-			while (configDescriptionFile>0)
-			{
+			while (configDescriptionFile>0)		{
 				char_count = FGets(configDescriptionFile,sLine);
 
-				if (char_count == -1 || DescriptionCounter > 8000)
-				{
+				if (char_count == -1 || DescriptionCounter > 8000)	{
 					break;
 				}
 				serverDesc.Insert(sLine);
@@ -344,12 +386,10 @@ class ServerPanelConfig {
 		bool skipLine = false;
 		FileHandle configRulesFile = OpenFile(RULES_PATH, FileMode.READ);
 		if (configRulesFile != 0) {
-			while (configRulesFile>0)
-			{
+			while (configRulesFile>0)	{
 				char_count = FGets(configRulesFile,sLine);
 
-				if (char_count == -1 || RulesCounter > 8000)
-				{
+				if (char_count == -1 || RulesCounter > 8000)	{
 					break;
 				}
 				serverRules.Insert(sLine);
@@ -384,7 +424,14 @@ class ServerPanelConfig {
 			//ServerPanelBase.Log( "ServerPanelConfig", "All Configuration files have been found" );
 			JsonFileLoader<SPJsonConfig>.JsonLoadFile(SP_CONFIG_PATH, newSPConfigData);
 		}
-		else if (FileExist(SP_OLD_CONFIG_PATH) && FileExist(PROFILE_PATH + "ServerName.txt") && !FileExist(SP_CONFIG_PATH)) {
+		else if (FileExist(SP_OLD_JSON_CONFIG_PATH)) {
+			ServerPanelBase.Log( "ServerPanelConfig", "Old Json Configuration file has been found" );
+
+			createDefaultCFGFromJson();
+
+			JsonFileLoader<SPJsonConfig>.JsonLoadFile(SP_CONFIG_PATH, newSPConfigData);
+		}
+		else if (FileExist(SP_OLD_CONFIG_PATH) && FileExist(PROFILE_PATH + "ServerName.txt") && !FileExist(SP_OLD_CONFIG_PATH)) {
 			ServerPanelBase.Log( "ServerPanelConfig", "Old Configuration & Server Name found" );
 			readOldConfig();
 			readOldServername();
@@ -397,17 +444,19 @@ class ServerPanelConfig {
 			JsonFileLoader<SPJsonConfig>.JsonLoadFile(SP_CONFIG_PATH, newSPConfigData);
 		}
 
-		SERVERNAME = newSPConfigData.ServerName;
-		BUTTON1NAME = newSPConfigData.Button1Name;
-		BUTTON1LINK = newSPConfigData.Button1Link;
-		BUTTON2NAME = newSPConfigData.Button2Name;
-		BUTTON2LINK = newSPConfigData.Button2Link;
-		BUTTON3NAME = newSPConfigData.Button3Name;
-		BUTTON3LINK = newSPConfigData.Button3Link;
-		BUTTONTAB2NAME = newSPConfigData.ButtonTab2Name;
-		BUTTONTAB3NAME = newSPConfigData.ButtonTab3Name;
-		PLAYERINFO = newSPConfigData.PlayerInfo;
-		DEFAULTIOFLAG = newSPConfigData.UseScriptLog;
+		SERVERNAME 		= newSPConfigData.ServerName;
+		BUTTON1NAME 	= newSPConfigData.Button1Name;
+		BUTTON1LINK 	= newSPConfigData.Button1Link;
+		BUTTON2NAME 	= newSPConfigData.Button2Name;
+		BUTTON2LINK 	= newSPConfigData.Button2Link;
+		BUTTON3NAME 	= newSPConfigData.Button3Name;
+		BUTTON3LINK 	= newSPConfigData.Button3Link;
+		BUTTONTAB0NAME 	= newSPConfigData.ButtonTab0Name;
+		BUTTONTAB1NAME 	= newSPConfigData.ButtonTab1Name;
+		BUTTONTAB2NAME 	= newSPConfigData.ButtonTab2Name;
+		BUTTONTAB3NAME 	= newSPConfigData.ButtonTab3Name;
+		PLAYERINFO 		= newSPConfigData.PlayerInfo;
+		DEFAULTIOFLAG 	= newSPConfigData.UseScriptLog;
 	}
 
 	void reloadKey()	{
