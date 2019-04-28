@@ -1,47 +1,67 @@
 class ServerPanelMenu extends UIScriptedMenu {
 	PlayerBase Player;
 	private Widget m_WidgetRoot;
-	private ButtonWidget m_BtnCancel, m_BtnRight, m_BtnLeft, m_BtnClose, m_BtnDonate, m_btnDescription, m_btnRules, m_btnTabTitle2, m_btnTabTitle3;
+	private ButtonWidget m_BtnCancel, m_BtnRight, m_BtnLeft, m_BtnClose, m_BtnDonate, m_btnDescription, m_btnRules, m_btnTabTitle0, m_btnTabTitle1, m_btnTabTitle2, m_btnTabTitle3;
 	private TextListboxWidget m_PlayersList, m_DescriptionList, m_RulesList, m_Tab2List, m_Tab3List;
 	private MultilineTextWidget m_ServerName;
-	private ImageWidget m_ImagePlayerInfo;
-	private TextWidget m_TitlePanel, m_PlayerTitle, m_TextPlayerNickname, m_TextPlayerBlood, m_TextPlayerHealth, m_TextPlayerPos, m_tabTitle2, m_tabTitle3;
-	private string m_Link1, m_Link2, m_Link3, m_Tab1name, m_Tab2name;
+	private ImageWidget m_ImagePlayerInfo, m_IconHealth, m_IconBlood, m_IconWater, m_IconFood;
+	private TextWidget m_TitlePanel, m_PlayerTitle, m_TextPlayerNickname, m_PlayTime, m_TextPlayerBlood, m_TextPlayerHealth, m_TextPlayerWater, m_TextPlayerEnergy, m_TextPlayerPos;
+	private string m_Link1, m_Link2, m_Link3, m_Tab1name, m_Tab2name, m_Tab3name, m_Tab4name;
 	private int SPMENUKEY;
 
+	// Colors
+	private const int 					WHITE			= ARGB(255, 255, 255, 255);
+	private const int 					ORANGE			= ARGB(255, 255, 165, 0);
+	private const int 					GREEN			= ARGB(255, 0, 206, 0);
+	private const int 					RED				= ARGB(255, 255, 0, 0);
+	private const int 					YELLOW			= ARGB(255, 255, 255, 0);
 	protected bool m_IsVisible = false;
+
+	void ServerPanelMenu()	{	
+		
+	}
+
+	void ~ServerPanelMenu()	{	
+	}
 
 	override Widget Init()	{
 		layoutRoot = GetGame().GetWorkspace().CreateWidgets( "ServerPanel/scripts/5_Mission/gui/layouts/ServerPanel.layout" );
 
-		m_TitlePanel = TextWidget.Cast( layoutRoot.FindAnyWidget( "title_text" ) );
-		m_BtnDonate = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_donate" ) );
-		m_BtnRight = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_discord" ) );
-		m_BtnLeft = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_website" ) );
-		m_BtnCancel = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_cancel" ) );
-		m_BtnClose = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_close_widget" ) );
+		m_TitlePanel 		= TextWidget.Cast( layoutRoot.FindAnyWidget( "title_text" ) );
+		m_BtnDonate	 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_donate" ) );
+		m_BtnRight	 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_discord" ) );
+		m_BtnLeft	 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_website" ) );
+		m_BtnCancel	 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_cancel" ) );
+		m_BtnClose	 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_close_widget" ) );
 
 
 		//Player Information
-		m_ImagePlayerInfo = ImageWidget.Cast( layoutRoot.FindAnyWidget( "ImagePlayerInfo" ) );
-		m_PlayerTitle = TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
-		m_TextPlayerNickname = TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_Nickname" ) );
-		m_TextPlayerBlood = TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_health" ) );
-		m_TextPlayerHealth = TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_blood" ) );
-		m_TextPlayerPos = TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_position" ) );
-		m_PlayersList = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Player_List" ) );
+		m_ImagePlayerInfo 	= ImageWidget.Cast( layoutRoot.FindAnyWidget( "ImagePlayerInfo" ) );
+		m_IconHealth 		= ImageWidget.Cast( layoutRoot.FindAnyWidget( "IconHealth" ) );
+		m_IconBlood 		= ImageWidget.Cast( layoutRoot.FindAnyWidget( "IconBlood" ) );
+		m_IconWater 		= ImageWidget.Cast( layoutRoot.FindAnyWidget( "IconWater" ) );
+		m_IconFood 			= ImageWidget.Cast( layoutRoot.FindAnyWidget( "IconFood" ) );
+		m_PlayerTitle 		= TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
+		m_TextPlayerNickname= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_Nickname" ) );
+		m_TextPlayerBlood 	= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_blood" ) );
+		m_TextPlayerHealth 	= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_health" ) );
+		m_TextPlayerWater 	= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_water" ) );
+		m_TextPlayerEnergy 	= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_food" ) );
+		m_TextPlayerPos 	= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_position" ) );
+		m_PlayTime 			= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_playtime" ) );
+		m_PlayersList 		= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Player_List" ) );
 
 		//Tab
-		m_btnDescription = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_Description" ) );
-		m_btnRules = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_Rules" ) );
-		m_btnTabTitle2 = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ) );
-		m_btnTabTitle3 = ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ) );
+		m_btnTabTitle0		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_0" ) );
+		m_btnTabTitle1 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_1" ) );
+		m_btnTabTitle2		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ) );
+		m_btnTabTitle3 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ) );
 
-		m_ServerName = MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ) );
-		m_DescriptionList = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_0" ) );
-		m_RulesList = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_1" ) );
-		m_Tab2List = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_2" ) );
-		m_Tab3List = TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_3" ) );
+		m_ServerName 		= MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ) );
+		m_DescriptionList 	= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_0" ) );
+		m_RulesList 		= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_1" ) );
+		m_Tab2List 			= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_2" ) );
+		m_Tab3List 			= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Tab_3" ) );
 
 		m_DescriptionList.Show(true);
 		m_RulesList.Show(false);
@@ -49,11 +69,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab3List.Show(false);
 		m_ImagePlayerInfo.Show(false);
 
-		return layoutRoot;
-	}
+		m_TitlePanel.SetText( "Server Panel Information by LaGTeK" + " | " + GetDate());
 
-	void ServerPanelMenu()	{	
-		//GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
+		return layoutRoot;
 	}
 
 	override void OnShow()	{
@@ -65,10 +83,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		GetGame().GetMission().PlayerControlEnable();
 
-		m_TitlePanel.SetText( "Server Panel Information by LaGTeK" + GetDate());
-		
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncButtonRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncSNameTabsRequest", new Param1< int >( 0 ), true, NULL );
+		GetRPCManager().SendRPC( "ServerPanelI", "SyncConfigRequest", new Param1< int >( 0 ), true, NULL );
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
 	}
@@ -92,102 +107,46 @@ class ServerPanelMenu extends UIScriptedMenu {
 		return date;
 	}
 
-	/*void ShowPanelRemote( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
-	{
-        //Answer call only when client...MissionGameplay runs client only anyway but still add it :P
-        if (type == CallType.Client)
-        {
-        	//Check if sender is still connected to not trigger an Null pointers
-        	if (sender != NULL){
-        		//Show menu ( you can call another function from here to show menu if you have made a custom one )
-        		//you might need to make a loop to check if player's screen is not black or has another GUI....then display yours
-				ServerPanelBase.Log("ServerPanelI", "ShowPanelRemote");
-        		GetGame().GetUIManager().ShowScriptedMenu( GetServerPanelMenu() , NULL );
-				PlayerControlEnable();
-        	}
-        }
-	}*/
-
-	void SyncButtons( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		Param6<string, string, string, string, string, string> syncConfig;
-
-		string sbtn1name;
-		string sbtn1link;
-		string sbtn2name;
-		string sbtn2link;
-		string sbtn3name;
-		string sbtn3link;
-
-
-		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
-			if ( !ctx.Read( syncConfig ) ) {
-				ServerPanelBase.Log("ServerPanelFile", "config sync files read error - possible version mismatch");
-				return;
-			}
-			sbtn1name = syncConfig.param1;
-			sbtn1link = syncConfig.param2;
-			sbtn2name = syncConfig.param3;
-			sbtn2link = syncConfig.param4;
-			sbtn3name = syncConfig.param5;
-			sbtn3link = syncConfig.param6;
-
-		}
-		m_Link1 = sbtn1link;
-		m_Link2 = sbtn2link;
-		m_Link3 = sbtn3link;
-
-		if (layoutRoot.IsVisible()) {
-			
-			if (m_Link1 != "" && sbtn1name != "") {
-				m_BtnRight.SetText(sbtn1name);
-				m_BtnRight.Show(true);
-			}
-			else{
-				m_BtnRight.Show(false);
-			}
-			if (m_Link2 != "" && sbtn2name != "") {
-				m_BtnLeft.SetText(sbtn2name);
-				m_BtnLeft.Show(true);
-			}
-			else{
-				m_BtnLeft.Show(false);
-			}
-			if (m_Link3 != "" && sbtn3name != "") {
-				m_BtnDonate.SetText(sbtn3name);
-				m_BtnDonate.Show(true);
-			}
-			else{
-				m_BtnDonate.Show(false);
-			}
-		}
-	}
-
-	void SyncSNameTabs( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		Param4<string, string, string, int> SyncSNameTabS;
-		string sServerName = "";
-		string sTab1name = "";
-		string sTab2name = "";
+	void SyncConfig( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
+		Param2<ref TStringArray, int> syncConfig;
+		ref TStringArray sPanelConfig;
+		string sBtn1name, sBtn1link, sBtn2name, sBtn2link, sBtn3name, sBtn3link, sServerName, sTab0name, sTab1name, sTab2name, sTab3name;
 		int sPlayerInfo;
 
 		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
-			if ( !ctx.Read( SyncSNameTabS ) ) {
-				ServerPanelBase.Log("ServerPanelFile", "Name sync files read error - possible version mismatch");
+			if ( !ctx.Read( syncConfig ) ) {
+				ServerPanelBase.Log("ServerPanelFile", "Config sync files read error - possible version mismatch");
 				return;
 			}
-			sServerName = SyncSNameTabS.param1;
-			sTab1name = SyncSNameTabS.param2;
-			sTab2name = SyncSNameTabS.param3;
-			sPlayerInfo = SyncSNameTabS.param4;
+			sPanelConfig 	= syncConfig.param1;
+			sPlayerInfo 	= syncConfig.param2;
 
 		}
-		m_Tab1name = sTab1name;
-		m_Tab2name = sTab2name;
+
+		sBtn1name 	= sPanelConfig[0];
+		sBtn1link 	= sPanelConfig[1];
+		sBtn2name 	= sPanelConfig[2];
+		sBtn2link 	= sPanelConfig[3];
+		sBtn3name 	= sPanelConfig[4];
+		sBtn3link 	= sPanelConfig[5];
+		sServerName = sPanelConfig[6];
+		sTab0name 	= sPanelConfig[7];
+		sTab1name 	= sPanelConfig[8];
+		sTab2name 	= sPanelConfig[9];
+		sTab3name 	= sPanelConfig[10];
+
+		m_Link1 	= sBtn1link;
+		m_Link2 	= sBtn2link;
+		m_Link3 	= sBtn3link;
+		m_Tab1name 	= sTab0name;
+		m_Tab2name 	= sTab1name;
+		m_Tab3name 	= sTab2name;
+		m_Tab4name 	= sTab3name;
 
 		if (layoutRoot.IsVisible()) {
 			m_ServerName.SetText(sServerName);
 
-			if (sPlayerInfo == 0)
-			{
+			if (sPlayerInfo == 0)	{
 				m_ImagePlayerInfo.Show(true);
 				m_PlayerTitle.Show(false);
 				m_TextPlayerBlood.Show(false);
@@ -196,20 +155,53 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_PlayersList.Show(false);
 			}
 			if (m_Tab1name != "") {
-				m_tabTitle2.SetText(m_Tab1name);
-				m_btnTabTitle2.SetText(m_Tab1name);
+				m_btnTabTitle0.SetText(m_Tab1name);
+				m_btnTabTitle0.Show(true);
+			}
+			else{
+				m_btnTabTitle0.Show(false);
+			}
+			if (m_Tab2name != "") {
+				m_btnTabTitle1.SetText(m_Tab2name);
+				m_btnTabTitle1.Show(true);
+			}
+			else{
+				m_btnTabTitle1.Show(false);
+			}
+			if (m_Tab3name != "") {
+				m_btnTabTitle2.SetText(m_Tab3name);
 				m_btnTabTitle2.Show(true);
 			}
 			else{
 				m_btnTabTitle2.Show(false);
 			}
-			if (m_Tab2name != "") {
-				m_tabTitle3.SetText(m_Tab2name);
-				m_btnTabTitle3.SetText(m_Tab2name);
+			if (m_Tab4name != "") {
+				m_btnTabTitle3.SetText(m_Tab4name);
 				m_btnTabTitle3.Show(true);
 			}
 			else{
 				m_btnTabTitle3.Show(false);
+			}
+			if (m_Link1 != "" && sBtn1name != "") {
+				m_BtnRight.SetText(sBtn1name);
+				m_BtnRight.Show(true);
+			}
+			else{
+				m_BtnRight.Show(false);
+			}
+			if (m_Link2 != "" && sBtn2name != "") {
+				m_BtnLeft.SetText(sBtn2name);
+				m_BtnLeft.Show(true);
+			}
+			else{
+				m_BtnLeft.Show(false);
+			}
+			if (m_Link3 != "" && sBtn3name != "") {
+				m_BtnDonate.SetText(sBtn3name);
+				m_BtnDonate.Show(true);
+			}
+			else{
+				m_BtnDonate.Show(false);
 			}
 		}
 	}
@@ -217,23 +209,22 @@ class ServerPanelMenu extends UIScriptedMenu {
 	void SyncTab( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 		Param4<ref TStringArray, ref TStringArray, ref TStringArray, ref TStringArray> syncTabs;
 
-		ref TStringArray ssServerDesc = new TStringArray;
-		ref TStringArray ssServerRules = new TStringArray;
-		ref TStringArray ssServerTab2 = new TStringArray;
-		ref TStringArray ssServerTab3 = new TStringArray;
+		ref TStringArray ssServerDesc	= new TStringArray;
+		ref TStringArray ssServerRules	= new TStringArray;
+		ref TStringArray ssServerTab2	= new TStringArray;
+		ref TStringArray ssServerTab3	= new TStringArray;
 
 		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
 			if ( !ctx.Read( syncTabs ) ) {
 				ServerPanelBase.Log("ServerPanelFile", "Tab sync files read error - possible version mismatch");
 				return;
 			}
-			ssServerDesc = syncTabs.param1;
-			ssServerRules = syncTabs.param2;
-			ssServerTab2 = syncTabs.param3;
-			ssServerTab3 = syncTabs.param4;
+			ssServerDesc	= syncTabs.param1;
+			ssServerRules	= syncTabs.param2;
+			ssServerTab2	= syncTabs.param3;
+			ssServerTab3	= syncTabs.param4;
 		}
 
-		//ref TStringArray sTest = new TStringArray;
 		int i;
 
 		if (layoutRoot.IsVisible()) {
@@ -254,10 +245,15 @@ class ServerPanelMenu extends UIScriptedMenu {
 	}
 
 	void SyncPlayers( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		Param3<ref TStringArray, ref TIntArray, vector> syncDataS;
+		Param4<ref TStringArray, ref TIntArray, vector, TFloatArray> syncDataS;
 		ref TStringArray playerListC;
 		ref TIntArray playerDataC;
+		ref TFloatArray playerDataF;
 		int sUpTime = 0;
+		int sHealth;
+		int sBlood;
+		float sEnergy;
+		float sWater;
 
 		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
 			if ( !ctx.Read( syncDataS ) ) {
@@ -268,23 +264,100 @@ class ServerPanelMenu extends UIScriptedMenu {
 			m_PlayersList.ClearItems();
 			playerListC = syncDataS.param1;
 			playerDataC = syncDataS.param2;
+			playerDataF = syncDataS.param4;
 			if (playerDataC.Count() == 0) return;
 
 			sUpTime = Math.Round(playerDataC[0]/1000);
 		}
 
+		sHealth = playerDataC[2];
+		sBlood 	= playerDataC[3];
+		sEnergy = playerDataF[1];
+		sWater 	= playerDataF[0];
+
+		m_TextPlayerHealth.SetText(" " + sHealth.ToString());
+		m_TextPlayerBlood.SetText(" " + sBlood.ToString());
+
+		int y =1;
+		for ( int i = 0; i < playerListC.Count(); ++i ) {
+			m_PlayersList.AddItem(" " + y.ToString() + ": " + playerListC.Get(i), new Param1<string>(playerListC.Get(i)), 0);
+			y++;
+		}
+		m_PlayTime.SetText(Math.Floor(sUpTime / 3600).ToString() + "h " + ((sUpTime / 60) % 60).ToString() + "min");
+		m_PlayerTitle.SetText("Online Players: " + playerListC.Count());
+		m_TextPlayerNickname.SetText(playerListC.Get(playerDataC[1]));
+		vector playerPos = syncDataS.param3;
+		//m_TextPlayerPos.SetText("Pos. X: " + Math.Floor(playerPos[0]).ToString() + "  Y: " + Math.Floor(playerPos[2]).ToString() + "  Alt: " + Math.Floor(playerPos[1]).ToString() + " m");
+		m_TextPlayerPos.SetText("Pos. X: " + Math.Floor(playerPos[0]).ToString() + "  Y: " + Math.Floor(playerPos[2]).ToString());
+
 		if (layoutRoot.IsVisible()) {
-			int y =1;
-			for ( int i = 0; i < playerListC.Count(); ++i ) {
-				m_PlayersList.AddItem(" " + y.ToString() + ": " + playerListC.Get(i), new Param1<string>(playerListC.Get(i)), 0);
-				y++;
+			if (sHealth <= 20)	{
+				m_TextPlayerHealth.SetColor(RED);
 			}
-			m_PlayerTitle.SetText("Online Players: " + playerListC.Count());
-			m_TextPlayerNickname.SetText(playerListC.Get(playerDataC[1]));
-			vector playerPos = syncDataS.param3;
-			m_TextPlayerPos.SetText("X: " + Math.Floor(playerPos[0]).ToString() + "  Y: " + Math.Floor(playerPos[2]).ToString());
-			m_TextPlayerHealth.SetText(playerDataC[3].ToString());
-			m_TextPlayerBlood.SetText(playerDataC[2].ToString());
+			if (sHealth <= 40 && sHealth > 20)	{
+				m_TextPlayerHealth.SetColor(ORANGE);
+			}
+			if (sHealth <= 60 && sHealth > 40)	{
+				m_TextPlayerHealth.SetColor(YELLOW);
+			}
+			if (sHealth > 60 && sHealth <= 90)	{
+				m_TextPlayerHealth.SetColor(GREEN);
+			}
+			if (sHealth > 90)	{
+				m_TextPlayerHealth.SetColor(WHITE);
+			}
+			
+			if (sBlood <= 3000)		{
+				m_TextPlayerBlood.SetColor(RED);
+			}
+			if (sBlood <= 3500 && sBlood > 3000)	{
+				m_TextPlayerBlood.SetColor(ORANGE);
+			}
+			if (sBlood <= 4000 && sBlood > 3500)	{
+				m_TextPlayerBlood.SetColor(YELLOW);
+			}
+			if (sBlood > 4000 && sBlood <= 4500)	{
+				
+				m_TextPlayerBlood.SetColor(GREEN);
+			}
+			if (sBlood >= 4500)	{
+				m_TextPlayerBlood.SetColor(WHITE);
+			}
+			
+			if (sEnergy <= 200)	{	
+				m_TextPlayerEnergy.SetColor(RED);
+				m_TextPlayerEnergy.SetText(" Starved !");
+			}
+			if (sEnergy <= 400 && sEnergy > 200)	{
+				m_TextPlayerEnergy.SetColor(YELLOW);
+				m_TextPlayerEnergy.SetText(" Feel Starved");
+			}
+			if (sEnergy > 400 && sEnergy <= 1000)	{
+				m_TextPlayerEnergy.SetColor(WHITE);
+				m_TextPlayerEnergy.SetText(" Good");
+			}
+			if (sEnergy > 1000)	{
+				m_TextPlayerEnergy.SetColor(WHITE);
+				m_TextPlayerEnergy.SetText(" Excellent");
+			}
+			
+			if (sWater <= 300)	{
+				m_TextPlayerWater.SetColor(RED);
+				m_TextPlayerWater.SetText(" Thirsty !");
+			}
+			if (sWater <= 600 && sWater > 300)	{
+				m_TextPlayerWater.SetColor(YELLOW);
+				m_TextPlayerWater.SetText(" Feel Thirsty");
+			}
+			if (sWater > 600 && sWater <= 1000)	{
+				//m_IconWater.SetColor(WHITE);
+				m_TextPlayerWater.SetColor(WHITE);
+				m_TextPlayerWater.SetText(" Good");
+			}
+			if (sWater > 1200)	{
+				m_TextPlayerWater.SetColor(WHITE);
+				m_TextPlayerWater.SetText(" Excellent");
+			}
 		}
 	}
 
@@ -299,8 +372,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 	override bool OnClick( Widget w, int x, int y, int button )	{
 		super.OnClick(w, x, y, button);
 
-		if ( w == m_btnDescription )
-		{
+		if ( w == m_btnTabTitle0 )	{
 			m_DescriptionList.Show(true);
 			m_RulesList.Show(false);
 			m_Tab2List.Show(false);
@@ -308,8 +380,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			Print("CLICKED FIRST TAB");
 			return true;
 		}
-		if ( w == m_btnRules )
-		{
+		if ( w == m_btnTabTitle1 )	{
 			m_DescriptionList.Show(false);
 			m_RulesList.Show(true);
 			m_Tab2List.Show(false);
@@ -317,8 +388,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			Print("CLICKED SECOND TAB");
 			return true;
 		}
-		if ( w == m_btnTabTitle2 )
-		{
+		if ( w == m_btnTabTitle2 )	{
 			m_DescriptionList.Show(false);
 			m_RulesList.Show(false);
 			m_Tab2List.Show(true);
@@ -326,8 +396,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			Print("CLICKED THIRD TAB");
 			return true;
 		}
-		if ( w == m_btnTabTitle3 )
-		{
+		if ( w == m_btnTabTitle3 )	{
 			m_DescriptionList.Show(false);
 			m_RulesList.Show(false);
 			m_Tab2List.Show(false);
@@ -335,25 +404,21 @@ class ServerPanelMenu extends UIScriptedMenu {
 			Print("CLICKED FOURTH TAB");
 			return true;
 		}
-		if ( w == m_BtnCancel || w == m_BtnClose)
-		{
+		if ( w == m_BtnCancel || w == m_BtnClose)	{
 			GetGame().GetUIManager().Back();
 			return true;
 		}
-		if ( w == m_BtnRight )
-		{
+		if ( w == m_BtnRight )	{
 			GetGame().OpenURL( m_Link1 );
 			Print("CLICKED FIRST BUTTON");
 			return true;
 		}
-		if ( w == m_BtnLeft )
-		{
+		if ( w == m_BtnLeft )	{
 			GetGame().OpenURL(m_Link2);
 			Print("CLICKED SECOND BUTTON");
 			return true;
 		}
-		if ( w == m_BtnDonate)
-		{
+		if ( w == m_BtnDonate)	{
 			GetGame().OpenURL(m_Link3);
 			Print("CLICKED THIRD BUTTON");
 			return true;

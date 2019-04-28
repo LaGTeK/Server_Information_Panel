@@ -2,36 +2,36 @@ PanelWidgetClass ServerPanelMenu {
  visible 0
  disabled 0
  color 0 0 0 0
- position 0 -0.05
- size 1795 908
+ position 0 0.06
+ size 0.957 0.84
  halign center_ref
- valign center_ref
  hexactpos 0
  vexactpos 0
- hexactsize 1
- vexactsize 1
+ hexactsize 0
+ vexactsize 0
  scriptclass "ServerPanelMenu"
  {
   PanelWidgetClass Background {
-   color 0 0 0 0.8627
+   visible 1
+   color 0 0 0 0.7804
    position 0 0
-   size 1 908
+   size 1 1
    hexactpos 1
    vexactpos 1
    hexactsize 0
-   vexactsize 1
+   vexactsize 0
    style rover_sim_colorable
    {
     PanelWidgetClass title_wrapper {
      visible 1
-     color 0 0 0 0.7843
+     color 0.1255 0.1255 0.1255 0.7804
      position 0 0
      size 1 70
      hexactpos 1
      vexactpos 1
      hexactsize 0
      vexactsize 1
-     style rover_sim_colorable
+     style NewStyle
      {
       TextWidgetClass title_text {
        position 0 0
@@ -63,6 +63,7 @@ PanelWidgetClass ServerPanelMenu {
      style MenuDefault
      text "CANCEL"
      text_proportion 0.8
+     font "gui/fonts/etelkatextpro"
     }
     ButtonWidgetClass btn_website {
      position 240 15
@@ -76,6 +77,7 @@ PanelWidgetClass ServerPanelMenu {
      style MenuDefault
      text "XXX"
      text_proportion 0.7
+     font "gui/fonts/etelkatextpro"
     }
     ButtonWidgetClass btn_discord {
      position 20 15
@@ -89,16 +91,17 @@ PanelWidgetClass ServerPanelMenu {
      style MenuDefault
      text "XXX"
      text_proportion 0.7
+     font "gui/fonts/etelkatextpro"
      switch normal
     }
     MultilineTextWidgetClass text_name {
      ignorepointer 1
      position 15 80
-     size 1315 50
+     size 0.77 0.058
      hexactpos 1
      vexactpos 1
-     hexactsize 1
-     vexactsize 1
+     hexactsize 0
+     vexactsize 0
      text "XXX"
      "exact text" 1
      text_proportion 0.8
@@ -107,120 +110,84 @@ PanelWidgetClass ServerPanelMenu {
     }
     PanelWidgetClass PanelPlayerInformation {
      ignorepointer 1
-     position 1335 80
-     size 450 750
-     hexactpos 1
-     vexactpos 1
-     hexactsize 1
-     vexactsize 1
+     position 0.785 0.09
+     size 0.21 0.83
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
      style rover_sim_black
      {
-      TextWidgetClass PlayerInformationTitle {
+      PanelWidgetClass PlayerInformationbck {
        ignorepointer 1
        keepsafezone 0
-       color 0.7216 0.2667 0.2667 1
+       color 0.1255 0.1255 0.1255 0.7804
        position 0 0
-       size 450 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       style Bold
-       text "Player Informations"
-       "text halign" center
-       "text valign" center
-      }
-      TextWidgetClass Health {
-       ignorepointer 1
-       position 10 103
-       size 205 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       text "Health : "
-       "text halign" right
-       "text valign" center
-      }
-      TextWidgetClass txt_health {
-       ignorepointer 1
-       position 225 103
-       size 215 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       text "XXX"
-       "text valign" center
-      }
-      TextWidgetClass Blood {
-       ignorepointer 1
-       position 10 155
-       size 205 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       text "Blood : "
-       "text halign" right
-       "text valign" center
-      }
-      TextWidgetClass txt_blood {
-       ignorepointer 1
-       position 225 155
-       size 215 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       text "XXX"
-       "exact text" 0
-       "text valign" center
-      }
-      TextWidgetClass TextWidget4 {
-       ignorepointer 1
-       position 10 208
-       size 86 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       text "Pos."
-       "text valign" center
+       size 1 0.07
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 0
+       style NewStyle
+       {
+        TextWidgetClass PlayerInformationTitle {
+         ignorepointer 1
+         keepsafezone 0
+         color 0.7216 0.2667 0.2667 1
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 0
+         style Bold
+         text "Player Informations"
+         "exact text" 0
+         text_proportion 0.8
+         "text halign" center
+         "text valign" center
+        }
+       }
       }
       TextWidgetClass txt_position {
        ignorepointer 1
-       position 104 208
-       size 335 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       position 0.01 0.386
+       size 0.98 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Bold
        text "XXX"
        "exact text" 0
-       text_proportion 0.9
+       text_proportion 0.8
+       "text halign" center
        "text valign" center
       }
       PanelWidgetClass PanelWidget0 {
        ignorepointer 1
-       color 0.298 0.298 0.298 1
-       position 0 263
-       size 448 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       style editor_selection
+       color 0.1255 0.1255 0.1255 0.7804
+       position 0 0.44
+       size 1 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 1
+       style NewStyle
        {
         TextWidgetClass OnlinePlayerTitle {
          ignorepointer 1
          color 0.7216 0.2667 0.2667 1
          position 0 0
-         size 448 48
+         size 1 1
          hexactpos 1
          vexactpos 1
-         hexactsize 1
-         vexactsize 1
+         hexactsize 0
+         vexactsize 0
+         style Bold
          text "Online Players"
          "text color" 0.7216 0.2667 0.2667 1
          "exact text" 0
@@ -231,38 +198,221 @@ PanelWidgetClass ServerPanelMenu {
       }
       TextWidgetClass txt_Nickname {
        ignorepointer 1
-       position 10 51.63
-       size 430 48
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       position 0.01 0.07
+       size 0.98 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Bold
        text "XXX"
+       font "gui/fonts/metronbook-bold"
+       "exact text" 0
        "text halign" center
        "text valign" center
       }
       TextListboxWidgetClass Player_List {
        ignorepointer 0
-       position 10 315
-       size 435 430
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       keepsafezone 0
+       size 1 0.5
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 1
+       draggable 0
        style Default
        "no focus" 1
        "title visible" 0
+       colums "Online Players "
        lines 15
+       "highlight row" 1
+      }
+      GridSpacerWidgetClass GridSpacerWidget0 {
+       visible 1
+       ignorepointer 1
+       keepsafezone 0
+       position 0.01 0.13
+       size 0.98 0.26
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       "Ignore invisible" 0
+       Padding 0
+       Margin 0
+       content_halign center
+       content_valign center
+       Columns 2
+       Rows 5
+       {
+        TextWidgetClass txt_health0 {
+         ignorepointer 1
+         position 0.56 0.13
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "Health :"
+         font "gui/fonts/metronbook"
+         "exact text" 0
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass txt_health {
+         ignorepointer 1
+         position 0.56 0.13
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+        TextWidgetClass txt_blood0 {
+         ignorepointer 1
+         position 0.56 0.18
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "Blood :"
+         font "gui/fonts/metronbook"
+         "exact text" 0
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass txt_blood {
+         ignorepointer 1
+         position 0.56 0.18
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+        TextWidgetClass txt_water0 {
+         ignorepointer 1
+         position 0.56 0.23
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "Water :"
+         font "gui/fonts/metronbook"
+         "exact text" 0
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass txt_water {
+         ignorepointer 1
+         position 0.56 0.23
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+        TextWidgetClass txt_food0 {
+         ignorepointer 1
+         position 0.56 0.23
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "Food :"
+         font "gui/fonts/metronbook"
+         "exact text" 0
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass txt_food {
+         ignorepointer 1
+         position 0.56 0.23
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         font "gui/fonts/metron"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+        TextWidgetClass playtimesession {
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "Session Time :"
+         font "gui/fonts/metronbook"
+         "exact text" 0
+         text_proportion 0.8
+         "size to text h" 0
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass txt_playtime {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+       }
       }
       ImageWidgetClass ImagePlayerInfo {
        visible 1
        ignorepointer 1
        position 0 105
-       size 450 645
+       size 1 0.86
        hexactpos 1
        vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       hexactsize 0
+       vexactsize 0
        imageTexture "{1C4C349D0F4C7458}ServerPanel/scripts/5_Mission/gui/imageset/PlayerInfo.edds"
        mode opaque
        "src alpha" 0
@@ -272,22 +422,22 @@ PanelWidgetClass ServerPanelMenu {
      }
     }
     ButtonWidgetClass btn_close_widget {
-     position 1730.60999 10.7183
-     size 48 48
-     hexactpos 1
-     vexactpos 1
-     hexactsize 1
-     vexactsize 1
+     position 0.96 0.01
+     size 0.029 0.053
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
      {
       ImageWidgetClass btn_close0 {
        ignorepointer 1
-       position 0.74 0.74
-       size 48 48
+       position 0 0
+       size 1 1
        halign right_ref
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
        image0 "set:dayz_gui image:Close"
        mode blend
        "src alpha" 1
@@ -296,25 +446,25 @@ PanelWidgetClass ServerPanelMenu {
     }
     FrameWidgetClass SPTabber {
      ignorepointer 1
-     position 0 0
-     size 1795 908
+     position 0.91959 -0.5472
+     size 1 1
      hexactpos 1
      vexactpos 1
-     hexactsize 1
-     vexactsize 1
+     hexactsize 0
+     vexactsize 0
      priority 1
      draggable 0
-     scriptclass "TabberUI"
+     scriptclass ""
      {
       WrapSpacerWidgetClass TabBar {
        ignorepointer 1
-       color 0.2588 0.2588 0.2588 1
-       position 15 135
-       size 1315 48
+       color 0.1255 0.1255 0.1255 0.7804
+       position 15 140
+       size 0.77 0.055
        hexactpos 1
        vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       hexactsize 0
+       vexactsize 0
        style DayZDefaultPanel
        {
         GridSpacerWidgetClass SPTab_Control_Container {
@@ -331,25 +481,28 @@ PanelWidgetClass ServerPanelMenu {
          Columns 4
          Rows 1
          {
-          ButtonWidgetClass ButtonTab_Description {
+          ButtonWidgetClass ButtonTab_0 {
            position 10 10
            size 48 48
            hexactpos 1
            vexactpos 1
            hexactsize 1
            vexactsize 1
-           text "DESCRIPTION"
+           text "XXX"
            text_proportion 0.8
+           font "gui/fonts/etelkatextpro"
+           switch normal
           }
-          ButtonWidgetClass ButtonTab_Rules {
+          ButtonWidgetClass ButtonTab_1 {
            position 10 10
            size 48 48
            hexactpos 1
            vexactpos 1
            hexactsize 1
            vexactsize 1
-           text "RULES"
+           text "XXX"
            text_proportion 0.8
+           font "gui/fonts/etelkatextpro"
           }
           ButtonWidgetClass ButtonTab_2 {
            position 10 10
@@ -360,6 +513,7 @@ PanelWidgetClass ServerPanelMenu {
            vexactsize 1
            text "XXX"
            text_proportion 0.8
+           font "gui/fonts/etelkatextpro"
           }
           ButtonWidgetClass ButtonTab_3 {
            position 10 10
@@ -370,67 +524,81 @@ PanelWidgetClass ServerPanelMenu {
            vexactsize 1
            text "XXX"
            text_proportion 0.8
+           font "gui/fonts/etelkatextpro"
           }
          }
         }
        }
       }
-      TextListboxWidgetClass Tab_0 {
-       visible 1
-       ignorepointer 0
-       position 15 190
-       size 1315 640
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       scaled 1
-       style Default
-       lines 30
-       "highlight row" 0
-       font "gui/fonts/Metron"
-      }
-      TextListboxWidgetClass Tab_1 {
-       visible 1
-       ignorepointer 0
-       position 15 190
-       size 1315 640
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       style Default
-       lines 30
-       "highlight row" 0
-       font "gui/fonts/Metron"
-      }
-      TextListboxWidgetClass Tab_2 {
-       visible 1
-       ignorepointer 0
-       position 15 190
-       size 1315 640
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       style Default
-       lines 30
-       "highlight row" 0
-       font "gui/fonts/Metron"
-      }
-      TextListboxWidgetClass Tab_3 {
-       visible 1
-       ignorepointer 0
-       position 15 190
-       size 1315 640
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-       style Default
-       lines 30
-       "highlight row" 0
-       font "gui/fonts/Metron"
+      PanelWidgetClass PanelWidget1 {
+       ignorepointer 1
+       color 0.1255 0.1255 0.1255 0.7804
+       position 0.01 0.21
+       size 0.77 0.71
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        TextListboxWidgetClass Tab_0 {
+         visible 1
+         ignorepointer 0
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         style Default
+         lines 28
+         "highlight row" 0
+         font "gui/fonts/metronbook"
+        }
+        TextListboxWidgetClass Tab_1 {
+         visible 1
+         ignorepointer 0
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Default
+         lines 28
+         "highlight row" 0
+         font "gui/fonts/metronbook"
+        }
+        TextListboxWidgetClass Tab_2 {
+         visible 1
+         ignorepointer 0
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Default
+         lines 28
+         "highlight row" 0
+         font "gui/fonts/metronbook"
+        }
+        TextListboxWidgetClass Tab_3 {
+         visible 1
+         ignorepointer 0
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Default
+         lines 28
+         "highlight row" 0
+         font "gui/fonts/metronbook"
+        }
+       }
       }
      }
     }
@@ -446,6 +614,7 @@ PanelWidgetClass ServerPanelMenu {
      style MenuDefault
      text "XXX"
      text_proportion 0.7
+     font "gui/fonts/etelkatextpro"
     }
    }
   }
