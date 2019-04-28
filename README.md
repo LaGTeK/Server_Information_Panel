@@ -20,8 +20,26 @@ On server:
 -   `ServerPanelConfig.json` is now used to configure your buttons, links and ur Server Name, Don't leave any blank space in Button name & Button Link, follow the exemple. U Can now add more buttons and Tabs are now here. U can also hide player information, it will show just ingame name and a magnific picture :)
 -   U can also leave link blank, the button will disapear, same for tabs
 
+### Json File - [ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json)
+
+ - `ServerName = Your Server name`
+ - `Button1Name = Your Button1Name`
+ - `Button1Link = Your Button1Link`
+ - `Button2Name = Your Button2Name`
+ - `Button2Link = Your Button2Link`
+ - `Button3Name = Your Button3Name`
+ - `Button3Link = Your Button3Link`
+ - `ButtonTab0Name = Name of the First Tab`
+ - `ButtonTab1Name = Name of the Second Tab`
+ - `ButtonTab2Name = Name of the Third Tab`
+ - `ButtonTab3Name = Name of the Fourth Tab`
+ - `PlayerInfo = You can display or hide player information with this parameter`
+ - `UseScriptLog = You can use separate log from script.log for Server Panel Mod `
+
 ### Old installation
-- `UseScriptLog` param has been added, u have to set it up manualy in ur json file (Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanelConfig.json))
+- `UseScriptLog` param has been added, u have to set it up manualy in ur json file 
+- You can also change the name of the two first Tab now
+(Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json))
 -   `ServerName.txt` & `ServerConfigNew.cfg` are not used used anymore, these files should be deleted and remplaced with `ServerPanelConfig.json` automaticatly
 
 
