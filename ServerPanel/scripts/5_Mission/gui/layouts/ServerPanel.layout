@@ -2,7 +2,7 @@ PanelWidgetClass ServerPanelMenu {
  visible 0
  disabled 0
  color 0 0 0 0
- position 0 0.06
+ position 0 0.05
  size 0.957 0.84
  halign center_ref
  hexactpos 0
