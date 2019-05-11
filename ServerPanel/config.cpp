@@ -30,16 +30,28 @@ class CfgMods
 		type="mod";
 		dependencies[]=
 		{
-			"Game","Mission"
+			"Game","World","Mission"
 		};
 		class defs
 		{
+			class imageSets
+			{
+				files[] = {"ServerPanel/scripts/gui/imageset/SP_Icons.imageset"};
+			};
 			class gameScriptModule
 			{
 				value="";
 				files[]=
 				{
 					"ServerPanel/scripts/3_Game"
+				};
+			};
+			class worldScriptModule
+			{
+				value="";
+				files[]=
+				{
+					"ServerPanel/scripts/4_World"
 				};
 			};
 			class missionScriptModule
