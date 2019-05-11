@@ -17,7 +17,7 @@ modded class MissionServer {
 
 	override void OnInit() {
 		super.OnInit();
-		ServerPanelBase.Log("ServerPanelI", "SERVER PANEL INIT");
 		GetServerPanelBase().OnServerReady();
+		ServerPanelBase.Log("ServerPanelI", "SERVER PANEL INIT");
 	}
 };
