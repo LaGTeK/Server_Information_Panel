@@ -6,21 +6,21 @@
 
 -   Make sure that you have installed [Community Framework](https://github.com/Jacob-Mango/DayZ-Community-Framework) by Jacob_Mango, Arkensor and Kegan Hollern
 -   Download latest release
--   Add `Community Framework` and `Server_Information_Panel` to your game and server launch options. For example:
-    `-mod=@Community-Framework;@Server_Information_Panel;`
+-   Add `CF` (Community Framework) and `Server_Information_Panel` to your game and server launch options. For example:
+    `-mod=@CF;@Server_Information_Panel;`
 
 On server:
 
 -   Copy file `LaGTeK.bikey` from `ServerPanel\keys` into server `keys` folder
 -   Copy folder `ServerPanel` from mod folder to `[ServerProfilesFolder]`.
--   Customize your informations from `ServerDescription.txt` and `ServerRules.txt`
+-   Customize your informations from `ServerTab0.txt` and `ServerTab1.txt`
     (You are now able to add what u want, i've tried with some special character and only `|` and `#` can't be used ! ) Don't put more than 110 chars per line !
 -   You can now add some Tabs like About or Crafting tab, Customize your informations from `ServerTab2.txt` file, and `ServerTab3.txt`
     (You are now able to add what u want, i've tried with some special character and only `|` and `#` can't be used ! ) Don't put more than 110 chars per line !
 -   `ServerPanelConfig.json` is now used to configure your buttons, links and ur Server Name, Don't leave any blank space in Button name & Button Link, follow the exemple. U Can now add more buttons and Tabs are now here. U can also hide player information, it will show just ingame name and a magnific picture :)
 -   U can also leave link blank, the button will disapear, same for tabs
 
-### Json File - [ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json)
+### Json File - [ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanelConfig.json)
 
  - `ServerName = Your Server name`
  - `Button1Name = Your Button1Name`
@@ -33,13 +33,14 @@ On server:
  - `ButtonTab1Name = Name of the Second Tab`
  - `ButtonTab2Name = Name of the Third Tab`
  - `ButtonTab3Name = Name of the Fourth Tab`
- - `PlayerInfo = You can display or hide player information with this parameter`
+ - `PlayerInfo = You can display or hide player's side information with this parameter`
+ - `PlayerTab = You can display or hide player Tab with this parameter`
  - `UseScriptLog = You can use separate log from script.log for Server Panel Mod `
 
 ### Old installation
 - `UseScriptLog` param has been added, u have to set it up manualy in ur json file 
 - You can also change the name of the two first Tab now
-(Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json))
+(Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanelConfig.json))
 -   `ServerName.txt` & `ServerConfigNew.cfg` are not used used anymore, these files should be deleted and remplaced with `ServerPanelConfig.json` automaticatly
 
 
@@ -61,5 +62,7 @@ This is WIP, It's my first mod and I work on this in my spare time. I will my be
 
 ## Contributor
 
-- Special Thanks to [Vaker](https://github.com/Moondarker) from [ZomBerry Admin Tools](https://steamcommunity.com/sharedfiles/filedetails/?id=1582756848) for his help.
+- Special Thanks to Shix from Aftermath server for the tab effect.
 - Special Thanks to [Da0ne](https://github.com/Da0ne) from [Vanilla++](https://github.com/VanillaPlusPlus) for his help too :)
+- Special Thanks to [Vaker](https://github.com/Moondarker) from [ZomBerry Admin Tools](https://steamcommunity.com/sharedfiles/filedetails/?id=1582756848) for his help.
+
