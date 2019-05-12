@@ -9,5 +9,8 @@
     "ButtonTab0Name": "TAB0",
     "ButtonTab1Name": "TAB1",
     "ButtonTab2Name": "TAB2",
+    "ButtonTab3Name": "TAB3",
+    "PlayerInfo": 1,
+    "PlayerTab": 1,
     "UseScriptLog": 0
 }

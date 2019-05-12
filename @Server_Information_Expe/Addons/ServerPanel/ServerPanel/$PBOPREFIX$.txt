@@ -1,0 +1,6 @@
+﻿///<'ServerPanel.pbo' properties via Mikero's dos tools, dll version 7.19>///
+product=dayz ugc
+prefix=ServerPanel
+//Pbo Type is: Arma Addon
+//Sha: 'EB143E279F5233704CE8F2DB708B01195AD5C373'
+//////</properties>//////
