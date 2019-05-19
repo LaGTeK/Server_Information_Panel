@@ -5,7 +5,7 @@ modded class MissionGameplay {
 	void MissionGameplay() {
 		ServerPanelBase.Log("ServerPanelI", "ServerPanel Loaded Client side");	
 
-		GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
+		//GetRPCManager().AddRPC( "RPC_ShowPanelRemote", "ShowPanelRemote", this, SingeplayerExecutionType.Client );
 	}
 
 	private ref ServerPanelBase GetServerPanelBase() {
@@ -20,9 +20,9 @@ modded class MissionGameplay {
 
 		UIManager UIMgr = GetGame().GetUIManager();
 
-		if (GetServerPanelMenu().GetLayoutRoot().IsVisible()) {
+		/*if (GetServerPanelMenu().GetLayoutRoot().IsVisible()) {
 			GetServerPanelMenu().OnKeyPress( key );
-		}
+		}*/
 
 		switch ( key ) {
 			case ServerPanelBase.GetConfig().GetSPMenuKey(): {
@@ -43,7 +43,7 @@ modded class MissionGameplay {
 		}
 	}
 
-	void ShowPanelRemote( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )	{
+	/*void ShowPanelRemote( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )	{
 		//Answer call only when client...MissionGameplay runs client only anyway but still add it :P
 		if (type == CallType.Client)	{
 			//Check if sender is still connected to not trigger an Null pointers
@@ -56,5 +56,5 @@ modded class MissionGameplay {
 				PlayerControlEnable();
 			}
 		}
-	}
+	}*/
 };

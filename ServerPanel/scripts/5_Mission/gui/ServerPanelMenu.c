@@ -107,10 +107,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 
 	void ServerPanelMenu()	{
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncConfig", this, SingeplayerExecutionType.Server );
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncTab", this, SingeplayerExecutionType.Server );
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncPlayers", this, SingeplayerExecutionType.Server );
-		
 	}
 
 	void ~ServerPanelMenu()	{	
@@ -120,28 +116,28 @@ class ServerPanelMenu extends UIScriptedMenu {
 		layoutRoot 						= GetGame().GetWorkspace().CreateWidgets( "ServerPanel/scripts/gui/layouts/ServerPanel.layout" );
 		layoutRoot.Show(false);
 
-		WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown( layoutRoot.FindAnyWidget( "PlayerPreview" ),  this, "MouseButtonDown" );
+		WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown( layoutRoot.FindAnyWidget( "PlayerPreview" ), this, "MouseButtonDown" );
 		
 		m_PlayerInfo					= Widget.Cast(layoutRoot.FindAnyWidget("PanelPlayerInformation"));
 
 		m_PanelTabs						= Widget.Cast(layoutRoot.FindAnyWidget("PanelTabs"));
 
-		m_TitlePanel 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "title_text" ) );
+		m_TitlePanel 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "title_text" ));
 
-		m_ServerName 					= MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ) );
+		m_ServerName 					= MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ));
 
-		m_BtnDonate	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_donate" ) );
-		m_BtnRight	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_discord" ) );
-		m_BtnLeft	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_website" ) );
-		m_BtnCancel	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_cancel" ) );
-		m_BtnClose	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_close_widget" ) );
+		m_BtnDonate	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_donate" ));
+		m_BtnRight	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_discord" ));
+		m_BtnLeft	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_website" ));
+		m_BtnCancel	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_cancel" ));
+		m_BtnClose	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_close_widget" ));
 
 		//BtnTab
-		m_btnTabTitle0					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_0" ) );
-		m_btnTabTitle1 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_1" ) );
-		m_btnTabTitle2					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ) );
-		m_btnTabTitle3					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ) );
-		m_btnTabTitle4 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_4" ) );
+		m_btnTabTitle0					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_0" ));
+		m_btnTabTitle1 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_1" ));
+		m_btnTabTitle2					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ));
+		m_btnTabTitle3					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ));
+		m_btnTabTitle4 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_4" ));
 
 		//Tabs
 		m_Tab0							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_0"));
@@ -150,10 +146,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab3							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_3"));		
 		m_Tab4							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_4"));
 
-		m_Tab0List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab0" ) );
-		m_Tab1List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab1" ) );
-		m_Tab2List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab2" ) );
-		m_Tab3List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab3" ) );
+		m_Tab0List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab0" ));
+		m_Tab1List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab1" ));
+		m_Tab2List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab2" ));
+		m_Tab3List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab3" ));
 
 		//Player Information
 		m_PlayerTitle 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
@@ -212,7 +208,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_TitlePanel.SetText(header);
 
 		SPBloodName();
-		SPServerDate();
 		SPGetDirection();
 
 		return layoutRoot;
@@ -239,14 +234,13 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
 
-		PPEffects.SetBlurMenu(0.5);
-		GetGame().GetInput().ChangeGameFocus(1);
-		GetGame().GetUIManager().ShowUICursor(true);
-		GetGame().GetMission().GetHud().Show(false);
-		GetGame().GetMission().PlayerControlEnable();
+		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
+		g_Game.GetUIManager().ShowUICursor(true);
+		g_Game.GetUIManager().ShowCursor(true);
+		GetGame().GetInput().ChangeGameFocus( 1 );
+		GetGame().GetMission().GetHud().Show( false );
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(UpdateHeader, 1000, true);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPServerDate, 1000, true );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGetDirection, 1000, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
@@ -255,27 +249,28 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 	override void OnHide()	{
 		//super.OnHide();
-		//m_ServerPanelMenu = NULL;
+		m_ServerPanelMenu = NULL;
+
+		g_Game.GetUIManager().ShowCursor(false);
+		g_Game.GetUIManager().ShowUICursor(false);
+		GetGame().GetInput().ResetGameFocus();
+		GetGame().GetMission().PlayerControlEnable();
+		GetGame().GetUIManager().Back();
+		GetGame().GetMission().GetHud().Show( true );
 
 		PPEffects.SetBlurMenu(0);
-		GetGame().GetUIManager().ShowUICursor(false);
-		GetGame().GetMission().GetHud().Show(true);
-
-		GetGame().GetInput().ResetGameFocus();
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGetDirection);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGender);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPPlayerPreview);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPServerDate);
 	}
 
-	void SPGetDirection ()	{
+	private void SPGetDirection ()	{
 		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
 		if (player)	{
 			vector playerOrientation = player.GetOrientation();
-			//float position = playerOrientation[0] / -180;
 			float position = playerOrientation[0]/-180;
 
 			m_Direction.SetText(position.ToString());
@@ -291,25 +286,13 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 	}
 
-	void SPItemPreview()	{
+	private void SPItemPreview()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
 			if (Player.GetItemInHands()) m_ItemPreview.SetItem(Player.GetItemInHands());
 		}
 	}
 
-	void SPServerDate()	{
-		private int		sOrigYear;
-		private int		sOrigMonth;
-		private int		sOrigDay;
-		private int		sOrigHour;
-		private int		sOrigMinute;
-
-		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
-			GetGame().GetWorld().GetDate( sOrigDay, sOrigMonth, sOrigDay, sOrigHour, sOrigMinute );
-			m_ServerTime.SetText("" + sOrigDay + "/" + sOrigMonth + "/" + sOrigDay + " | " + sOrigHour + ":" + sOrigMinute);
-		}
-	}
-	void SPPlayerPreview()	{
+	private void SPPlayerPreview()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
 			m_PlayerPreview.SetPlayer( GetGame().GetPlayer() );
 			m_PlayerPreview.SetModelPosition( "0 0 0.605" );
@@ -328,29 +311,31 @@ class ServerPanelMenu extends UIScriptedMenu {
 			}
 		}
 	}
-	void UpdateRotation( int mouse_x, int mouse_y, bool is_dragging )	{
+	private void UpdateRotation( int mouse_x, int mouse_y, bool is_dragging )	{
 		vector orientation = m_CharacterOrientation;
 		orientation[1] = orientation[1] - ( m_CharacterRotationX - mouse_x );
 		m_PlayerPreview.SetModelOrientation( orientation );
 
-		if ( !is_dragging )
-		{	
+		if ( !is_dragging )	{	
 			m_CharacterOrientation = orientation;
 		}
 	}
-	bool MouseButtonDown()	{
+
+	private bool MouseButtonDown()	{
 		g_Game.GetMousePos( m_CharacterRotationX, m_CharacterRotationY );
 		GetGame().GetDragQueue().Call( this, "UpdateRotation" );
 		return true;
 	}
-	void UpdateHeader()	{
+
+	private void UpdateHeader()	{
 		int hour, minute, second, year, month, day;
 		GetHourMinuteSecond(hour, minute, second);
 		GetYearMonthDay(year, month, day);
 		string header = "Server Panel Information by LaGTeK | " + day + "/" + month + "/" + year + " | " + hour + ":" + minute + ":" + second;
 		m_TitlePanel.SetText(header);
 	}
-	void SPGender()	{
+
+	private void SPGender()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
 			if (Player){
 				if (Player.IsMale() )	m_Sex.SetText("Man");
@@ -358,7 +343,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			}
 		}
 	}
-	void SPCalculatePlayerLoad()	{
+	private void SPCalculatePlayerLoad()	{
 		EntityAI attachment;
 		ItemBase itemHands;
 		
@@ -385,7 +370,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 			m_Weight.SetText("" + totalWeight + " Kg");
 		}
 	}
-	void SPBloodName()	{
+
+	private void SPBloodName()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
 			Class.CastTo(Player, GetGame().GetPlayer() );
 			
@@ -613,10 +599,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 			minutes 			= minutes - hours * 60;
 			m_SurvivalTime.SetText("" + hours + "h " + minutes + "m " + seconds + "s");
 
-			//int a1 				= sDistance / 10;
-			//float ran 			= (float) a1 / 100.0;
-			//m_DistanceTravelled.SetText("" + ran + " Km");
-
 			int y =1;
 			for ( int i = 0; i < PlayerListC.Count(); ++i ) {
 				m_PlayersList.AddItem(" " + y.ToString() + ": " + PlayerListC.Get(i), new Param1<string>(PlayerListC.Get(i)), 0);
@@ -651,14 +633,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 			else if (sWater <= 600 && sWater > 300)		{m_TextPlayerWater.SetColor(YELLOW);m_TextPlayerWater.SetText(" Feel Thirsty");}
 			else if (sWater > 600 && sWater <= 1000)	{m_TextPlayerWater.SetColor(WHITE);m_TextPlayerWater.SetText(" Good");}
 			else if (sWater > 1000)	{m_TextPlayerWater.SetColor(WHITE);m_TextPlayerWater.SetText(" Excellent");}
-		}
-	}
-
-	void OnKeyPress( int key ) {
-		UIManager UIMgr = GetGame().GetUIManager();
-		if (key == ServerPanelBase.GetConfig().GetSPMenuKey()) {
-			if (!UIMgr.IsMenuOpen(MENU_INGAME)) UIMgr.CloseAll();
-			return;
 		}
 	}
 
@@ -734,7 +708,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 		return true;
 	}
-	void TransitionTab(Widget newTab, Widget oldTab)	{
+
+	private void TransitionTab(Widget newTab, Widget oldTab)	{
 		Transitioning = true;
 		float width, height, x, y;
 		m_CurrentTabPanel.GetSize(width, height);
@@ -748,7 +723,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		m_CurrentTabPanel = newTab;
 	}
-	void TransitionStep(Widget newTab, Widget oldTab, float stepSize)	{
+
+	private void TransitionStep(Widget newTab, Widget oldTab, float stepSize)	{
 		currentTransitionStep++;
 		float x, y;
 		oldTab.GetPos(x, y);
@@ -812,7 +788,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		else	{
 			out_string = value.ToString();
 		}
-		
 		return out_string;
 	}
 }

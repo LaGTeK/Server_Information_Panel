@@ -18,7 +18,6 @@ class ServerPanelBase {
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncConfigRequest", this, SingeplayerExecutionType.Server );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncTabsRequest", this, SingeplayerExecutionType.Server );
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncPlayersRequest", this, SingeplayerExecutionType.Server );
-		//GetRPCManager().AddRPC( "ServerPanelI", "SyncWeatherRequest", this, SingeplayerExecutionType.Server );
 
 		m_ServerPanelConfig = new ref ServerPanelConfig;
 	}
@@ -39,7 +38,7 @@ class ServerPanelBase {
 
 
 	static void Log( string module, string toLog ) {
-		GetLogger().Log( module, toLog );//need fonction to log my data i can't debug because i don't know values
+		GetLogger().Log( module, toLog );
 	}
 
 	void OnServerReady() {
@@ -113,7 +112,6 @@ class ServerPanelBase {
 		ref TStringArray playerListS 	= new TStringArray;
 		ref TIntArray plyData 			= new TIntArray;
 		ref TFloatArray plyFData 		= new TFloatArray;
-		//ref TBoolArray PlyBData			= new TBoolArray;
 		string Item = "Nothing :)";
 		array<Man> players 				= new array<Man>;
 		PlayerBase player;
@@ -131,9 +129,6 @@ class ServerPanelBase {
 					plyData.Insert(i);
 					plyData.Insert(player.GetHealth());
 					plyData.Insert(player.GetHealth("", "Blood"));
-					//plyData.Insert(player.StatGet("killdist"));
-					//plyData.Insert(player.StatGet("kills"));
-					//plyData.Insert(player.StatGet("killszombies");
 					plyFData.Insert(player.GetStatWater().Get());
 					plyFData.Insert(player.GetStatEnergy().Get());
 					plyFData.Insert(player.StatGet("dist"));
