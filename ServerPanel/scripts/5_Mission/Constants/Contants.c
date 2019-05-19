@@ -11,4 +11,9 @@
 	static const string SP_OLD_DESCRIPTION_PATH		= "$profile:\\ServerPanel\\ServerDescription.txt";
 	static const string SP_OLD_RULES_PATH			= "$profile:\\ServerPanel\\ServerRules.txt";
 
+
+	//Kill count
+	static const string SP_OLD_CONFIG_FOLDER		= "$profile:\\ServerPanel\\ServerPanel.json";
+
+
 	const int SERVER_PANEL							=	26169;

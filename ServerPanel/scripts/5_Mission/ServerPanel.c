@@ -141,6 +141,9 @@ class ServerPanelBase {
 					plyPos = player.GetPosition();
 					plyFData.Insert(player.GetHealth( "", "Shock" ));
 					plyFData.Insert(player.GetStatStamina().Get());
+					plyFData.Insert(player.StatGet("players_killed"));
+					plyFData.Insert(player.StatGet("infected_killed"));
+					plyFData.Insert(player.StatGet("longest_survivor_hit"));
 					bool m_HasDisease = player.HasDisease();
 
 					if (player.GetItemInHands() && !player.GetCommand_Vehicle()) {Item = (player.GetItemInHands().GetInventoryItemType().GetName())}

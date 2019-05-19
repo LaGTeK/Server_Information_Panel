@@ -670,8 +670,8 @@ PanelWidgetClass ServerPanelMenu {
               }
               GridSpacerWidgetClass GridSpacerWidget1 {
                ignorepointer 1
-               position 0.07 0.09
-               size 0.91 0.21
+               position 0.07 0.08
+               size 0.91 0.28
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -681,6 +681,7 @@ PanelWidgetClass ServerPanelMenu {
                content_halign center
                content_valign center
                Columns 2
+               Rows 4
                {
                 TextWidgetClass distance {
                  ignorepointer 1
@@ -741,36 +742,60 @@ PanelWidgetClass ServerPanelMenu {
                  "text halign" right
                  "text valign" center
                 }
-                TextWidgetClass playtimesession {
+                TextWidgetClass ZKilled {
                  ignorepointer 1
-                 position 0 0
-                 size 0.5 0.05
-                 hexactpos 0
-                 vexactpos 0
-                 hexactsize 0
-                 vexactsize 0
-                 scaled 1
-                 text "Session Time : "
-                 font "gui/fonts/metronbook"
+                 position 1221.48999 82.58
+                 size 211.493 48
+                 hexactpos 1
+                 vexactpos 1
+                 hexactsize 1
+                 vexactsize 1
+                 text "Zombies Killed : "
                  "text offset" 6 0
                  "exact text" 0
                  text_proportion 0.6
-                 "size to text h" 0
                  "text valign" center
                 }
-                TextWidgetClass txt_playtime {
-                 visible 1
+                TextWidgetClass txt_ZKilled {
                  ignorepointer 1
-                 position 0.5 0
-                 size 0.5 0.05
-                 hexactpos 0
-                 vexactpos 0
-                 hexactsize 0
-                 vexactsize 0
+                 position 1221.48999 82.58
+                 size 211.493 48
+                 hexactpos 1
+                 vexactpos 1
+                 hexactsize 1
+                 vexactsize 1
                  style Bold
-                 text " XXX"
+                 text "XXX"
                  "text offset" -6 0
+                 text_proportion 0.8
+                 "text halign" right
+                 "text valign" center
+                }
+                TextWidgetClass PKilled {
+                 ignorepointer 1
+                 position 1221.48999 82.58
+                 size 211.493 48
+                 hexactpos 1
+                 vexactpos 1
+                 hexactsize 1
+                 vexactsize 1
+                 text "Players Killed : "
+                 "text offset" 6 0
                  "exact text" 0
+                 text_proportion 0.6
+                 "text valign" center
+                }
+                TextWidgetClass txt_PKilled {
+                 ignorepointer 1
+                 position 1221.48999 82.58
+                 size 211.493 48
+                 hexactpos 1
+                 vexactpos 1
+                 hexactsize 1
+                 vexactsize 1
+                 style Bold
+                 text "XXX"
+                 "text offset" -6 0
                  text_proportion 0.8
                  "text halign" right
                  "text valign" center
@@ -780,7 +805,7 @@ PanelWidgetClass ServerPanelMenu {
               PanelWidgetClass PanelWidget6 {
                ignorepointer 1
                color 0.2549 0.2549 0.2549 1
-               position 0.01 0.33
+               position 0.01 0.37
                size 0.98 0.07
                hexactpos 0
                vexactpos 0
@@ -804,7 +829,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               GridSpacerWidgetClass GridSpacerWidget2 {
                ignorepointer 1
-               position 0.07 0.4
+               position 0.07 0.44
                size 0.91 0.28
                hexactpos 0
                vexactpos 0
@@ -953,7 +978,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageSex {
                ignorepointer 1
-               position 0.0125 0.405
+               position 0.0125 0.445
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -969,7 +994,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageDistance {
                ignorepointer 1
-               position 0.0125 0.095
+               position 0.0125 0.085
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -985,7 +1010,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageSurvived {
                ignorepointer 1
-               position 0.0125 0.165
+               position 0.0125 0.155
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -999,27 +1024,9 @@ PanelWidgetClass ServerPanelMenu {
                filter 1
                nocache 0
               }
-              ImageWidgetClass ImageSession {
-               ignorepointer 1
-               position 0.0125 0.235
-               size 40 40
-               hexactpos 0
-               vexactpos 0
-               hexactsize 1
-               vexactsize 1
-               image0 "set:spicons image:SessionTime"
-               mode blend
-               "src alpha" 1
-               "no wrap" 1
-               stretch 1
-               "flip u" 0
-               "flip v" 0
-               filter 1
-               nocache 0
-              }
               ImageWidgetClass ImageWeight {
                ignorepointer 1
-               position 0.0125 0.4725
+               position 0.0125 0.515
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1036,7 +1043,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageBloodType {
                ignorepointer 1
-               position 0.0125 0.5425
+               position 0.0125 0.585
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1052,7 +1059,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageHands {
                ignorepointer 1
-               position 0.0125 0.6125
+               position 0.0125 0.655
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1068,14 +1075,46 @@ PanelWidgetClass ServerPanelMenu {
               }
               ItemPreviewWidgetClass ItemPreview {
                ignorepointer 1
-               position 0 0
-               size 0.86 0.32
+               position 0 0.005
+               size 0.73 0.27
                halign center_ref
                valign bottom_ref
                hexactpos 0
                vexactpos 0
                hexactsize 0
                vexactsize 0
+              }
+              ImageWidgetClass ImageZKilled {
+               ignorepointer 1
+               position 0.0125 0.225
+               size 40 40
+               hexactpos 0
+               vexactpos 0
+               hexactsize 1
+               vexactsize 1
+               image0 "set:spicons image:ZKilled"
+               mode blend
+               "src alpha" 1
+               "no wrap" 1
+               stretch 1
+               filter 1
+               nocache 0
+              }
+              ImageWidgetClass ImagePKilled {
+               ignorepointer 1
+               position 0.0125 0.295
+               size 40 40
+               hexactpos 0
+               vexactpos 0
+               hexactsize 1
+               vexactsize 1
+               image0 "set:spicons image:PKilled"
+               mode blend
+               "src alpha" 1
+               "no wrap" 1
+               stretch 1
+               filter 1
+               nocache 0
               }
              }
             }
@@ -1093,8 +1132,8 @@ PanelWidgetClass ServerPanelMenu {
               PlayerPreviewWidgetClass PlayerPreview {
                clipchildren 1
                ignorepointer 0
-               position 0.245 0.015
-               size 0.48 0.64
+               position 0.245 0.01
+               size 0.48 0.63
                halign center_ref
                hexactpos 0
                vexactpos 0
@@ -1243,7 +1282,7 @@ PanelWidgetClass ServerPanelMenu {
               PanelWidgetClass PanelWidget7 {
                ignorepointer 1
                color 0.2549 0.2549 0.2549 1
-               position 0.01 0.67
+               position 0.01 0.65
                size 0.98 0.07
                hexactpos 0
                vexactpos 0
@@ -1267,8 +1306,8 @@ PanelWidgetClass ServerPanelMenu {
               }
               GridSpacerWidgetClass GridSpacerWidget3 {
                ignorepointer 1
-               position 0.07 0.745
-               size 0.91 0.21
+               position 0.07 0.72
+               size 0.91 0.28
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1278,6 +1317,7 @@ PanelWidgetClass ServerPanelMenu {
                content_halign center
                content_valign center
                Columns 2
+               Rows 4
                {
                 TextWidgetClass Disease {
                  ignorepointer 1
@@ -1297,40 +1337,6 @@ PanelWidgetClass ServerPanelMenu {
                  "text valign" center
                 }
                 TextWidgetClass txt_disease {
-                 visible 1
-                 ignorepointer 1
-                 position 0.5 0
-                 size 0.5 0.05
-                 hexactpos 0
-                 vexactpos 0
-                 hexactsize 0
-                 vexactsize 0
-                 style Bold
-                 text "XXX"
-                 "text offset" -6 0
-                 "exact text" 0
-                 text_proportion 0.8
-                 "text halign" right
-                 "text valign" center
-                }
-                TextWidgetClass sTime {
-                 ignorepointer 1
-                 position 0 0
-                 size 0.5 0.04
-                 hexactpos 0
-                 vexactpos 0
-                 hexactsize 0
-                 vexactsize 0
-                 scaled 1
-                 text "Server Time : "
-                 font "gui/fonts/metronbook"
-                 "text offset" 6 0
-                 "exact text" 0
-                 text_proportion 0.6
-                 "size to text h" 0
-                 "text valign" center
-                }
-                TextWidgetClass txt_sTime {
                  visible 1
                  ignorepointer 1
                  position 0.5 0
@@ -1381,6 +1387,74 @@ PanelWidgetClass ServerPanelMenu {
                  "text halign" right
                  "text valign" center
                 }
+                TextWidgetClass playtimesession {
+                 ignorepointer 1
+                 position 0 0
+                 size 0.5 0.05
+                 hexactpos 0
+                 vexactpos 0
+                 hexactsize 0
+                 vexactsize 0
+                 scaled 1
+                 text "Session Time : "
+                 font "gui/fonts/metronbook"
+                 "text offset" 6 0
+                 "exact text" 0
+                 text_proportion 0.6
+                 "size to text h" 0
+                 "text valign" center
+                }
+                TextWidgetClass txt_playtime {
+                 visible 1
+                 ignorepointer 1
+                 position 0.5 0
+                 size 0.5 0.05
+                 hexactpos 0
+                 vexactpos 0
+                 hexactsize 0
+                 vexactsize 0
+                 style Bold
+                 text " XXX"
+                 "text offset" -6 0
+                 "exact text" 0
+                 text_proportion 0.8
+                 "text halign" right
+                 "text valign" center
+                }
+                TextWidgetClass longestShot {
+                 ignorepointer 1
+                 position 0 0
+                 size 0.5 0.05
+                 hexactpos 0
+                 vexactpos 0
+                 hexactsize 0
+                 vexactsize 0
+                 scaled 1
+                 text "Longest Shot : "
+                 font "gui/fonts/metronbook"
+                 "text offset" 6 0
+                 "exact text" 0
+                 text_proportion 0.6
+                 "size to text h" 0
+                 "text valign" center
+                }
+                TextWidgetClass txt_longestShot {
+                 visible 1
+                 ignorepointer 1
+                 position 0.5 0
+                 size 0.5 0.05
+                 hexactpos 0
+                 vexactpos 0
+                 hexactsize 0
+                 vexactsize 0
+                 style Bold
+                 text " XXX"
+                 "text offset" -6 0
+                 "exact text" 0
+                 text_proportion 0.8
+                 "text halign" right
+                 "text valign" center
+                }
                }
               }
               MultilineTextWidgetClass Good {
@@ -1401,7 +1475,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImagesTime {
                ignorepointer 1
-               position 0.0125 0.8175
+               position 0.0125 0.795
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1415,25 +1489,9 @@ PanelWidgetClass ServerPanelMenu {
                filter 1
                nocache 0
               }
-              ImageWidgetClass ImagesDirection {
-               ignorepointer 1
-               position 0.0125 0.885
-               size 40 40
-               hexactpos 0
-               vexactpos 0
-               hexactsize 1
-               vexactsize 1
-               image0 "set:spicons image:Compass"
-               mode blend
-               "src alpha" 1
-               "no wrap" 1
-               stretch 1
-               filter 1
-               nocache 0
-              }
               ImageWidgetClass ImagesDisease {
                ignorepointer 1
-               position 0.0125 0.75
+               position 0.0125 0.725
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1444,6 +1502,42 @@ PanelWidgetClass ServerPanelMenu {
                "src alpha" 1
                "no wrap" 1
                stretch 1
+               filter 1
+               nocache 0
+              }
+              ImageWidgetClass ImageSession {
+               ignorepointer 1
+               position 0.0125 0.865
+               size 40 40
+               hexactpos 0
+               vexactpos 0
+               hexactsize 1
+               vexactsize 1
+               image0 "set:spicons image:SessionTime"
+               mode blend
+               "src alpha" 1
+               "no wrap" 1
+               stretch 1
+               "flip u" 0
+               "flip v" 0
+               filter 1
+               nocache 0
+              }
+              ImageWidgetClass ImageLongestShot {
+               ignorepointer 1
+               position 0.0125 0.935
+               size 40 40
+               hexactpos 0
+               vexactpos 0
+               hexactsize 1
+               vexactsize 1
+               image0 "set:spicons image:Sniper"
+               mode blend
+               "src alpha" 1
+               "no wrap" 1
+               stretch 1
+               "flip u" 0
+               "flip v" 0
                filter 1
                nocache 0
               }

@@ -56,6 +56,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 	protected TextWidget 						m_Direction;
 	protected TextWidget 						m_ZKilled;
 	protected TextWidget 						m_PKilled;
+	protected TextWidget						m_LongestShot;
 
 	protected ImageWidget 						m_ImgNight;
 	protected ImageWidget 						m_ImgSun;
@@ -172,8 +173,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_SurvivalTime 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_survivaltime" ) );
 		m_DistanceTravelled 			= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_distance" ) );
 		m_Direction						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_direction" ) );
-		//m_ZKilled						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_zKilled" ) );
-		//m_PKilled						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_pKilled" ) );
+		m_ZKilled						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_ZKilled" ) );
+		m_PKilled						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_PKilled" ) );
+		m_LongestShot					= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_longestShot" ) );
 
 		//ProgressBar
 		m_HealthBar 					= ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "HealthBar" ) );
@@ -249,8 +251,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPPlayerPreview, 500, false );
-		
-		
 	}
 
 	override void OnHide()	{
@@ -522,7 +522,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			sServerTab0	= syncTabs.param1;
 			sServerTab1	= syncTabs.param2;
 			sServerTab2	= syncTabs.param3;
-			sServerTab3	= syncTabs.param3;
+			sServerTab3	= syncTabs.param4;
 		}
 
 		int i;
@@ -539,16 +539,19 @@ class ServerPanelMenu extends UIScriptedMenu {
 		ref TIntArray PlayerDataC			= new TIntArray;
 		ref TFloatArray PlayerDataF			= new TFloatArray;
 
-		int sUpTime 		= 	0;
-		int sHealth 		=	0;
-		int sBlood 			=	0;
-		//int sAvgPing		=	0;
-		float sEnergy 		=	0;
-		float sWater 		=	0;
-		float sDistance 	=	0;
-		float sPlaytime 	=	0;
-		float sShock		=	0;
-		float sStamina		=	0;
+		int sUpTime 				= 	0;
+		int sHealth 				=	0;
+		int sBlood 					=	0;
+		//int sAvgPing				=	0;
+		float sEnergy 				=	0;
+		float sWater 				=	0;
+		float sDistance 			=	0;
+		float sPlaytime 			=	0;
+		float sShock				=	0;
+		float sStamina				=	0;
+		float sPlayers_killed		= 	0;
+		float sInfected_killed		= 	0;
+		float sLongest_survivor_hit	= 	0;
 
 		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
 			if ( !ctx.Read( syncDataS ) ) {
@@ -569,15 +572,18 @@ class ServerPanelMenu extends UIScriptedMenu {
 			sUpTime = Math.Round(PlayerDataC[0]/1000);
 		}
 
-		sHealth 		=	PlayerDataC[2];
-		sBlood 			=	PlayerDataC[3];
-		//sAvgPing		=	PlayerDataC[4];
-		sEnergy 		=	PlayerDataF[1];
-		sWater 			=	PlayerDataF[0];
-		sDistance 		=	PlayerDataF[2];
-		sPlaytime 		=	PlayerDataF[3];
-		sShock			=	PlayerDataF[4];
-		sStamina		=	PlayerDataF[5];
+		sHealth 				=	PlayerDataC[2];
+		sBlood 					=	PlayerDataC[3];
+		//sAvgPing				=	PlayerDataC[4];
+		sEnergy 				=	PlayerDataF[1];
+		sWater 					=	PlayerDataF[0];
+		sDistance 				=	PlayerDataF[2];
+		sPlaytime 				=	PlayerDataF[3];
+		sShock					=	PlayerDataF[4];
+		sStamina				=	PlayerDataF[5];
+		sPlayers_killed			=	PlayerDataF[6];
+		sInfected_killed		=	PlayerDataF[7];
+		sLongest_survivor_hit	=	PlayerDataF[8];
 
 		if (layoutRoot.IsVisible()) {
 
@@ -589,6 +595,11 @@ class ServerPanelMenu extends UIScriptedMenu {
 			m_TextPlayerHealth.SetText(" " + sHealth.ToString());
 			m_TextPlayerBlood.SetText(" " + sBlood.ToString());
 			//m_AvgPing.SetText(" " + sAvgPing + "ms");
+
+			m_LongestShot.SetText(GetDistanceString(sLongest_survivor_hit));
+			m_PKilled.SetText(GetValueString(sPlayers_killed));
+			m_ZKilled.SetText(GetValueString(sInfected_killed));
+			m_DistanceTravelled.SetText(GetDistanceString(sDistance));
 
 			if (sDisease) m_Condition.SetText("Sick !");
 			else m_Condition.SetText("Healthy");
@@ -602,9 +613,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 			minutes 			= minutes - hours * 60;
 			m_SurvivalTime.SetText("" + hours + "h " + minutes + "m " + seconds + "s");
 
-			int a1 				= sDistance / 10;
-			float ran 			= (float) a1 / 100.0;
-			m_DistanceTravelled.SetText("" + ran + " Km");
+			//int a1 				= sDistance / 10;
+			//float ran 			= (float) a1 / 100.0;
+			//m_DistanceTravelled.SetText("" + ran + " Km");
 
 			int y =1;
 			for ( int i = 0; i < PlayerListC.Count(); ++i ) {
@@ -751,5 +762,57 @@ class ServerPanelMenu extends UIScriptedMenu {
 			oldTab.SetPos(leftX, y, true);
 			Transitioning = false;
 		}
+	}
+
+	protected string GetDistanceString( float total_distance, bool meters_only = false )	{
+		if( total_distance < 0 )
+			return "0m";
+	
+		int distance_meters = total_distance;
+		string distance_string;
+		
+		int kilometers = distance_meters / 1000;
+		if ( kilometers > 0 && !meters_only )	{
+			distance_string += GetValueString( kilometers ) + "km";			//kilometers
+			distance_string += " ";											//separator
+		}
+		else	{
+			distance_string += GetValueString( distance_meters ) + "m";		//meters
+		}
+		
+		return distance_string;
+	}
+
+	protected string GetValueString( float total_value )	{
+		if( total_value < 0 )
+			return "0";
+	
+		int value = total_value;
+		string out_string;
+		
+		if ( value >= 1000 )	{
+			string value_string = value.ToString();
+			
+			int count;		
+			int first_length = value_string.Length() % 3;		//calculate position of the first separator
+			if ( first_length > 0 )	{
+				count = 3 - first_length;
+			}
+			
+			for ( int i = 0; i < value_string.Length(); ++i )	{
+				out_string += value_string.Get( i );
+				count ++;
+				
+				if ( count >= 3 )	{
+					out_string += " ";			//separator
+					count = 0;
+				}
+			}
+		}
+		else	{
+			out_string = value.ToString();
+		}
+		
+		return out_string;
 	}
 }

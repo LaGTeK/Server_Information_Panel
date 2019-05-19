@@ -1,7 +1,7 @@
 modded class InGameMenu {
 	override void RegisterButtons() {
-		//RegisterButton( "CREDITS", "OnClick_Credits" );
-
+		//RegisterButton( "CREDITS", "EnterCreditsMenu" );
+		RegisterButton( "CREDITS", "OnClick_Credits" );
 		RegisterButton( "SERVER INFORMATIONS", "EnterServerPanelMenu" );
     }
 
