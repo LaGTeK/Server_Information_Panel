@@ -25,7 +25,7 @@ class ServerPanelLogger {
 
 	void SwitchToCustomIO() {
 		string tempPath = "";
-		string realProfiles = ServerPanelBase.GetConfig().GetProfilesPath();
+		string realProfiles = "";
 		if (!defaultIO) return;
 
 		if (defaultIO) {

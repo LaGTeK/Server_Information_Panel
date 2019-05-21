@@ -84,7 +84,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 	private TextListboxWidget 					m_Tab3List;
 
 	private string m_Link1, m_Link2, m_Link3, m_Tab0name, m_Tab1name, m_Tab2name, m_Tab3name;
-	private int SPMENUKEY;
 
 	//Player Preview
 	protected vector m_CharacterOrientation;
@@ -107,86 +106,87 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 
 	void ServerPanelMenu()	{
+		//GetRPCManager().AddRPC("ServerPanelConfig", "SyncPlayers", this, SingeplayerExecutionType.Server);
 	}
 
 	void ~ServerPanelMenu()	{	
 	}
 
 	override Widget Init()	{
-		layoutRoot 						= GetGame().GetWorkspace().CreateWidgets( "ServerPanel/scripts/gui/layouts/ServerPanel.layout" );
+		layoutRoot 						=	GetGame().GetWorkspace().CreateWidgets( "ServerPanel/scripts/gui/layouts/ServerPanel.layout" );
 		layoutRoot.Show(false);
 
 		WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown( layoutRoot.FindAnyWidget( "PlayerPreview" ), this, "MouseButtonDown" );
 		
-		m_PlayerInfo					= Widget.Cast(layoutRoot.FindAnyWidget("PanelPlayerInformation"));
+		m_PlayerInfo					=	Widget.Cast(layoutRoot.FindAnyWidget("PanelPlayerInformation"));
 
-		m_PanelTabs						= Widget.Cast(layoutRoot.FindAnyWidget("PanelTabs"));
+		m_PanelTabs						=	Widget.Cast(layoutRoot.FindAnyWidget("PanelTabs"));
 
-		m_TitlePanel 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "title_text" ));
+		m_TitlePanel 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "title_text" ));
 
-		m_ServerName 					= MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ));
+		m_ServerName 					=	MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "text_name" ));
 
-		m_BtnDonate	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_donate" ));
-		m_BtnRight	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_discord" ));
-		m_BtnLeft	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_website" ));
-		m_BtnCancel	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_cancel" ));
-		m_BtnClose	 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_close_widget" ));
+		m_BtnDonate	 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_donate" ));
+		m_BtnRight	 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_discord" ));
+		m_BtnLeft	 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_website" ));
+		m_BtnCancel	 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_cancel" ));
+		m_BtnClose	 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "btn_close_widget" ));
 
 		//BtnTab
-		m_btnTabTitle0					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_0" ));
-		m_btnTabTitle1 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_1" ));
-		m_btnTabTitle2					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ));
-		m_btnTabTitle3					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ));
-		m_btnTabTitle4 					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_4" ));
+		m_btnTabTitle0					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_0" ));
+		m_btnTabTitle1 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_1" ));
+		m_btnTabTitle2					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_2" ));
+		m_btnTabTitle3					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_3" ));
+		m_btnTabTitle4 					=	ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ButtonTab_4" ));
 
 		//Tabs
-		m_Tab0							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_0"));
-		m_Tab1							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_1"));
-		m_Tab2							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_2"));
-		m_Tab3							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_3"));		
-		m_Tab4							= Widget.Cast(layoutRoot.FindAnyWidget("Tab_4"));
+		m_Tab0							=	Widget.Cast(layoutRoot.FindAnyWidget("Tab_0"));
+		m_Tab1							=	Widget.Cast(layoutRoot.FindAnyWidget("Tab_1"));
+		m_Tab2							=	Widget.Cast(layoutRoot.FindAnyWidget("Tab_2"));
+		m_Tab3							=	Widget.Cast(layoutRoot.FindAnyWidget("Tab_3"));		
+		m_Tab4							=	Widget.Cast(layoutRoot.FindAnyWidget("Tab_4"));
 
-		m_Tab0List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab0" ));
-		m_Tab1List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab1" ));
-		m_Tab2List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab2" ));
-		m_Tab3List 						= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab3" ));
+		m_Tab0List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab0" ));
+		m_Tab1List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab1" ));
+		m_Tab2List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab2" ));
+		m_Tab3List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab3" ));
 
 		//Player Information
-		m_PlayerTitle 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
-		m_TextPlayerNickname			= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_Nickname" ) );
-		m_TextPlayerBlood 				= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_blood" ) );
-		m_TextPlayerHealth 				= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_health" ) );
-		m_TextPlayerWater 				= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_water" ) );
-		m_TextPlayerEnergy 				= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_food" ) );
-		m_TextPlayerPos 				= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_position" ) );
-		m_ItemHands						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_itemhands" ) );
-		m_Sex							= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_sex" ) );
-		m_Weight 						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_weight" ) );
-		m_BloodType						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_bloodtype" ) );
-		m_PlayTime 						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_playtime" ) );
-		m_ServerTime					= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_sTime" ) );
-		m_Condition 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_disease" ) );
-		m_SurvivalTime 					= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_survivaltime" ) );
-		m_DistanceTravelled 			= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_distance" ) );
-		m_Direction						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_direction" ) );
-		m_ZKilled						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_ZKilled" ) );
-		m_PKilled						= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_PKilled" ) );
-		m_LongestShot					= TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_longestShot" ) );
+		m_PlayerTitle 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
+		m_TextPlayerNickname			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_Nickname" ) );
+		m_TextPlayerBlood 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_blood" ) );
+		m_TextPlayerHealth 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_health" ) );
+		m_TextPlayerWater 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_water" ) );
+		m_TextPlayerEnergy 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_food" ) );
+		m_TextPlayerPos 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_position" ) );
+		m_ItemHands						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_itemhands" ) );
+		m_Sex							=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_sex" ) );
+		m_Weight 						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_weight" ) );
+		m_BloodType						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_bloodtype" ) );
+		m_PlayTime 						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_playtime" ) );
+		m_ServerTime					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_sTime" ) );
+		m_Condition 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_disease" ) );
+		m_SurvivalTime 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_survivaltime" ) );
+		m_DistanceTravelled 			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_distance" ) );
+		m_Direction						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_direction" ) );
+		m_ZKilled						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_ZKilled" ) );
+		m_PKilled						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_PKilled" ) );
+		m_LongestShot					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_longestShot" ) );
 
 		//ProgressBar
-		m_HealthBar 					= ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "HealthBar" ) );
-		m_BloodBar 						= ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "BloodBar" ) );
-		m_ShockBar 						= ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "ShockBar" ) );
-		m_StaminaBar 					= ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "StaminaBar" ) );
+		m_HealthBar 					=	ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "HealthBar" ) );
+		m_BloodBar 						=	ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "BloodBar" ) );
+		m_ShockBar 						=	ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "ShockBar" ) );
+		m_StaminaBar 					=	ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "StaminaBar" ) );
 
-		m_PlayersList 					= TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Player_List" ) );
+		m_PlayersList 					=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "Player_List" ) );
 
 		//Preview Widget
-		m_PlayerPreview 				= PlayerPreviewWidget.Cast( layoutRoot.FindAnyWidget( "PlayerPreview" ) );
-		m_ItemPreview					= ItemPreviewWidget.Cast( layoutRoot.FindAnyWidget( "ItemPreview" ) );
+		m_PlayerPreview 				=	PlayerPreviewWidget.Cast( layoutRoot.FindAnyWidget( "PlayerPreview" ) );
+		m_ItemPreview					=	ItemPreviewWidget.Cast( layoutRoot.FindAnyWidget( "ItemPreview" ) );
 
-		m_CurrentTab = ServerPanelTab.Tab0;
-		m_CurrentTabPanel = m_Tab0;
+		m_CurrentTab 					=	ServerPanelTab.Tab0;
+		m_CurrentTabPanel 				=	m_Tab0;
 
 		float x, y, w, h;
 		m_CurrentTabPanel.GetPos(x, y);
@@ -210,28 +210,27 @@ class ServerPanelMenu extends UIScriptedMenu {
 		SPBloodName();
 		SPGetDirection();
 
+		FillFilesInformations();
+		//FillPlayersInformations();
+
 		return layoutRoot;
 	}
 
-	void Show()
-	{
+	void Show()	{
 		SetFocus(NULL);
 		layoutRoot.Show(true);
 
 		OnShow();
 	}
 
-	void Hide()
-	{
+	void Hide()	{
 		SetFocus(NULL);
 		OnHide();
 		layoutRoot.Show(false);
 	}
 
 	override void OnShow()	{
-
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncConfigRequest", new Param1< int >( 0 ), true, NULL );
-		GetRPCManager().SendRPC( "ServerPanelI", "SyncTabsRequest", new Param1< int >( 0 ), true, NULL );
+		
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
 
 		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
@@ -311,6 +310,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			}
 		}
 	}
+	
 	private void UpdateRotation( int mouse_x, int mouse_y, bool is_dragging )	{
 		vector orientation = m_CharacterOrientation;
 		orientation[1] = orientation[1] - ( m_CharacterRotationX - mouse_x );
@@ -343,6 +343,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			}
 		}
 	}
+
 	private void SPCalculatePlayerLoad()	{
 		EntityAI attachment;
 		ItemBase itemHands;
@@ -394,129 +395,90 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 	}
 
-	void SyncConfig( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		Param2<ref TStringArray, ref TBoolArray> syncConfig;
-		ref TStringArray sPanelConfig;
-		ref TBoolArray sConfigBool
-		string sBtn1name, sBtn1link, sBtn2name, sBtn2link, sBtn3name, sBtn3link, sServerName, sTab0name, sTab1name, sTab2name, sTab3name;
-		bool sPlayerInfo;
-		bool sPlayerTab;
-
-		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
-			if ( !ctx.Read( syncConfig ) ) {
-				ServerPanelBase.Log("ServerPanelFile", "Config sync files read error - possible version mismatch");
-				return;
-			}
-			sPanelConfig 	= syncConfig.param1;
-			sConfigBool 	= syncConfig.param2;
-		}
-
-		if (layoutRoot.IsVisible()) {
-			sBtn1name 	= sPanelConfig[0];
-			sBtn1link 	= sPanelConfig[1];
-			sBtn2name 	= sPanelConfig[2];
-			sBtn2link 	= sPanelConfig[3];
-			sBtn3name 	= sPanelConfig[4];
-			sBtn3link 	= sPanelConfig[5];
-			sServerName = sPanelConfig[6];
-			sTab0name 	= sPanelConfig[7];
-			sTab1name 	= sPanelConfig[8];
-			sTab2name 	= sPanelConfig[9];
-			sTab3name 	= sPanelConfig[10];
-
-			sPlayerInfo 	= sConfigBool[0];
-			sPlayerTab 		= sConfigBool[1];
-
-			m_Link1		= sBtn1link;
-			m_Link2		= sBtn2link;
-			m_Link3		= sBtn3link;
-			m_Tab0name	= sTab0name;
-			m_Tab1name	= sTab1name;
-			m_Tab2name	= sTab2name;
-			m_Tab3name	= sTab3name;
-
-			m_ServerName.SetText(sServerName);
-
-			if (!sPlayerInfo) {
-				float new_x = 98/100;
-				float new_y = 77/100;
-				m_PlayerInfo.Show(false);
-				m_PanelTabs.SetSize(new_x,new_y);
-			}
-
-			if (!sPlayerTab) {
-				//m_Tab4.Show(false);
-				m_btnTabTitle4.Show(false);
-			}
-
-			if (m_Tab0name != "") {
-				m_btnTabTitle0.SetText(m_Tab0name);
-				m_btnTabTitle0.Show(true);
-			}
-			else m_btnTabTitle0.Show(false);
-
-			if (m_Tab1name != "") {
-				m_btnTabTitle1.SetText(m_Tab1name);
-				m_btnTabTitle1.Show(true);
-			}
-			else m_btnTabTitle1.Show(false);
-
-			if (m_Tab2name != "") {
-				m_btnTabTitle2.SetText(m_Tab2name);
-				m_btnTabTitle2.Show(true);
-			}
-			else m_btnTabTitle2.Show(false);
-
-			if (m_Tab3name != "") {
-				m_btnTabTitle3.SetText(m_Tab3name);
-				m_btnTabTitle3.Show(true);
-			}
-			else m_btnTabTitle3.Show(false);
-
-			if (m_Link1 != "" && sBtn1name != "") {
-				m_BtnRight.SetText(sBtn1name);
-				m_BtnRight.Show(true);
-			}
-			else m_BtnRight.Show(false);
-
-			if (m_Link2 != "" && sBtn2name != "") {
-				m_BtnLeft.SetText(sBtn2name);
-				m_BtnLeft.Show(true);
-			}
-			else m_BtnLeft.Show(false);
-
-			if (m_Link3 != "" && sBtn3name != "") {
-				m_BtnDonate.SetText(sBtn3name);
-				m_BtnDonate.Show(true);
-			}
-			else m_BtnDonate.Show(false);
-		}
-	}
-	void SyncTab( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		Param4<ref TStringArray, ref TStringArray, ref TStringArray, ref TStringArray> syncTabs;
-
-		ref TStringArray sServerTab0	= new TStringArray;
-		ref TStringArray sServerTab1	= new TStringArray;
-		ref TStringArray sServerTab2	= new TStringArray;
-		ref TStringArray sServerTab3	= new TStringArray;
-
-		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
-			if ( !ctx.Read( syncTabs ) ) {
-				ServerPanelBase.Log("ServerPanelFile", "Tab sync files read error - possible version mismatch");
-				return;
-			}
-			sServerTab0	= syncTabs.param1;
-			sServerTab1	= syncTabs.param2;
-			sServerTab2	= syncTabs.param3;
-			sServerTab3	= syncTabs.param4;
-		}
+	void FillFilesInformations()	{
+		if (!GetServerPanelServerConfig() || !GetServerPanelClientConfig())
+			return;
 
 		int i;
 
-		for ( i = 0; i < sServerTab0.Count(); ++i ) 	m_Tab0List.AddItem(sServerTab0.Get(i), new Param1<string>(sServerTab0.Get(i)), 0);
-		for ( i = 0; i < sServerTab1.Count(); ++i ) 	m_Tab1List.AddItem(sServerTab1.Get(i), new Param1<string>(sServerTab1.Get(i)), 0);
-		for ( i = 0; i < sServerTab2.Count(); ++i ) 	m_Tab2List.AddItem(sServerTab2.Get(i), new Param1<string>(sServerTab2.Get(i)), 0);
-		for ( i = 0; i < sServerTab3.Count(); ++i ) 	m_Tab3List.AddItem(sServerTab3.Get(i), new Param1<string>(sServerTab3.Get(i)), 0);
+		if (!GetServerPanelServerConfig().DISPLAYPLAYERINFO) {
+			float new_x = 98/100;
+			float new_y = 77/100;
+			m_PlayerInfo.Show(false);
+			m_PanelTabs.SetSize(new_x,new_y);
+		}
+
+		if (!GetServerPanelServerConfig().DISPLAYPLAYERTAB)	m_btnTabTitle4.Show(false);
+
+		m_ServerName.SetText(GetServerPanelServerConfig().SERVERNAME);
+
+		m_Link1 	= GetServerPanelServerConfig().BUTTON1LINK;
+		m_Link2 	= GetServerPanelServerConfig().BUTTON2LINK;
+		m_Link3 	= GetServerPanelServerConfig().BUTTON3LINK;
+		m_Tab0name	= GetServerPanelServerConfig().BUTTONTAB0NAME;
+		m_Tab1name	= GetServerPanelServerConfig().BUTTONTAB1NAME;
+		m_Tab2name	= GetServerPanelServerConfig().BUTTONTAB2NAME;
+		m_Tab3name	= GetServerPanelServerConfig().BUTTONTAB3NAME;
+
+
+
+		if (m_Tab0name != "") {
+			m_btnTabTitle0.SetText(m_Tab0name);
+			m_btnTabTitle0.Show(true);
+		}
+		else m_btnTabTitle0.Show(false);
+
+		if (m_Tab1name != "") {
+			m_btnTabTitle1.SetText(m_Tab1name);
+			m_btnTabTitle1.Show(true);
+		}
+		else m_btnTabTitle1.Show(false);
+
+		if (m_Tab2name != "") {
+			m_btnTabTitle2.SetText(m_Tab2name);
+			m_btnTabTitle2.Show(true);
+		}
+		else m_btnTabTitle2.Show(false);
+
+		if (m_Tab3name != "") {
+			m_btnTabTitle3.SetText(m_Tab3name);
+			m_btnTabTitle3.Show(true);
+		}
+		else m_btnTabTitle3.Show(false);
+
+		if (m_Link1 != "" && GetServerPanelServerConfig().BUTTON1NAME != "") {
+			m_BtnRight.SetText(GetServerPanelServerConfig().BUTTON1NAME);
+			m_BtnRight.Show(true);
+		}
+		else m_BtnRight.Show(false);
+
+		if (m_Link2 != "" && GetServerPanelServerConfig().BUTTON2NAME != "") {
+			m_BtnLeft.SetText(GetServerPanelServerConfig().BUTTON2NAME);
+			m_BtnLeft.Show(true);
+		}
+		else m_BtnLeft.Show(false);
+
+		if (m_Link3 != "" && GetServerPanelServerConfig().BUTTON3NAME != "") {
+			m_BtnDonate.SetText(GetServerPanelServerConfig().BUTTON3NAME);
+			m_BtnDonate.Show(true);
+		}
+		else m_BtnDonate.Show(false);
+
+		m_Tab0List.ClearItems();
+		for (i = 0; i < GetServerPanelServerConfig().sServerTab0.Count(); i++)
+		m_Tab0List.AddItem(GetServerPanelServerConfig().sServerTab0[i], NULL, 0);
+
+		m_Tab1List.ClearItems();
+		for (i = 0; i < GetServerPanelServerConfig().sServerTab1.Count(); i++)
+		m_Tab1List.AddItem(GetServerPanelServerConfig().sServerTab1[i], NULL, 0);
+
+		m_Tab2List.ClearItems();
+		for (i = 0; i < GetServerPanelServerConfig().sServerTab2.Count(); i++)
+		m_Tab2List.AddItem(GetServerPanelServerConfig().sServerTab2[i], NULL, 0);
+
+		m_Tab3List.ClearItems();
+		for (i = 0; i < GetServerPanelServerConfig().sServerTab3.Count(); i++)
+		m_Tab3List.AddItem(GetServerPanelServerConfig().sServerTab3[i], NULL, 0);
 	}
 
 	void SyncPlayers( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
@@ -661,28 +623,28 @@ class ServerPanelMenu extends UIScriptedMenu {
 		return true;
 	}
 
-	bool OnDiscordBtnClick()	{
+	protected bool OnDiscordBtnClick()	{
 		GetGame().OpenURL(m_Link3);
 		Print("CLICKED THIRD BUTTON");
 		return true;
 	}
-	bool OnBtnLeftClick()	{
+	protected bool OnBtnLeftClick()	{
 		GetGame().OpenURL(m_Link2);
 		Print("CLICKED SECOND BUTTON");
 		return true;
 	}
-	bool OnBtnRightClick()	{
+	protected bool OnBtnRightClick()	{
 		GetGame().OpenURL( m_Link1 );
 		Print("CLICKED FIRST BUTTON");
 		return true;
 	}
-	bool OnBtnCloseClick()	{
+	protected bool OnBtnCloseClick()	{
 		Hide();
 		UIManager uiManager = GetGame().GetUIManager();
 		uiManager.CloseAll();
 		return true;
 	}
-	bool OnBtnTabClick(Widget w)	{
+	protected bool OnBtnTabClick(Widget w)	{
 		if (Transitioning)
 			return true;
 
