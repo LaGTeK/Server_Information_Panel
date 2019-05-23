@@ -1,6 +1,6 @@
 class ServerPanelBase {
 
-	ref ServerPanelClientConfig g_ClientConfig;
+	static ref ServerPanelClientConfig g_ClientConfig;
 	ref ServerPanelServerConfig g_ServerConfig;
 
 	static ref ServerPanelLogger m_ServerPanelLogger;
@@ -19,11 +19,20 @@ class ServerPanelBase {
 		}
 		else	{
 			Log("ServerPanelConfig", "Reading Client Config");
-			g_ClientConfig = configManager.ReadClientConfig();
+			//g_ClientConfig = g_ClientConfig.reloadKey();
 			GetRPCManager().SendRPC("ServerPanelConfig", "GetConfigRequest", NULL, true, NULL);
 		}
 
+		g_ClientConfig = new ref ServerPanelClientConfig;
+
 		InitRPC();
+	}
+
+	static ref ServerPanelClientConfig GetConfig() {
+		if ( !g_ClientConfig ) {
+			g_ClientConfig = new ref ServerPanelClientConfig;
+		}
+		return g_ClientConfig;
 	}
 
 	static ref ServerPanelLogger GetLogger(){
@@ -40,10 +49,12 @@ class ServerPanelBase {
 	void InitRPC()	{
 		if (GetGame().IsServer())	{
 			//Server calls
+			Log("ServerPanelConfig", "ConfigRequest");
 			GetRPCManager().AddRPC("ServerPanelConfig", "GetConfigRequest", this, SingeplayerExecutionType.Server);
 		}
 		else	{
 			//Client calls
+			Log("ServerPanelConfig", "ConfigResponse");
 			GetRPCManager().AddRPC("ServerPanelConfig", "GetConfigResponse", this, SingeplayerExecutionType.Server);
 		}
 	}

@@ -5,10 +5,7 @@
 	static const string CFG_PATH 					= "$saves:";
 	static const string CFG_PATH_SERVER				= "$profile:";
 
-	const int SERVER_PANEL							=	69613;
-
-	const string INFOPANEL_LOGGER_DIR_SERVER = CFG_PATH_SERVER + "ServerPanel\\";
-	const string INFOPANEL_LOGGER_PREFIX_SERVER = "ServerPanel_";
+	static const int SERVER_PANEL							=	69613;
 
 	//OLD PATH
 	static const string SP_OLD_CONFIG_PATH			= "$profile:\\ServerPanel\\ServerPanelConfig.json";

@@ -107,6 +107,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 	void ServerPanelMenu()	{
 		//GetRPCManager().AddRPC("ServerPanelConfig", "SyncPlayers", this, SingeplayerExecutionType.Server);
+		
 	}
 
 	void ~ServerPanelMenu()	{	
@@ -211,7 +212,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		SPGetDirection();
 
 		FillFilesInformations();
-		//FillPlayersInformations();
 
 		return layoutRoot;
 	}
@@ -233,31 +233,22 @@ class ServerPanelMenu extends UIScriptedMenu {
 		
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
 
-		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
-		g_Game.GetUIManager().ShowUICursor(true);
-		g_Game.GetUIManager().ShowCursor(true);
-		GetGame().GetInput().ChangeGameFocus( 1 );
-		GetGame().GetMission().GetHud().Show( false );
-
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(UpdateHeader, 1000, true);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGetDirection, 1000, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPPlayerPreview, 500, false );
+
+		GetGame().GetInput().ChangeGameFocus(1);
+		GetGame().GetUIManager().ShowUICursor(true);
+		GetGame().GetMission().GetHud().Show(false);
 	}
 
 	override void OnHide()	{
-		//super.OnHide();
-		m_ServerPanelMenu = NULL;
 
-		g_Game.GetUIManager().ShowCursor(false);
-		g_Game.GetUIManager().ShowUICursor(false);
 		GetGame().GetInput().ResetGameFocus();
-		GetGame().GetMission().PlayerControlEnable();
-		GetGame().GetUIManager().Back();
-		GetGame().GetMission().GetHud().Show( true );
-
-		PPEffects.SetBlurMenu(0);
+		GetGame().GetUIManager().ShowUICursor(false);
+		GetGame().GetMission().GetHud().Show(true);
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
@@ -396,7 +387,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 	}
 
 	void FillFilesInformations()	{
-		if (!GetServerPanelServerConfig() || !GetServerPanelClientConfig())
+		if (!GetServerPanelServerConfig())
 			return;
 
 		int i;
@@ -408,7 +399,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			m_PanelTabs.SetSize(new_x,new_y);
 		}
 
-		if (!GetServerPanelServerConfig().DISPLAYPLAYERTAB)	m_btnTabTitle4.Show(false);
+		if (!GetServerPanelServerConfig().DISPLAYPLAYERTAB))	m_btnTabTitle4.Show(false);
 
 		m_ServerName.SetText(GetServerPanelServerConfig().SERVERNAME);
 

@@ -1,15 +1,17 @@
 class SPOldJsonConfig {
 	string ServerName, Button1Name, Button1Link, Button2Name, Button2Link, Button3Name, Button3Link, ButtonTab0Name, ButtonTab1Name, ButtonTab2Name, ButtonTab3Name;
-	int		PlayerInfo;
-	bool	UseScriptLog;
+	bool	PlayerInfo;
+	bool	PlayerTab;
+};
+
+class SPJsonKeyConfig {
+	string SPMenuKey;
 };
 
 static ref ServerPanelBase m_ServerPanelBase;
 static ref ServerPanelBase GetServerPanelBase() {
 	if ( !m_ServerPanelBase ) {
 		m_ServerPanelBase = new ref ServerPanelBase;
-
-
 	}
 	return m_ServerPanelBase;
 }
@@ -26,8 +28,4 @@ static ref ServerPanelMenu GetServerPanelMenu() {
 
 static ref ServerPanelServerConfig GetServerPanelServerConfig()	{
 	return GetServerPanelBase().g_ServerConfig;
-}
-
-static ref ServerPanelClientConfig GetServerPanelClientConfig()	{
-	return GetServerPanelBase().g_ClientConfig;
 }

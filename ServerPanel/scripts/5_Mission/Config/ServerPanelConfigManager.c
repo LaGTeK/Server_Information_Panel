@@ -11,7 +11,7 @@ class ServerPanelConfigManager	{
 	private string BUTTONTAB2NAME;
 	private string BUTTONTAB3NAME;
 	private bool DISPLAYPLAYERINFO;
-	private bool DEFAULTIOFLAG;
+	private bool DISPLAYPLAYERTAB;
 
 	private ref TStringArray sServerTab0 = new ref TStringArray;
 	private ref TStringArray sServerTab1 = new ref TStringArray;
@@ -28,22 +28,11 @@ class ServerPanelConfigManager	{
 				return OldConfig();
 			}	
 			else {
+				ServerPanelBase.Log("ServerPanelConfig", "Config File not found, trying to create Default Server Config");
 				return WriteDefaultServer();
 			}
-		}
-		ServerPanelBase.Log("ServerPanelConfig", "Config File not found, trying to create Default Server Config");
+		}	
 		return ServerPanelServerConfig.Load();
-	}
-
-	ServerPanelClientConfig ReadClientConfig()	{
-		string fileName;
-		FileAttr fileAttributes;
-		FindFileHandle file = FindFile(SP_CONFIGKEY_PATH, fileName, fileAttributes, 0);
-		if (!file) {
-			ServerPanelBase.Log("ServerPanelConfig", "Config File not found, trying to create Default Client Config");
-			return WriteDefaultClient();
-		}
-		return ServerPanelClientConfig.Load();
 	}
 
 	ServerPanelServerConfig OldConfig()	{
@@ -99,28 +88,19 @@ class ServerPanelConfigManager	{
 			config.sServerTab2.Insert("Tab2 " + i);
 			config.sServerTab3.Insert("Tab3 " + i);
 		}
-		config.SERVERNAME 		= "Welcome on MyDAyZ server !! - Hosted By MyDayZ.eu";
-		config.BUTTON1NAME 		= "DISCORD";
-		config.BUTTON1LINK 		= "https://discord.gg/KAgNn6K";
-		config.BUTTON2NAME 		= "WEBSITE";
-		config.BUTTON2LINK 		= "https://mydayz.eu";
-		config.BUTTON3NAME 		= "DONATE";
-		config.BUTTON3LINK 		= "https://www.paypal.me/MyDayZ";
-		config.BUTTONTAB0NAME 	= "TAB0";
-		config.BUTTONTAB1NAME 	= "TAB1";
-		config.BUTTONTAB2NAME 	= "TAB2";
-		config.BUTTONTAB3NAME 	= "TAB3";
-		config.DISPLAYPLAYERINFO= true;
-		config.DISPLAYPLAYERTAB	= true;
-		config.Save();
-		return config;
-	}
-
-	ServerPanelClientConfig WriteDefaultClient()	{
-		ServerPanelBase.Log("ServerPanelConfig", "Writting Default Client Config");
-		ref ServerPanelClientConfig config = new ref ServerPanelClientConfig;
-		config.SPMENUKEY = KeyCode.KC_PAUSE;
-
+		config.SERVERNAME 			= "Welcome on MyDAyZ server !! - Hosted By MyDayZ.eu";
+		config.BUTTON1NAME 			= "DISCORD";
+		config.BUTTON1LINK 			= "https://discord.gg/KAgNn6K";
+		config.BUTTON2NAME 			= "WEBSITE";
+		config.BUTTON2LINK 			= "https://mydayz.eu";
+		config.BUTTON3NAME 			= "DONATE";
+		config.BUTTON3LINK 			= "https://www.paypal.me/MyDayZ";
+		config.BUTTONTAB0NAME 		= "TAB0";
+		config.BUTTONTAB1NAME 		= "TAB1";
+		config.BUTTONTAB2NAME 		= "TAB2";
+		config.BUTTONTAB3NAME 		= "TAB3";
+		config.DISPLAYPLAYERINFO	= true;
+		config.DISPLAYPLAYERTAB		= true;
 		config.Save();
 		return config;
 	}
@@ -144,7 +124,7 @@ class ServerPanelConfigManager	{
 		BUTTONTAB2NAME				= oldSPConfigData.ButtonTab2Name;
 		BUTTONTAB3NAME				= oldSPConfigData.ButtonTab3Name;
 		DISPLAYPLAYERINFO			= oldSPConfigData.PlayerInfo;
-		DEFAULTIOFLAG 				= oldSPConfigData.UseScriptLog;
+		DISPLAYPLAYERTAB			= oldSPConfigData.PlayerTab;
 
 		ServerPanelBase.Log( "ServerPanelConfig", "Deleting old json file" );
 
