@@ -13,14 +13,11 @@ On server:
 
 -   Copy file `LaGTeK.bikey` from `ServerPanel\keys` into server `keys` folder
 -   Copy folder `ServerPanel` from mod folder to `[ServerProfilesFolder]`.
--   Customize your informations from `ServerTab0.txt` and `ServerTab1.txt`
+-   `ServerPanel.json` is now used to configure all the panel (buttons, links and ur Server Name, Ands différents Tabs Content)
     (You are now able to add what u want, i've tried with some special character and only `|` and `#` can't be used ! ) Don't put more than 110 chars per line !
--   You can now add some Tabs like About or Crafting tab, Customize your informations from `ServerTab2.txt` file, and `ServerTab3.txt`
-    (You are now able to add what u want, i've tried with some special character and only `|` and `#` can't be used ! ) Don't put more than 110 chars per line !
--   `ServerPanelConfig.json` is now used to configure your buttons, links and ur Server Name, Don't leave any blank space in Button name & Button Link, follow the exemple. U Can now add more buttons and Tabs are now here. U can also hide player information, it will show just ingame name and a magnific picture :)
--   U can also leave link blank, the button will disapear, same for tabs
+-   U can also leave a link blank & the button will disapear, same for tabs
 
-### Json File - [ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanelConfig.json)
+### Json File - [ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanel.json)
 
  - `ServerName = Your Server name`
  - `Button1Name = Your Button1Name`
@@ -36,11 +33,14 @@ On server:
  - `PlayerInfo = You can display or hide player's side information with this parameter`
  - `PlayerTab = You can display or hide player Tab with this parameter`
  - `UseScriptLog = You can use separate log from script.log for Server Panel Mod `
+ - `sServerTab0 = Content of the First Tab`
+ - `sServerTab1 = Content of the Second Tab`
+ - `sServerTab2 = Content of the Third Tab`
+ - `sServerTab3 = Content of the Fourth Tab`
 
 ### Old installation
-- `UseScriptLog` param has been added, u have to set it up manualy in ur json file 
 - You can also change the name of the two first Tab now
-(Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanelConfig.json))
+(Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json))
 -   `ServerName.txt` & `ServerConfigNew.cfg` are not used used anymore, these files should be deleted and remplaced with `ServerPanelConfig.json` automaticatly
 
 

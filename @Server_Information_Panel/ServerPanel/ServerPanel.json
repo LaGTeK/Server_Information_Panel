@@ -1,0 +1,54 @@
+{
+    "SERVERNAME": "Welcome on MyDAyZ server !! - Hosted By MyDayZ.eu",
+    "BUTTON1NAME": "DISCORD",
+    "BUTTON1LINK": "https://discord.gg/KAgNn6K",
+    "BUTTON2NAME": "WEBSITE",
+    "BUTTON2LINK": "https://mydayz.eu",
+    "BUTTON3NAME": "DONATE",
+    "BUTTON3LINK": "https://www.paypal.me/MyDayZ",
+    "BUTTONTAB0NAME": "TAB0",
+    "BUTTONTAB1NAME": "TAB1",
+    "BUTTONTAB2NAME": "TAB2",
+    "BUTTONTAB3NAME": "",
+    "DISPLAYPLAYERINFO": 1,
+    "DISPLAYPLAYERTAB": 1,
+    "sServerTab0": [
+        "Write your informations Tab0 0",
+        "Write your informations Tab0 1",
+        "Write your informations Tab0 2",
+        "Write your informations Tab0 3",
+        "Write your informations Tab0 4",
+        "Write your informations Tab0 5",
+        "Write your informations Tab0 6",
+        "Write your informations Tab0 7",
+        "Write your informations Tab0 8",
+        "Write your informations Tab0 9"
+    ],
+    "sServerTab1": [
+        "Write your informations Tab1 0",
+        "Write your informations Tab1 1",
+        "Write your informations Tab1 2",
+        "Write your informations Tab1 3",
+        "Write your informations Tab1 4",
+        "Write your informations Tab1 5",
+        "Write your informations Tab1 6",
+        "Write your informations Tab1 7",
+        "Write your informations Tab1 8",
+        "Write your informations Tab1 9"
+    ],
+    "sServerTab2": [
+        "Write your informations Tab2 0",
+        "Write your informations Tab2 1",
+        "Write your informations Tab2 2",
+        "Write your informations Tab2 3",
+        "Write your informations Tab2 4",
+        "Write your informations Tab2 5",
+        "Write your informations Tab2 6",
+        "Write your informations Tab2 7",
+        "Write your informations Tab2 8",
+        "Write your informations Tab2 9"
+    ],
+    "sServerTab3": [
+        ""
+    ]
+}
