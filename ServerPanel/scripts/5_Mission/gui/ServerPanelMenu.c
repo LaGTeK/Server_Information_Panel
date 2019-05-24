@@ -239,16 +239,22 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPPlayerPreview, 500, false );
 
-		GetGame().GetInput().ChangeGameFocus(1);
+		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
 		GetGame().GetUIManager().ShowUICursor(true);
-		GetGame().GetMission().GetHud().Show(false);
+		GetGame().GetUIManager().ShowCursor(true);
+		GetGame().GetInput().ChangeGameFocus( 1 );
+		GetGame().GetMission().GetHud().Show( false );
+
 	}
 
 	override void OnHide()	{
 
-		GetGame().GetInput().ResetGameFocus();
+		GetGame().GetUIManager().ShowCursor(false);
 		GetGame().GetUIManager().ShowUICursor(false);
-		GetGame().GetMission().GetHud().Show(true);
+		GetGame().GetInput().ResetGameFocus();
+		GetGame().GetMission().PlayerControlEnable();
+		GetGame().GetUIManager().Back();
+		GetGame().GetMission().GetHud().Show( true );
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
@@ -399,7 +405,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			m_PanelTabs.SetSize(new_x,new_y);
 		}
 
-		if (!GetServerPanelServerConfig().DISPLAYPLAYERTAB))	m_btnTabTitle4.Show(false);
+		if (!GetServerPanelServerConfig().DISPLAYPLAYERTAB)	m_btnTabTitle4.Show(false);
 
 		m_ServerName.SetText(GetServerPanelServerConfig().SERVERNAME);
 
@@ -514,12 +520,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 		sHealth 				=	PlayerDataC[2];
 		sBlood 					=	PlayerDataC[3];
 		//sAvgPing				=	PlayerDataC[4];
-		sEnergy 				=	PlayerDataF[1];
 		sWater 					=	PlayerDataF[0];
-		sDistance 				=	PlayerDataF[2];
-		sPlaytime 				=	PlayerDataF[3];
-		sShock					=	PlayerDataF[4];
-		sStamina				=	PlayerDataF[5];
+		sEnergy 				=	PlayerDataF[1];		
+		sShock					=	PlayerDataF[2];
+		sStamina				=	PlayerDataF[3];
+		sDistance 				=	PlayerDataF[4];
+		sPlaytime 				=	PlayerDataF[5];
 		sPlayers_killed			=	PlayerDataF[6];
 		sInfected_killed		=	PlayerDataF[7];
 		sLongest_survivor_hit	=	PlayerDataF[8];

@@ -59,7 +59,7 @@ class ServerPanelConfigManager	{
 		config.BUTTONTAB2NAME 		= BUTTONTAB2NAME;
 		config.BUTTONTAB3NAME 		= BUTTONTAB3NAME;
 		config.DISPLAYPLAYERINFO	= DISPLAYPLAYERINFO;
-		config.DISPLAYPLAYERTAB		= DEFAULTIOFLAG;
+		config.DISPLAYPLAYERTAB		= DISPLAYPLAYERTAB;
 
 		int i;
 		for (i = 0; i < sServerTab0.Count(); i++)
@@ -83,10 +83,10 @@ class ServerPanelConfigManager	{
 		ServerPanelBase.Log("ServerPanelConfig", "Writting Default Server Config");
 		ref ServerPanelServerConfig config = new ref ServerPanelServerConfig;
 		for (int i = 0; i < 10; i++)	{
-			config.sServerTab0.Insert("Tab0 " + i);
-			config.sServerTab1.Insert("Tab1 " + i);
-			config.sServerTab2.Insert("Tab2 " + i);
-			config.sServerTab3.Insert("Tab3 " + i);
+			config.sServerTab0.Insert("Write your informations Tab0 " + i);
+			config.sServerTab1.Insert("Write your informations Tab1 " + i);
+			config.sServerTab2.Insert("Write your informations Tab2 " + i);
+			config.sServerTab3.Insert("Write your informations Tab3 " + i);
 		}
 		config.SERVERNAME 			= "Welcome on MyDAyZ server !! - Hosted By MyDayZ.eu";
 		config.BUTTON1NAME 			= "DISCORD";

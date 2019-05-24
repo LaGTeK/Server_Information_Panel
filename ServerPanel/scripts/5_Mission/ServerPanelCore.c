@@ -85,7 +85,6 @@ class ServerPanelBase {
 		array<Man> players 				= new array<Man>;
 		PlayerBase player;
 		PlayerIdentity plyIdent;
-		vector plyPos;
 
 		if ( type == CallType.Server && GetGame().IsServer() ) {
 
@@ -100,14 +99,14 @@ class ServerPanelBase {
 					plyData.Insert(player.GetHealth("", "Blood"));
 					plyFData.Insert(player.GetStatWater().Get());
 					plyFData.Insert(player.GetStatEnergy().Get());
-					plyFData.Insert(player.StatGet("dist"));
-					plyFData.Insert(player.StatGet("playtime"));
-					plyPos = player.GetPosition();
 					plyFData.Insert(player.GetHealth( "", "Shock" ));
 					plyFData.Insert(player.GetStatStamina().Get());
+					plyFData.Insert(player.StatGet("dist"));
+					plyFData.Insert(player.StatGet("playtime"));
 					plyFData.Insert(player.StatGet("players_killed"));
 					plyFData.Insert(player.StatGet("infected_killed"));
 					plyFData.Insert(player.StatGet("longest_survivor_hit"));
+					vector plyPos = player.GetPosition();
 					bool m_HasDisease = player.HasDisease();
 
 					if (player.GetItemInHands() && !player.GetCommand_Vehicle()) {Item = (player.GetItemInHands().GetInventoryItemType().GetName())}
@@ -116,7 +115,7 @@ class ServerPanelBase {
 				playerListS.Insert(plyIdent.GetName());				
 			}
 			GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayers", new Param6<ref TStringArray, ref TIntArray, vector, ref TFloatArray, string, bool> (playerListS, plyData, plyPos, plyFData, Item, m_HasDisease), true, sender );
-			Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - player list sync");
+			Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - Player Stats sync");
 		}
 	}
 };
