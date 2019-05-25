@@ -41,7 +41,7 @@ On server:
 ### Old installation
 - You can also change the name of the two first Tab now
 (Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json))
--   `ServerName.txt` & `ServerConfigNew.cfg` are not used used anymore, these files should be deleted and remplaced with `ServerPanelConfig.json` automaticatly
+-   Old config files are not used used anymore, these files should be deleted and remplaced with `ServerPanel.json` automaticatly
 
 
 ## Q: Can i change default menu key ?
