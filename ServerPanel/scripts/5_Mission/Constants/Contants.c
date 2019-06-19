@@ -1,6 +1,7 @@
 	static const string SP_CONFIGKEY_PATH 			= "$saves:ServerPanelKey.json";
 	static const string SP_CONFIG_PATH				= "$profile:\\ServerPanel\\ServerPanel.json";
 	static const string PROFILE_PATH 				= "$profile:\\ServerPanel\\";
+	static const string LOG_PATH 				= "$profile:\\ServerPanel\\Logs\\";
 
 	static const string CFG_PATH 					= "$saves:";
 	static const string CFG_PATH_SERVER				= "$profile:";

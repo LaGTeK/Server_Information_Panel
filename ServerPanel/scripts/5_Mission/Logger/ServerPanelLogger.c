@@ -24,17 +24,26 @@ class ServerPanelLogger {
 	}
 
 	void SwitchToCustomIO() {
-		string tempPath = "";
+		string tempPath = LOG_PATH;
 		string realProfiles = "";
-		if (!defaultIO) return;
-
-		if (defaultIO) {
-			tempPath = "$profile:";
-			if (realProfiles != "") Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + realProfiles);
-				else Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + tempPath);
+		//if (!defaultIO) return;
+		if (FileExist(tempPath)) {
 			SetDir(tempPath);
+			Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in " + tempPath);
 		}
-		if (defaultIO) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
+		else {
+			tempPath = "$profile:";
+			SetDir(tempPath);
+			Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in " + tempPath);
+		}
+
+		//if (defaultIO) {
+		//	tempPath = "$profile:";
+		//	if (realProfiles != "") Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + realProfiles);
+		//		else Log("ServerPanelLogger", "INFO: Will try to create ServerPanel log file in profile root: " + tempPath);
+		//	SetDir(tempPath);
+		//}
+		//if (defaultIO) Log("ServerPanelLogger", "WARN: All attempts to use custom log file failed, using script.log");
 	}
 
 	private void SetDir(string fPath) {

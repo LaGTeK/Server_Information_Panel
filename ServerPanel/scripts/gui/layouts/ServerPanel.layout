@@ -1133,7 +1133,7 @@ PanelWidgetClass ServerPanelMenu {
                clipchildren 1
                ignorepointer 0
                position 0.245 0.01
-               size 0.48 0.63
+               size 0.48 0.69
                halign center_ref
                hexactpos 0
                vexactpos 0
@@ -1143,7 +1143,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageHearth {
                ignorepointer 1
-               position 0.2975 0.58
+               position 0.2975 0.63
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1161,8 +1161,8 @@ PanelWidgetClass ServerPanelMenu {
               }
               MultilineTextWidgetClass Dead {
                ignorepointer 1
-               position 0.34 0.51
-               size 0.149 0.07
+               position 0.34 0.55
+               size 0.159 0.07
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1179,7 +1179,7 @@ PanelWidgetClass ServerPanelMenu {
                ignorepointer 1
                color 0.8745 0.1098 0.1098 1
                position 0.31 0.01
-               size 0.03 0.56
+               size 0.03 0.61
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1190,7 +1190,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageHealth {
                ignorepointer 1
-               position 0.0275 0.581
+               position 0.0275 0.631
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1210,7 +1210,7 @@ PanelWidgetClass ServerPanelMenu {
                ignorepointer 1
                color 0.1569 0.6235 0.2745 1
                position 0.04 0.01
-               size 0.03 0.56
+               size 0.03 0.61
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1221,7 +1221,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageBlood {
                ignorepointer 1
-               position 0.1175 0.58
+               position 0.1175 0.63
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1239,7 +1239,7 @@ PanelWidgetClass ServerPanelMenu {
                ignorepointer 1
                color 0.7686 0.1412 0.1412 1
                position 0.13 0.01
-               size 0.03 0.56
+               size 0.03 0.61
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1252,7 +1252,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImageStamina {
                ignorepointer 1
-               position 0.2075 0.58
+               position 0.2075 0.63
                size 40 40
                hexactpos 0
                vexactpos 0
@@ -1270,7 +1270,7 @@ PanelWidgetClass ServerPanelMenu {
                ignorepointer 1
                color 0.0706 0.5608 0.5608 1
                position 0.22 0.01
-               size 0.03 0.56
+               size 0.03 0.61
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1282,7 +1282,7 @@ PanelWidgetClass ServerPanelMenu {
               PanelWidgetClass PanelWidget7 {
                ignorepointer 1
                color 0.2549 0.2549 0.2549 1
-               position 0.01 0.65
+               position 0.01 0.71
                size 0.98 0.07
                hexactpos 0
                vexactpos 0
@@ -1306,8 +1306,8 @@ PanelWidgetClass ServerPanelMenu {
               }
               GridSpacerWidgetClass GridSpacerWidget3 {
                ignorepointer 1
-               position 0.07 0.72
-               size 0.91 0.28
+               position 0.07 0.79
+               size 0.91 0.21
                hexactpos 0
                vexactpos 0
                hexactsize 0
@@ -1317,7 +1317,6 @@ PanelWidgetClass ServerPanelMenu {
                content_halign center
                content_valign center
                Columns 2
-               Rows 4
                {
                 TextWidgetClass Disease {
                  ignorepointer 1
@@ -1354,6 +1353,7 @@ PanelWidgetClass ServerPanelMenu {
                  "text valign" center
                 }
                 TextWidgetClass direction {
+                 visible 0
                  ignorepointer 1
                  position 0 0
                  size 0.5 0.04
@@ -1371,7 +1371,7 @@ PanelWidgetClass ServerPanelMenu {
                  "text valign" center
                 }
                 TextWidgetClass txt_direction {
-                 visible 1
+                 visible 0
                  ignorepointer 1
                  position 0.5 0
                  size 0.5 0.05
@@ -1474,6 +1474,7 @@ PanelWidgetClass ServerPanelMenu {
                wrap 1
               }
               ImageWidgetClass ImagesTime {
+               visible 0
                ignorepointer 1
                position 0.0125 0.795
                size 40 40
@@ -1491,7 +1492,7 @@ PanelWidgetClass ServerPanelMenu {
               }
               ImageWidgetClass ImagesDisease {
                ignorepointer 1
-               position 0.0125 0.725
+               position 0.0125 0.795
                size 40 40
                hexactpos 0
                vexactpos 0

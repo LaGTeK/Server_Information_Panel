@@ -9,6 +9,7 @@ class ServerPanelBase {
 		GetLogger().SwitchToCustomIO();
 
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncPlayersRequest", this, SingeplayerExecutionType.Server );
+		//GetRPCManager().AddRPC( "ServerPanelI", "SyncLeaderBoardRequest", this, SingeplayerExecutionType.Server );
 
 		ref ServerPanelConfigManager configManager = new ref ServerPanelConfigManager;
 
@@ -76,6 +77,33 @@ class ServerPanelBase {
 			return;
 		g_ServerConfig = data.param1;
 	}
+
+	/*void SyncLeaderBoardRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
+		ref TStringArray playerListS 	= new TStringArray;
+		ref TFloatArray plyPData 		= new TFloatArray;
+		ref TFloatArray plyIData 		= new TFloatArray;
+		array<Man> players 				= new array<Man>;
+		PlayerBase player;
+		PlayerIdentity plyIdent;
+
+		if ( type == CallType.Server && GetGame().IsServer() ) {
+
+			GetGame().GetPlayers(players);
+			for (int i = 0; i < players.Count(); ++i) {
+				player = PlayerBase.Cast(players.Get(i));
+				plyIdent = player.GetIdentity();
+
+				playerListS.Insert(plyIdent.GetName());
+				//plyFData.Insert(player.StatGet("dist"));
+				//plyFData.Insert(player.StatGet("playtime"));
+				plyPData.Insert(player.StatGet("players_killed"));
+				plyIData.Insert(player.StatGet("infected_killed"));
+				//plyFData.Insert(player.StatGet("longest_survivor_hit"));
+			}
+			GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayers", new Param3<ref TStringArray, ref TFloatArray, ref TFloatArray> (playerListS, plyPData, plyIData), true, sender );
+			Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - Player LeaderBoard sync");
+		}
+	}*/
 
 	void SyncPlayersRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 		ref TStringArray playerListS 	= new TStringArray;

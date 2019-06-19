@@ -22,6 +22,7 @@ static ref ServerPanelMenu GetServerPanelMenu() {
 		m_ServerPanelMenu = new ref ServerPanelMenu;
 
 		GetRPCManager().AddRPC( "ServerPanelI", "SyncPlayers", m_ServerPanelMenu, SingeplayerExecutionType.Client );
+		//GetRPCManager().AddRPC( "ServerPanelI", "SyncLeaderBoard", m_ServerPanelMenu, SingeplayerExecutionType.Client );
 	}
 	return m_ServerPanelMenu;
 }	

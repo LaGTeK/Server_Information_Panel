@@ -151,6 +151,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab1List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab1" ));
 		m_Tab2List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab2" ));
 		m_Tab3List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab3" ));
+		//m_LeaderBoard					=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_LB" ));
 
 		//Player Information
 		m_PlayerTitle 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
@@ -209,9 +210,11 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_TitlePanel.SetText(header);
 
 		SPBloodName();
-		SPGetDirection();
+		//SPGetDirection();
 
 		FillFilesInformations();
+
+		m_Direction.Show(false);
 
 		return layoutRoot;
 	}
@@ -232,9 +235,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 	override void OnShow()	{
 		
 		GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayersRequest", new Param1< int >( 0 ), true, NULL );
+		//GetRPCManager().SendRPC( "ServerPanelI", "SyncLeaderBoardRequest", new Param1< int >( 0 ), true, NULL);
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(UpdateHeader, 1000, true);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGetDirection, 1000, false );
+		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGetDirection, 1000, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPPlayerPreview, 500, false );
@@ -258,12 +262,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGetDirection);
+		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGetDirection);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGender);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPPlayerPreview);
 	}
 
-	private void SPGetDirection ()	{
+	/*private void SPGetDirection ()	{
 		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
 		if (player)	{
 			vector playerOrientation = player.GetOrientation();
@@ -280,7 +284,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			if (position > 0.625  && position <= 0.875)m_Direction.SetText("South West");
 			if (position > 0.875  || position <= -0.875)m_Direction.SetText("South");
 		}
-	}
+	}*/
 
 	private void SPItemPreview()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
@@ -478,6 +482,37 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab3List.AddItem(GetServerPanelServerConfig().sServerTab3[i], NULL, 0);
 	}
 
+	/*void SyncLeaderBoard( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
+		Param3<ref TStringArray, TFloatArray, TFloatArray> syncDataS;
+		ref TStringArray PlayerListC		= new TStringArray;
+		ref TFloatArray PlayerDataP			= new TFloatArray;
+		ref TFloatArray PlayerDataI			= new TFloatArray;
+
+		if ( type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer() ) {
+			if ( !ctx.Read( syncDataS ) ) {
+				ServerPanelBase.Log("SyncPlayer","Player sync data read error - possible version mismatch");
+				return;
+			}
+
+			PlayerListC			= syncDataS.param1;
+			PlayerDataP			= syncDataS.param2;
+			PlayerDataI			= syncDataS.param3;
+		}
+
+		if (layoutRoot.IsVisible()) {	
+			int y;	
+			int i;
+		for ( i = 0; i < PlayerListC.Count(); ++i ) {
+				for ( i = 0; i < PlayerDataP.Count(); ++i ) {
+					for ( i = 0; i < PlayerDataI.Count(); ++i ) {
+						m_Tab3List.AddItem(" " + y.ToString() + ": " + PlayerListC.Get(i) + " " + PlayerDataP.Get(i).ToString() + " " + PlayerDataI.Get(i).ToString(), new Param1<string>(PlayerListC.Get(i)), new Param1<float>(PlayerDataP.Get(i)), new Param1<float>(PlayerDataI.Get(i)), 0);
+						y++;
+					}
+				}
+			}
+		}
+	}*/
+
 	void SyncPlayers( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 		Param6<ref TStringArray, ref TIntArray, vector, TFloatArray, string, bool> syncDataS;
 		ref TStringArray PlayerListC		= new TStringArray;
@@ -567,7 +602,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			int sMinutes 		= ((sUpTime / 60) % 60);
 			int sSeconds 		= sUpTime - sMinutes * 60;
 			m_PlayTime.SetText(sHours.ToString() + "h " + sMinutes.ToString() + "m" + sSeconds.ToString() + "s");
-			//m_PlayerTitle.SetText("Online Players: " + PlayerListC.Count());
+			m_PlayerTitle.SetText("Online Players: " + PlayerListC.Count());
 			m_TextPlayerNickname.SetText(PlayerListC.Get(PlayerDataC[1]));
 			m_TextPlayerPos.SetText("Pos. X: " + Math.Floor(PlayerPos[0]).ToString() + "  Y: " + Math.Floor(PlayerPos[2]).ToString());
 

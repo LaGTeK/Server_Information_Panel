@@ -22,7 +22,7 @@ modded class MissionGameplay {
 					GetGame().GetInput().ChangeGameFocus( 1 );
 					GetGame().GetMission().GetHud().Show( false );
 				}
-				else if (GetUIManager().IsMenuOpen( SERVER_PANEL ) && !g_Game.KeyBoardStatus())	{
+				else if (GetUIManager().IsMenuOpen( SERVER_PANEL ))	{
 					g_Game.GetUIManager().ShowCursor(false);
 					g_Game.GetUIManager().ShowUICursor(false);
 					GetGame().GetInput().ResetGameFocus();

@@ -2,7 +2,7 @@ modded class InGameMenu {
 	override void RegisterButtons() {
 		super.RegisterButtons();
 		
-		RegisterButton( "SERVER INFORMATIONS", "EnterServerPanelMenu" );
+		RegisterButton( "SERVER INFORMATION", "EnterServerPanelMenu" );
 		}
 
 	void EnterServerPanelMenu() {
