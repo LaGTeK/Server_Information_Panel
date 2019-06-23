@@ -1,0 +1,10 @@
+name = "Server_Information_Panel"; 								// name 
+picture = "Mods/TestMod/modpic.edds";			// picture in expanded description
+logoSmall = "Mods/TestMod/modlogosmall.edds";	// icon next to mod name when description is not expanded
+logo = "Mods/TestMod/modlogo.edds";				// logo below game menu
+logoOver = "Mods/TestMod/modlogohover.edds";	// on mouse hover over logo
+tooltip = "This mod allow server owner to display some informations about there server";							// tool tip on mouse hover
+overview = "This mod allow server owner to display some informations about there server"; 						// overview
+action = "https://www.mydayz.eu/";					// link
+author = "LaGTeK";								// author
+version = "0.4";								// version
