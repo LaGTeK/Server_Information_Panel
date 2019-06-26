@@ -13,11 +13,11 @@ PanelWidgetClass ServerPanelMenu {
  {
   PanelWidgetClass Background {
    visible 1
-   color 0 0 0 0.7804
+   color 0.1843 0.1843 0.1843 0.9412
    position 0 0
    size 1 1
-   hexactpos 1
-   vexactpos 1
+   hexactpos 0
+   vexactpos 0
    hexactsize 0
    vexactsize 0
    style rover_sim_colorable
@@ -26,12 +26,12 @@ PanelWidgetClass ServerPanelMenu {
      visible 1
      color 0.1255 0.1255 0.1255 0.7804
      position 0 0
-     size 1 60
+     size 1 55
      hexactpos 1
      vexactpos 1
      hexactsize 0
      vexactsize 1
-     style NewStyle
+     style rover_sim_colorable
      {
       TextWidgetClass title_text {
        position 0 0
@@ -44,15 +44,18 @@ PanelWidgetClass ServerPanelMenu {
        vexactsize 0
        style Normal
        text "Server Panel Information"
-       font "gui/fonts/Metron48"
-       "exact text" 1
+       font "gui/fonts/metronbook-bold"
+       "exact text" 0
        text_proportion 0.8
+       "size to text h" 0
+       "size to text v" 0
        "text halign" center
        "text valign" center
       }
      }
     }
     ButtonWidgetClass btn_cancel {
+     color 0.1529 0.1529 0.1529 1
      position 15 15
      size 180 50
      halign left_ref
@@ -61,12 +64,15 @@ PanelWidgetClass ServerPanelMenu {
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     style MenuDefault
+     style DayZDefaultButton
      text "CANCEL"
      text_proportion 0.8
      font "gui/fonts/etelkatextpro"
+     "disabled text color" 0 0 0 0.902
+     switch normal
     }
     ButtonWidgetClass btn_website {
+     color 0.3843 0.0824 0.1098 1
      position 240 15
      size 200 50
      halign right_ref
@@ -75,12 +81,13 @@ PanelWidgetClass ServerPanelMenu {
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     style MenuDefault
+     style DayZDefaultButton
      text "XXX"
      text_proportion 0.7
      font "gui/fonts/etelkatextpro"
     }
     ButtonWidgetClass btn_discord {
+     color 0.3843 0.0824 0.1098 1
      position 20 15
      size 200 50
      halign right_ref
@@ -89,7 +96,7 @@ PanelWidgetClass ServerPanelMenu {
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     style MenuDefault
+     style DayZDefaultButton
      text "XXX"
      text_proportion 0.7
      font "gui/fonts/etelkatextpro"
@@ -97,15 +104,15 @@ PanelWidgetClass ServerPanelMenu {
     }
     MultilineTextWidgetClass text_name {
      ignorepointer 1
-     position 0.01 0.075
-     size 0.77 0.068
+     position 0.01 0.085
+     size 0.77 0.05
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
      text "XXX"
      "exact text" 1
-     text_proportion 0.8
+     text_proportion 0.3
      "text valign" center
      wrap 0
     }
@@ -131,7 +138,7 @@ PanelWidgetClass ServerPanelMenu {
        hexactsize 0
        vexactsize 0
        scaled 0
-       style NewStyle
+       style rover_sim_colorable
        {
         TextWidgetClass PlayerInformationTitle {
          ignorepointer 1
@@ -146,6 +153,7 @@ PanelWidgetClass ServerPanelMenu {
          scaled 0
          style Bold
          text "Player Informations"
+         font "gui/fonts/metronbook-bold"
          "exact text" 0
          text_proportion 0.8
          "text halign" center
@@ -178,7 +186,7 @@ PanelWidgetClass ServerPanelMenu {
        hexactsize 0
        vexactsize 0
        scaled 1
-       style NewStyle
+       style rover_sim_colorable
        {
         TextWidgetClass OnlinePlayerTitle {
          ignorepointer 1
@@ -191,6 +199,7 @@ PanelWidgetClass ServerPanelMenu {
          vexactsize 0
          style Bold
          text "Online Players"
+         font "gui/fonts/metronbook-bold"
          "text color" 0.7216 0.2667 0.2667 1
          "exact text" 0
          text_proportion 0.8
@@ -211,12 +220,14 @@ PanelWidgetClass ServerPanelMenu {
        text "XXX"
        font "gui/fonts/metronbook-bold"
        "exact text" 0
+       text_proportion 0.8
        "text halign" center
        "text valign" center
       }
       TextListboxWidgetClass Player_List {
        ignorepointer 0
        keepsafezone 0
+       color 0.451 0.0118 0.0549 1
        size 0.98 0.5
        halign center_ref
        valign bottom_ref
@@ -378,12 +389,14 @@ PanelWidgetClass ServerPanelMenu {
      }
     }
     ButtonWidgetClass btn_close_widget {
-     position 0.97 0.013
+     color 0.3843 0.0824 0.1098 1
+     position 0.97 0.01
      size 0.02 0.04
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     style Colorable
      {
       ImageWidgetClass btn_close0 {
        ignorepointer 1
@@ -402,7 +415,7 @@ PanelWidgetClass ServerPanelMenu {
     }
     FrameWidgetClass SPTabber {
      ignorepointer 1
-     position 0.91959 -0.5472
+     position 0.91959 1.36442
      size 1 1
      hexactpos 1
      vexactpos 1
@@ -430,7 +443,7 @@ PanelWidgetClass ServerPanelMenu {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         style NewStyle
+         style rover_sim_colorable
          {
           GridSpacerWidgetClass SPTab_Control_Container {
            ignorepointer 1
@@ -532,6 +545,7 @@ PanelWidgetClass ServerPanelMenu {
             TextListboxWidgetClass ListBox_Tab0 {
              visible 1
              ignorepointer 0
+             color 0.451 0.0118 0.0549 1
              position 0 0
              size 1 1
              hexactpos 0
@@ -541,6 +555,38 @@ PanelWidgetClass ServerPanelMenu {
              style Default
              lines 27
              font "gui/fonts/metronbook"
+            }
+            ScrollWidgetClass ScrollWidget0 {
+             visible 0
+             ignorepointer 0
+             color 0.451 0.0118 0.0549 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              MultilineEditBoxWidgetClass Text_Tab0 {
+               ignorepointer 1
+               position 0 0
+               size 1 1
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               font "gui/fonts/metronbook22"
+               "exact text" 1
+               "size to text h" 0
+               "size to text v" 1
+               lines 100
+               "limit visible" 0
+              }
+             }
             }
            }
           }
@@ -558,6 +604,7 @@ PanelWidgetClass ServerPanelMenu {
             TextListboxWidgetClass ListBox_Tab1 {
              visible 1
              ignorepointer 0
+             color 0.451 0.0118 0.0549 1
              position 0 0
              size 1 1
              hexactpos 0
@@ -567,6 +614,38 @@ PanelWidgetClass ServerPanelMenu {
              style Default
              lines 27
              font "gui/fonts/metronbook"
+            }
+            ScrollWidgetClass ScrollWidget1 {
+             visible 0
+             ignorepointer 0
+             color 0.451 0.0118 0.0549 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              MultilineEditBoxWidgetClass Text_Tab1 {
+               ignorepointer 1
+               position 0 0
+               size 1 1
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               font "gui/fonts/metronbook22"
+               "exact text" 1
+               "size to text h" 0
+               "size to text v" 1
+               lines 100
+               "limit visible" 0
+              }
+             }
             }
            }
           }
@@ -584,6 +663,7 @@ PanelWidgetClass ServerPanelMenu {
             TextListboxWidgetClass ListBox_Tab2 {
              visible 1
              ignorepointer 0
+             color 0.451 0.0118 0.0549 1
              position 0 0
              size 1 1
              hexactpos 0
@@ -591,8 +671,41 @@ PanelWidgetClass ServerPanelMenu {
              hexactsize 0
              vexactsize 0
              style Default
+             "title visible" 0
              lines 27
              font "gui/fonts/metronbook"
+            }
+            ScrollWidgetClass ScrollWidget2 {
+             visible 0
+             ignorepointer 0
+             color 0.451 0.0118 0.0549 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              MultilineEditBoxWidgetClass Text_Tab2 {
+               ignorepointer 1
+               position 0 0
+               size 1 1
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               font "gui/fonts/metronbook22"
+               "exact text" 1
+               "size to text h" 0
+               "size to text v" 1
+               lines 100
+               "limit visible" 0
+              }
+             }
             }
            }
           }
@@ -619,6 +732,38 @@ PanelWidgetClass ServerPanelMenu {
              style Default
              lines 27
              font "gui/fonts/metronbook"
+            }
+            ScrollWidgetClass ScrollWidget3 {
+             visible 0
+             ignorepointer 0
+             color 0.451 0.0118 0.0549 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              MultilineEditBoxWidgetClass Text_Tab3 {
+               ignorepointer 1
+               position 0 0
+               size 1 1
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               font "gui/fonts/metronbook22"
+               "exact text" 1
+               "size to text h" 0
+               "size to text v" 1
+               lines 100
+               "limit visible" 0
+              }
+             }
             }
            }
           }
@@ -652,7 +797,7 @@ PanelWidgetClass ServerPanelMenu {
                vexactpos 0
                hexactsize 0
                vexactsize 0
-               style NewStyle
+               style rover_sim_colorable
                {
                 TextWidgetClass TextWidget0 {
                  ignorepointer 1
@@ -811,7 +956,7 @@ PanelWidgetClass ServerPanelMenu {
                vexactpos 0
                hexactsize 0
                vexactsize 0
-               style NewStyle
+               style rover_sim_colorable
                {
                 TextWidgetClass TextWidget2 {
                  ignorepointer 1
@@ -1288,7 +1433,7 @@ PanelWidgetClass ServerPanelMenu {
                vexactpos 0
                hexactsize 0
                vexactsize 0
-               style NewStyle
+               style rover_sim_colorable
                {
                 TextWidgetClass Title {
                  ignorepointer 1
@@ -1553,6 +1698,7 @@ PanelWidgetClass ServerPanelMenu {
      }
     }
     ButtonWidgetClass btn_donate {
+     color 0.3843 0.0824 0.1098 1
      position 460 15
      size 200 50
      halign right_ref
@@ -1561,7 +1707,7 @@ PanelWidgetClass ServerPanelMenu {
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     style MenuDefault
+     style DayZDefaultButton
      text "XXX"
      text_proportion 0.7
      font "gui/fonts/etelkatextpro"

@@ -83,6 +83,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 	private TextListboxWidget 					m_Tab2List;
 	private TextListboxWidget 					m_Tab3List;
 
+	//New Tabs
+	//private MultilineEditBoxWidget					m_TextTab0;
+	//private MultilineEditBoxWidget					m_TextTab1;
+	//private MultilineEditBoxWidget					m_TextTab2;
+	//private MultilineEditBoxWidget					m_TextTab3;
+
 	private string m_Link1, m_Link2, m_Link3, m_Tab0name, m_Tab1name, m_Tab2name, m_Tab3name;
 
 	//Player Preview
@@ -152,6 +158,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab2List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab2" ));
 		m_Tab3List 						=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_Tab3" ));
 		//m_LeaderBoard					=	TextListboxWidget.Cast( layoutRoot.FindAnyWidget( "ListBox_LB" ));
+
+		//New Tabs
+		//m_TextTab0						=	MultilineEditBoxWidget.Cast(layoutRoot.FindAnyWidget("Text_Tab0"));
+		//m_TextTab1						=	MultilineEditBoxWidget.Cast(layoutRoot.FindAnyWidget("Text_Tab1"));
+		//m_TextTab2						=	MultilineEditBoxWidget.Cast(layoutRoot.FindAnyWidget("Text_Tab2"));
+		//m_TextTab3						=	MultilineEditBoxWidget.Cast(layoutRoot.FindAnyWidget("Text_Tab3"));
 
 		//Player Information
 		m_PlayerTitle 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
@@ -465,6 +477,56 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 		else m_BtnDonate.Show(false);
 
+		//m_Tab0List.ClearItems();
+		
+		//float width;
+		//float height;
+
+		//string sTab0;
+		//foreach (string line0 : GetServerPanelServerConfig().sServerTab0){
+		//	m_TextTab0.SetLine(m_TextTab0.GetLinesCount(), line0);
+		//}
+		////m_TextTab0.SetText(sTab0);
+		////m_Tab0List.AddItem(GetServerPanelServerConfig().sServerTab0[i], NULL, 0);
+		//int sLines0 = m_TextTab0.GetLinesCount();
+		//if (sLines0 >= 29) {
+		//	m_TextTab0.GetSize(width,height);
+		//	m_TextTab0.SetSize(width,height +0.4,true);
+		//}
+		////m_TextTab0.Update();
+
+		//string sTab1;
+		//foreach (string line1 : GetServerPanelServerConfig().sServerTab1){
+		//	m_TextTab1.SetLine(m_TextTab1.GetLinesCount(), line1);
+		//}
+		////m_TextTab0.SetText(sTab0);
+		////m_Tab0List.AddItem(GetServerPanelServerConfig().sServerTab0[i], NULL, 0);
+		//int sLines1 = m_TextTab1.GetLinesCount();
+		//if (sLines1 >= 29) {
+		//	m_TextTab1.GetSize(width,height);
+		//	m_TextTab1.SetSize(width,height +0.4,true);
+		//}
+
+		//string sTab2;
+		//foreach (string line2 : GetServerPanelServerConfig().sServerTab2){
+		//	m_TextTab2.SetLine(m_TextTab2.GetLinesCount(), line2);
+		//}
+		//int sLines2 = m_TextTab2.GetLinesCount();
+		//if (sLines2 >= 29) {
+		//	m_TextTab2.GetSize(width,height);
+		//	m_TextTab2.SetSize(width,height +0.3,true);
+		//}
+
+		//string sTab3;
+		//foreach (string line3 : GetServerPanelServerConfig().sServerTab3){
+		//	m_TextTab3.SetLine(m_TextTab3.GetLinesCount(), line3);
+		//}
+		//int sLines3 = m_TextTab3.GetLinesCount();
+		//if (sLines3 >= 29) {
+		//	m_TextTab3.GetSize(width,height);
+		//	m_TextTab3.SetSize(width,height +0.4,true);
+		//}
+
 		m_Tab0List.ClearItems();
 		for (i = 0; i < GetServerPanelServerConfig().sServerTab0.Count(); i++)
 		m_Tab0List.AddItem(GetServerPanelServerConfig().sServerTab0[i], NULL, 0);
@@ -480,6 +542,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Tab3List.ClearItems();
 		for (i = 0; i < GetServerPanelServerConfig().sServerTab3.Count(); i++)
 		m_Tab3List.AddItem(GetServerPanelServerConfig().sServerTab3[i], NULL, 0);
+		
 	}
 
 	/*void SyncLeaderBoard( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
