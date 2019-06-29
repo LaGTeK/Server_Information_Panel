@@ -7,4 +7,4 @@ tooltip = "This mod allow server owner to display some informations about there 
 overview = "This mod allow server owner to display some informations about there server"; 						// overview
 action = "https://www.mydayz.eu/";					// link
 author = "LaGTeK";								// author
-version = "0.4";								// version
+version = "1.0";								// version
