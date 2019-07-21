@@ -13,12 +13,12 @@ class ServerPanelBase {
 
 		ref ServerPanelConfigManager configManager = new ref ServerPanelConfigManager;
 
-		if (GetGame().IsServer())	{
+		if (GetGame().IsServer()) {
 			Log("ServerPanelConfig", "Reading Server Config");
 			g_ServerConfig = configManager.ReadServerConfig();
 			
 		}
-		else	{
+		else {
 			Log("ServerPanelConfig", "Reading Client Config");
 			//g_ClientConfig = g_ClientConfig.reloadKey();
 			GetRPCManager().SendRPC("ServerPanelConfig", "GetConfigRequest", NULL, true, NULL);
