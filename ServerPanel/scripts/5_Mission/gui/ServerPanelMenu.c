@@ -53,7 +53,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 	protected TextWidget 						m_ItemHands;
 	protected TextWidget 						m_ServerTime;
 	protected TextWidget 						m_Condition;
-	protected TextWidget 						m_Direction;
+	//protected TextWidget 						m_Direction;
 	protected TextWidget 						m_ZKilled;
 	protected TextWidget 						m_PKilled;
 	protected TextWidget						m_LongestShot;
@@ -182,10 +182,11 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_Condition 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_disease" ) );
 		m_SurvivalTime 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_survivaltime" ) );
 		m_DistanceTravelled 			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_distance" ) );
-		m_Direction						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_direction" ) );
+		//m_Direction						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_direction" ) );
 		m_ZKilled						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_ZKilled" ) );
 		m_PKilled						=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_PKilled" ) );
 		m_LongestShot					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_longestShot" ) );
+		m_ServerTime					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_ServerTime" ));
 
 		//ProgressBar
 		m_HealthBar 					=	ProgressBarWidget.Cast( layoutRoot.FindAnyWidget( "HealthBar" ) );
@@ -221,12 +222,17 @@ class ServerPanelMenu extends UIScriptedMenu {
 		string header = "Server Panel Information by LaGTeK | " + sday + "/" + smonth + "/" + syear + " | " + shour + ":" + sminute + ":" + ssecond;
 		m_TitlePanel.SetText(header);
 
+		int m_year, m_month, m_day, m_hour, m_minute;
+		GetGame().GetWorld().GetDate(m_year, m_month, m_day, m_hour, m_minute);
+		string serverDate = "" + m_day + "/" + m_month + "/" + m_year + " | " + m_hour + ":" + m_minute;
+		m_ServerTime.SetText(serverDate);
+
 		SPBloodName();
 		//SPGetDirection();
 
 		FillFilesInformations();
 
-		m_Direction.Show(false);
+		//m_Direction.Show(false);
 
 		return layoutRoot;
 	}
@@ -250,6 +256,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		//GetRPCManager().SendRPC( "ServerPanelI", "SyncLeaderBoardRequest", new Param1< int >( 0 ), true, NULL);
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(UpdateHeader, 1000, true);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(ServerDate, 2000, true);
 		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGetDirection, 1000, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
@@ -273,30 +280,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetMission().GetHud().Show( true );
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(ServerDate);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
 		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGetDirection);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGender);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPPlayerPreview);
 	}
-
-	/*private void SPGetDirection ()	{
-		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
-		if (player)	{
-			vector playerOrientation = player.GetOrientation();
-			float position = playerOrientation[0]/-180;
-
-			m_Direction.SetText(position.ToString());
-
-			if (position > -0.875 && position <= -0.625)m_Direction.SetText("South East");
-			if (position > -0.625 && position <= -0.375)m_Direction.SetText("East");
-			if (position > -0.375 && position <= -0.125)m_Direction.SetText("North East");
-			if (position > -0.125 && position <= 0.125)m_Direction.SetText("North");
-			if (position > 0.125  && position <= 0.375)m_Direction.SetText("North West");
-			if (position > 0.375  && position <= 0.625)m_Direction.SetText("West");
-			if (position > 0.625  && position <= 0.875)m_Direction.SetText("South West");
-			if (position > 0.875  || position <= -0.875)m_Direction.SetText("South");
-		}
-	}*/
 
 	private void SPItemPreview()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
@@ -344,8 +333,15 @@ class ServerPanelMenu extends UIScriptedMenu {
 		int hour, minute, second, year, month, day;
 		GetHourMinuteSecond(hour, minute, second);
 		GetYearMonthDay(year, month, day);
-		string header = "Server Panel Information by LaGTeK | " + day + "/" + month + "/" + year + " | " + hour + ":" + minute + ":" + second;
+		string header = "Server Panel Information by LaGTeK | " + day + "/" + month + "/" + year + " | " + hour + ":" + minute+ ":" + second;
 		m_TitlePanel.SetText(header);
+	}
+
+		private void ServerDate()	{
+		int m_year, m_month, m_day, m_hour, m_minute;
+		GetGame().GetWorld().GetDate(m_year, m_month, m_day, m_hour, m_minute);
+		string serverDate = "" + m_day + "/" + m_month + "/" + m_year + " | " + m_hour + ":" + m_minute;
+		m_ServerTime.SetText(serverDate);
 	}
 
 	private void SPGender()	{

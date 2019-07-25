@@ -6,8 +6,6 @@
 	static const string CFG_PATH 					= "$saves:";
 	static const string CFG_PATH_SERVER				= "$profile:";
 
-	static const int SERVER_PANEL							=	69613;
-
 	//OLD PATH
 	static const string SP_OLD_CONFIG_PATH			= "$profile:\\ServerPanel\\ServerPanelConfig.json";
 	static const string TAB0_PATH 					= "$profile:\\ServerPanel\\ServerTab0.txt";

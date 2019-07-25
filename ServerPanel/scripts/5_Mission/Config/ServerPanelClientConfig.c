@@ -1,4 +1,4 @@
-class ServerPanelClientConfig {
+/*class ServerPanelClientConfig {
 	private 	int SPMENUKEY						= KeyCode.KC_PAUSE;
 
 	void ServerPanelClientConfig() {
@@ -52,4 +52,4 @@ class ServerPanelClientConfig {
 		ServerPanelBase.Log( "ServerPanelClientConfig", "Menu key is set to " + newSPConfigKey.SPMenuKey );
 		}
 	}
-}
+}*/

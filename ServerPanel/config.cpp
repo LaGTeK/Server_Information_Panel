@@ -28,6 +28,9 @@ class CfgMods
 		version="0.1";
 		extra=0;
 		type="mod";
+
+		inputs = "ServerPanel/SP_inputs.xml";
+
 		dependencies[]=
 		{
 			"Game","World","Mission"

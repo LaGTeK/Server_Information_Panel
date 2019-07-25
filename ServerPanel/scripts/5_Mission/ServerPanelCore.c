@@ -1,6 +1,6 @@
 class ServerPanelBase {
 
-	static ref ServerPanelClientConfig g_ClientConfig;
+	//static ref ServerPanelClientConfig g_ClientConfig;
 	ref ServerPanelServerConfig g_ServerConfig;
 
 	static ref ServerPanelLogger m_ServerPanelLogger;
@@ -13,27 +13,20 @@ class ServerPanelBase {
 
 		ref ServerPanelConfigManager configManager = new ref ServerPanelConfigManager;
 
-		if (GetGame().IsServer()) {
+		if (GetGame().IsServer())	{
 			Log("ServerPanelConfig", "Reading Server Config");
 			g_ServerConfig = configManager.ReadServerConfig();
 			
 		}
-		else {
+		else	{
 			Log("ServerPanelConfig", "Reading Client Config");
 			//g_ClientConfig = g_ClientConfig.reloadKey();
 			GetRPCManager().SendRPC("ServerPanelConfig", "GetConfigRequest", NULL, true, NULL);
 		}
 
-		g_ClientConfig = new ref ServerPanelClientConfig;
+		//g_ClientConfig = new ref ServerPanelClientConfig;
 
 		InitRPC();
-	}
-
-	static ref ServerPanelClientConfig GetConfig() {
-		if ( !g_ClientConfig ) {
-			g_ClientConfig = new ref ServerPanelClientConfig;
-		}
-		return g_ClientConfig;
 	}
 
 	static ref ServerPanelLogger GetLogger(){
@@ -77,33 +70,6 @@ class ServerPanelBase {
 			return;
 		g_ServerConfig = data.param1;
 	}
-
-	/*void SyncLeaderBoardRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
-		ref TStringArray playerListS 	= new TStringArray;
-		ref TFloatArray plyPData 		= new TFloatArray;
-		ref TFloatArray plyIData 		= new TFloatArray;
-		array<Man> players 				= new array<Man>;
-		PlayerBase player;
-		PlayerIdentity plyIdent;
-
-		if ( type == CallType.Server && GetGame().IsServer() ) {
-
-			GetGame().GetPlayers(players);
-			for (int i = 0; i < players.Count(); ++i) {
-				player = PlayerBase.Cast(players.Get(i));
-				plyIdent = player.GetIdentity();
-
-				playerListS.Insert(plyIdent.GetName());
-				//plyFData.Insert(player.StatGet("dist"));
-				//plyFData.Insert(player.StatGet("playtime"));
-				plyPData.Insert(player.StatGet("players_killed"));
-				plyIData.Insert(player.StatGet("infected_killed"));
-				//plyFData.Insert(player.StatGet("longest_survivor_hit"));
-			}
-			GetRPCManager().SendRPC( "ServerPanelI", "SyncPlayers", new Param3<ref TStringArray, ref TFloatArray, ref TFloatArray> (playerListS, plyPData, plyIData), true, sender );
-			Log("ServerPanelI", "" + sender.GetName() + " (" + sender.GetId() + ") - Player LeaderBoard sync");
-		}
-	}*/
 
 	void SyncPlayersRequest( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ) {
 		ref TStringArray playerListS 	= new TStringArray;
