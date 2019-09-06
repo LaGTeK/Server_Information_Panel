@@ -227,6 +227,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 		string serverDate = "" + m_day + "/" + m_month + "/" + m_year + " | " + m_hour + ":" + m_minute;
 		m_ServerTime.SetText(serverDate);
 
+		m_Weight.SetText("" + 0 + " Kg");
+
 		SPBloodName();
 		//SPGetDirection();
 
@@ -258,7 +260,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(UpdateHeader, 1000, true);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(ServerDate, 2000, true);
 		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGetDirection, 1000, false );
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
+		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPCalculatePlayerLoad, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPGender, 500, false );
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(SPPlayerPreview, 500, false );
 
@@ -281,7 +283,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(ServerDate);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
+		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPCalculatePlayerLoad);
 		//GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGetDirection);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPGender);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(SPPlayerPreview);
@@ -353,33 +355,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 	}
 
-	private void SPCalculatePlayerLoad()	{
-		EntityAI attachment;
-		ItemBase itemHands;
-		
-		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
-			itemHands			= Player.GetItemInHands();
-			int attcount		= Player.GetInventory().AttachmentCount();
-			int total_load		= 0;
-			
-			for (int att = 0; att < attcount; att++)	{	
-				attachment = Player.GetInventory().GetAttachmentFromIndex(att);
-				if ( attachment.IsItemBase() )	{
-					ItemBase attachmentIB;
-					Class.CastTo(attachmentIB, attachment);
-					total_load += attachmentIB.GetItemWeight();
-				}
-			}
-
-			if ( itemHands ) // adds weight of item carried in hands
-				total_load += itemHands.GetItemWeight();
-
-			//int a1 = sDistance / 10;
-			float totalWeight = (float) total_load / 1000.0;
-
-			m_Weight.SetText("" + totalWeight + " Kg");
-		}
-	}
 
 	private void SPBloodName()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
