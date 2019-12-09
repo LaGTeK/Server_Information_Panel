@@ -37,7 +37,7 @@ modded class DayZPlayerImplement
 		g_Game.GetUIManager().ShowCursor(false);
 		g_Game.GetUIManager().ShowUICursor(false);
 		g_Game.GetInput().ResetGameFocus();
-		g_Game.GetMission().PlayerControlEnable();
+		g_Game.GetMission().PlayerControlEnable(true);
 		g_Game.GetUIManager().Back();
 		g_Game.GetMission().GetHud().Show( true );
 		return;
@@ -52,7 +52,7 @@ modded class DayZPlayerImplement
 	
 	void UnlockControls()
 	{
-		GetGame().GetMission().PlayerControlEnable();
+		GetGame().GetMission().PlayerControlEnable(true);
 		GetGame().GetInput().ResetGameFocus();
 		GetGame().GetUIManager().ShowUICursor( false );
 		GetGame().GetMission().GetHud().Show( true );

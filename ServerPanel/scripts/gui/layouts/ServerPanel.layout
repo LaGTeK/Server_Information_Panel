@@ -1580,6 +1580,7 @@ PanelWidgetClass ServerPanelMenu {
                  "text valign" center
                 }
                 TextWidgetClass weight {
+                 visible 0
                  ignorepointer 1
                  position 0 0
                  size 0.5 0.04
@@ -1597,7 +1598,7 @@ PanelWidgetClass ServerPanelMenu {
                  "text valign" center
                 }
                 TextWidgetClass txt_weight {
-                 visible 1
+                 visible 0
                  ignorepointer 1
                  position 0.5 0
                  size 0.5 0.05
@@ -1641,6 +1642,7 @@ PanelWidgetClass ServerPanelMenu {
                }
               }
               ImageWidgetClass ImageWeight {
+               visible 0
                ignorepointer 1
                position 0.0125 0.935
                size 40 40

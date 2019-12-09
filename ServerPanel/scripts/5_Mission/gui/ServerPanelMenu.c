@@ -227,8 +227,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 		string serverDate = "" + m_day + "/" + m_month + "/" + m_year + " | " + m_hour + ":" + m_minute;
 		m_ServerTime.SetText(serverDate);
 
-		m_Weight.SetText("" + 0 + " Kg");
-
 		SPBloodName();
 		//SPGetDirection();
 
@@ -277,7 +275,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetGame().GetUIManager().ShowCursor(false);
 		GetGame().GetUIManager().ShowUICursor(false);
 		GetGame().GetInput().ResetGameFocus();
-		GetGame().GetMission().PlayerControlEnable();
+		GetGame().GetMission().PlayerControlEnable(true);
 		GetGame().GetUIManager().Back();
 		GetGame().GetMission().GetHud().Show( true );
 
@@ -355,6 +353,33 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 	}
 
+	/*private void SPCalculatePlayerLoad()	{
+		EntityAI attachment;
+		ItemBase itemHands;
+		
+		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
+			itemHands			= Player.GetItemInHands();
+			int attcount		= Player.GetInventory().AttachmentCount();
+			int total_load		= 0;
+			
+			for (int att = 0; att < attcount; att++)	{	
+				attachment = Player.GetInventory().GetAttachmentFromIndex(att);
+				if ( attachment.IsItemBase() )	{
+					ItemBase attachmentIB;
+					Class.CastTo(attachmentIB, attachment);
+					total_load += attachmentIB.GetItemWeight();
+				}
+			}
+
+			if ( itemHands ) // adds weight of item carried in hands
+				total_load += itemHands.GetItemWeight();
+
+			//int a1 = sDistance / 10;
+			float totalWeight = (float) total_load / 1000.0;
+
+			m_Weight.SetText("" + totalWeight + " Kg");
+		}
+	}*/
 
 	private void SPBloodName()	{
 		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
