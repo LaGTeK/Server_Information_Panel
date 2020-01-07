@@ -152,7 +152,7 @@ PanelWidgetClass ServerPanelMenu {
          vexactsize 0
          scaled 0
          style Bold
-         text "Player Informations"
+         text "Player Information"
          font "gui/fonts/metronbook-bold"
          "exact text" 0
          text_proportion 0.8
