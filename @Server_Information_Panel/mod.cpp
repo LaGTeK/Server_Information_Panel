@@ -1,4 +1,4 @@
-name = "Server_Information_Panel"; 								// name 
+name = "Server Information Panel"; 								// name 
 picture = "ServerPanel/scripts/gui/imageset/logo-server-panel.edds";			// picture in expanded description
 logoSmall = "ServerPanel/scripts/gui/imageset/logo-server-panel.edds";	// icon next to mod name when description is not expanded
 logo = "ServerPanel/scripts/gui/imageset/logo-server-panel.edds";				// logo below game menu
