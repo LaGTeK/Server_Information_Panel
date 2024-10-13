@@ -1,0 +1,1 @@
+static const int SERVER_PANEL							=	69613;

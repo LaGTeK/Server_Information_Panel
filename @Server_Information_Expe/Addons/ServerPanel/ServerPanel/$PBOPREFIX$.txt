@@ -1,0 +1,6 @@
+//<'ServerPanel.pbo' properties via Mikero's dos tools, dll version 9.57>
+prefix=ServerPanel;
+Mikero=DePbo.dll.7.29;
+version=Thu Nov 14 00:25:00 2019;
+//PboType=Arma Addon;
+//</properties>
