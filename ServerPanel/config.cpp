@@ -1,70 +1,56 @@
 class CfgPatches
 {
-	class ServerPanel_Scripts
-	{
-		units[]={};
-		weapons[]={};
-		requiredVersion=0.1;
-		requiredAddons[]=
-		{
-			"DZ_Scripts",
-			"JM_CF_Scripts"
-		};
-	};
-};
-class CfgMods
-{
 	class ServerPanel
 	{
-		dir="ServerPanel";
-		picture="";
+		requiredAddons[] = { "DZ_Scripts","JM_CF_Scripts" };
+	};
+};
+// class CfgAddons
+// {
+//     class PreloadAddons
+//     {
+//         class ServerPanel
+//         {
+//             list[]={};
+//         };
+//     };
+// };
+class CfgMods
+{
+    class ServerPanel
+    {
+		name = "ServerPanel";
+        dir="ServerPanel";
 		action="";
+        picture="";
 		hideName=1;
 		hidePicture=1;
-		name="ServerPanel";
-		credits="LaGTeK";
-		author="LaGTeK";
-		authorID="0";
-		version="0.1";
-		extra=0;
-		type="mod";
+		author = "LaGTeK";
+        overview = "";
+		creditsJson="ServerPanel/Scripts/Data/Credits.json";		
+		inputs = "ServerPanel/Inputs.xml";
+		type = "mod";
+		defines[] = {"SERVERPANEL"};
+		dependencies[] = {"Game","World","Mission"};
 
-		inputs = "ServerPanel/SP_inputs.xml";
-
-		dependencies[]=
-		{
-			"Game","World","Mission"
-		};
-		class defs
+        class defs
 		{
 			class imageSets
 			{
-				files[] = {"ServerPanel/scripts/gui/imageset/SP_Icons.imageset"};
+				files[] = {"ServerPanel/GUI/imageset/SP_Icons.imageset"};
 			};
 			class gameScriptModule
 			{
-				value="";
-				files[]=
-				{
-					"ServerPanel/scripts/3_Game"
-				};
+				files[] = { "ServerPanel/Scripts/3_Game" };
 			};
 			class worldScriptModule
 			{
-				value="";
-				files[]=
-				{
-					"ServerPanel/scripts/4_World"
-				};
+				files[] = { "ServerPanel/Scripts/4_World" };
 			};
-			class missionScriptModule
+			class missionScriptModule 
 			{
-				value="";
-				files[]=
-				{
-					"ServerPanel/scripts/5_Mission"
-				};
+				files[] = { "ServerPanel/Scripts/5_Mission" };
 			};
 		};
-	};
+    };
 };

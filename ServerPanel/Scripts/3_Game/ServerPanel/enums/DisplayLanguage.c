@@ -1,0 +1,15 @@
+enum DisplayLanguage
+{
+    ENGLISH,
+    FRENCH,
+    SPANISH,
+    ITALIAN,
+    GERMAN,
+    CZECH,
+    RUSSIAN,
+    CHINESE_TRADITIONAL,
+    CHINESE_SIMPLIFIED,
+    POLISH,
+    JAPANESE,
+    PORTUGUESE
+}

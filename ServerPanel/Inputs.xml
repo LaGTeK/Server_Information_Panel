@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<modded_inputs>
+
+	<!-- declarations -->
+	<inputs>
+
+		<actions>
+			<input name="SPOpenPanelMenu" loc="#STR_SP_KEY_OPEN_SERVER_PANEL" />
+		</actions>
+
+	</inputs>
+
+	<!-- preset -->
+	<preset>
+		
+		<input name="SPOpenPanelMenu">
+			<btn name="kPAUSE" />
+		</input>
+		
+	</preset>
+
+</modded_inputs>

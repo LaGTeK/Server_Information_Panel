@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{D140B773B815608F}ServerPanel/GUI/imageset/SP_Icon.png"
+ Author "lagtek"
+ ChangeDate 1716547889
+ Configurations {
+  PNGResourceClass PC {
+   SourceFile "SP_Icon.png"
+  }
+  PNGResourceClass XBOX_ONE : PC {
+  }
+  PNGResourceClass PS4 : PC {
+  }
+  PNGResourceClass LINUX : PC {
+  }
+ }
+}

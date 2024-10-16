@@ -1,0 +1,65 @@
+FrameWidgetClass rootFrame {
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+  PanelWidgetClass Tab_0 {
+   visible 1
+   ignorepointer 0
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   scaled 1
+   style blank
+   {
+    ScrollWidgetClass ScrollWidget0 {
+     visible 1
+     clipchildren 1
+     ignorepointer 0
+     keepsafezone 0
+     color 0.3843 0.0824 0.1098 1
+     position 0 0
+     size 1 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style blank
+     "Scrollbar V" 1
+     {
+      RichTextWidgetClass Text_0 {
+       visible 1
+       clipchildren 1
+       inheritalpha 0
+       ignorepointer 1
+       position 0 0
+       size 1 0.999
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 1
+       style DayZNormal
+       text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
+       font "gui/fonts/sdf_MetronLight24"
+       "text offset" 10 0
+       "text sharpness" 1.5
+       "exact text" 1
+       "exact text size" 20
+       "size to text h" 0
+       "size to text v" 0
+       wrap 1
+       "content offset" 12
+      }
+     }
+    }
+   }
+  }
+ }
+}

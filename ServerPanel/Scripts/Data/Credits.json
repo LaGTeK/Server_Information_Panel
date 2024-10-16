@@ -1,0 +1,28 @@
+{
+    "Departments": [
+        {
+            "DepartmentName": "ServerPanel",
+            "Sections": [
+                {
+                    "SectionName": "Developers",
+                    "SectionLines": [
+                        "LaGTeK"
+                    ]
+                },
+                {
+                    "SectionName": "Special Thanks",
+                    "SectionLines": [
+                        "Hlynge",
+                        "Dance Of Jesus",
+                        "Jacob_Mango",
+                        "Arkensor",
+                        "Vaker",
+                        "Da0ne",
+                        "Shix",
+                        "TH"
+                    ]
+                }
+            ]
+        }
+    ]
+}

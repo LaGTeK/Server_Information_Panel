@@ -1,0 +1,443 @@
+FrameWidgetClass rootFrame {
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+  PanelWidgetClass Tab_4 {
+   visible 1
+   ignorepointer 0
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style blank
+   {
+    PanelWidgetClass LeftSideCraftingPanelWidget {
+     ignorepointer 1
+     position 0 0
+     size 0.25 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass SearchPanelWidget {
+       ignorepointer 1
+       position 0 0
+       size 1 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ImageWidgetClass SearchIconImageWidget {
+         ignorepointer 1
+         position 0.015 0.14
+         size 0.1 0.73
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         image0 "set:spicons image:Search"
+         mode additive
+         "src alpha" 1
+         "clamp mode" clamp
+         "stretch mode" stretch_w_h
+         filter 1
+        }
+        EditBoxWidgetClass SearchEditBoxWidget {
+         position 0.13 0.05
+         size 0.73 0.9
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Editor
+         text "#layout_server_browser_server_serarch"
+         "limit visible" 1
+         "Use default text" 1
+         "exact text" 1
+         font "gui/fonts/MetronBook-Bold22"
+         "text sharpness" 1.162
+        }
+        ButtonWidgetClass SortButtonWidget {
+         color 0.3843 0.0824 0.1098 1
+         position 0.875 0.14
+         size 0.1 0.73
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         {
+          ImageWidgetClass SortImageWidget {
+           ignorepointer 1
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:spicons image:sortAZ"
+           mode additive
+           "src alpha" 1
+           "clamp mode" clamp
+           "stretch mode" stretch_w_h
+           filter 1
+          }
+         }
+        }
+       }
+      }
+      TextListboxWidgetClass CraftListTextListboxWidget {
+       color 0.502 0 0 1
+       position 0.01 0.08
+       size 0.98 0.92
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       "title visible" 0
+       colums "1"
+       lines 30
+       "highlight row" 1
+       font "gui/fonts/sdf_MetronLight24"
+      }
+     }
+    }
+    PanelWidgetClass RightSideCraftingPanelWidget {
+     ignorepointer 1
+     position 0.25 0
+     size 0.75 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass RLeftPanelWidget {
+       ignorepointer 1
+       position 0 0
+       size 0.5 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        TextWidgetClass IngredientsTitleTextWidget {
+         ignorepointer 1
+         position 0 0
+         size 1 0.08
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "#STR_SP_CRAFTING_NEED"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 10 0
+         "exact text" 1
+         "exact text size" 26
+         "text valign" center
+        }
+        PanelWidgetClass Ingredient1PanelWidget {
+         ignorepointer 1
+         position 0 0.08
+         size 1 0.42
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          TextListboxWidgetClass Ingredient1Label {
+           ignorepointer 0
+           color 0.502 0 0 1
+           position 0 0
+           size 0.4 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           colums "1"
+           lines 10
+           "highlight row" 0
+           font "gui/fonts/MetronLight14"
+          }
+          ItemPreviewWidgetClass Ingredient1ItemPreviewWidget {
+           ignorepointer 0
+           keepsafezone 0
+           position 0.41 0.05
+           size 0.58 0.9
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           draggable 0
+          }
+         }
+        }
+        PanelWidgetClass Ingredient2PanelWidget {
+         ignorepointer 0
+         size 1 0.42
+         halign center_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          TextListboxWidgetClass Ingredient2Label {
+           ignorepointer 0
+           color 0.502 0 0 1
+           position 0 0
+           size 0.4 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           scaled 1
+           colums "1"
+           lines 10
+           "highlight row" 0
+           font "gui/fonts/MetronLight14"
+          }
+          ItemPreviewWidgetClass Ingredient2ItemPreviewWidget {
+           ignorepointer 0
+           keepsafezone 0
+           position 0.41 0.05
+           size 0.58 0.9
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+          }
+         }
+        }
+        ImageWidgetClass IngredientsPlusImageWidget {
+         ignorepointer 1
+         color 0.8471 0.8471 0.8471 0.8471
+         position 0.45 0.5075
+         size 0.08 0.06
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         image0 "set:dayz_gui image:Expand"
+         mode additive
+         "src alpha" 1
+         "clamp mode" clamp
+         "stretch mode" stretch_w_h
+         filter 1
+        }
+       }
+      }
+      PanelWidgetClass RRightCraftingPanelWidget {
+       ignorepointer 1
+       position 0.5 0
+       size 0.5 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        TextWidgetClass IngredientsTitleTextWidget0 {
+         ignorepointer 1
+         position 0 0
+         size 1 0.08
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "#STR_SP_CRAFTING_RESULT"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 10 0
+         "exact text" 1
+         "exact text size" 26
+         "text valign" center
+        }
+        PanelWidgetClass ResultCraftPanelWidget {
+         ignorepointer 1
+         position 0 0.1
+         size 1 0.9
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          PanelWidgetClass ResultCraft0PanelWidget {
+           ignorepointer 1
+           position 0 0
+           size 1 0.33
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            ItemPreviewWidgetClass ResultCraft0ItemPreviewWidget {
+             ignorepointer 0
+             position 0 0
+             size 0.8 0.9
+             halign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+            }
+            TextWidgetClass ResultCraft0Label {
+             ignorepointer 1
+             size 1 0.1
+             halign center_ref
+             valign bottom_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             text "ResultCraftLabel0"
+             font "gui/fonts/sdf_MetronLight24"
+             "text offset" 10 0
+             "exact text" 1
+             "exact text size" 20
+             "size to text v" 0
+             "text halign" center
+             "text valign" center
+            }
+           }
+          }
+          PanelWidgetClass ResultCraft1PanelWidget {
+           ignorepointer 1
+           position 0 0.33
+           size 1 0.33
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            ItemPreviewWidgetClass ResultCraft1ItemPreviewWidget {
+             ignorepointer 0
+             position 0 0
+             size 0.8 0.9
+             halign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+            }
+            TextWidgetClass ResultCraft1Label {
+             ignorepointer 1
+             position 0 0
+             size 1 0.1
+             halign center_ref
+             valign bottom_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             text "ResultCraftLabel1"
+             font "gui/fonts/sdf_MetronLight24"
+             "text offset" 10 0
+             "exact text" 1
+             "exact text size" 20
+             "size to text v" 0
+             "text halign" center
+             "text valign" center
+            }
+           }
+          }
+          PanelWidgetClass ResultCraft2PanelWidget {
+           ignorepointer 1
+           position 0 0.66
+           size 1 0.33
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            ItemPreviewWidgetClass ResultCraft2ItemPreviewWidget {
+             ignorepointer 0
+             position 0 0
+             size 0.8 0.9
+             halign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+            }
+            TextWidgetClass ResultCraft2Label {
+             ignorepointer 1
+             position 0 0
+             size 1 0.1
+             halign center_ref
+             valign bottom_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             text "ResultCraftLabel2"
+             font "gui/fonts/sdf_MetronLight24"
+             "text offset" 10 0
+             "exact text" 1
+             "exact text size" 20
+             "size to text v" 0
+             "text halign" center
+             "text valign" center
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+      PanelWidgetClass EqualPanelWidget {
+       ignorepointer 1
+       position 0.475 0.508
+       size 0.045 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ImageWidgetClass EqualImageWidget2 {
+         ignorepointer 1
+         color 0.8471 0.8471 0.8471 0.8471
+         position 0 -0.2
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         image0 "set:dayz_gui image:Collapse"
+         mode additive
+         "src alpha" 1
+         "clamp mode" clamp
+         "stretch mode" stretch_w_h
+         filter 1
+        }
+        ImageWidgetClass EqualImageWidget1 {
+         ignorepointer 1
+         color 0.8471 0.8471 0.8471 0.8471
+         position 0 0.2
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         image0 "set:dayz_gui image:Collapse"
+         mode additive
+         "src alpha" 1
+         "clamp mode" clamp
+         "stretch mode" stretch_w_h
+         filter 1
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

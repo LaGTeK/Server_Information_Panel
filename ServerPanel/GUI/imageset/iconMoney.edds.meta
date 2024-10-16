@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{C0C5BF8E3151DEB6}ServerPanel/GUI/imageset/iconMoney.edds"
+ Author "lagtek"
+ ChangeDate -1024413397
+ Configurations {
+  PNGResourceClass PC {
+   SourceFile "iconMoney.png"
+  }
+  PNGResourceClass XBOX_ONE : PC {
+  }
+  PNGResourceClass PS4 : PC {
+  }
+  PNGResourceClass LINUX : PC {
+  }
+ }
+}

@@ -1,0 +1,1219 @@
+PanelWidgetClass ServerPanelMenu {
+ visible 1
+ disabled 0
+ color 0 0 0 0
+ size 0.95 0.85
+ halign center_ref
+ valign center_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ scriptclass ""
+ {
+  PanelWidgetClass Background {
+   visible 1
+   color 0.1843 0.1843 0.1843 0.9412
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+   {
+    PanelWidgetClass title_wrapper {
+     visible 1
+     color 0.1255 0.1255 0.1255 0.7804
+     position 0 0
+     size 1 55
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass title_text {
+       position 0 0
+       size 1 1
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Normal
+       text "#STR_SP_TITLE"
+       font "gui/fonts/sdf_MetronBook24"
+       "exact text" 1
+       "exact text size" 30
+       "size to text h" 0
+       "size to text v" 0
+       "text halign" center
+       "text valign" center
+      }
+     }
+    }
+    MultilineTextWidgetClass text_name {
+     ignorepointer 1
+     position 0.01 0.07
+     size 0.77 0.07
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style DayZNormal
+     text "XXX"
+     font "gui/fonts/sdf_MetronBook24"
+     "exact text" 1
+     "exact text size" 26
+     "size to text h" 0
+     "text valign" center
+     wrap 0
+    }
+    PanelWidgetClass PanelPlayerInformation {
+     visible 1
+     ignorepointer 1
+     position 0.785 0.07
+     size 0.205 0.85
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_black
+     {
+      PanelWidgetClass PlayerInformationbck {
+       ignorepointer 1
+       keepsafezone 0
+       color 0.1137 0.1137 0.1137 1
+       position 0 0
+       size 1 0.065
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 0
+       style rover_sim_colorable
+       {
+        TextWidgetClass PlayerInformationTitle {
+         ignorepointer 1
+         keepsafezone 0
+         color 0.7216 0.2667 0.2667 1
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         style Normal
+         text "#STR_SP_PLAYER_INFORMATION_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "bold text" 1
+         "exact text" 1
+         "exact text size" 26
+         "text halign" center
+         "text valign" center
+        }
+       }
+      }
+      TextWidgetClass txt_Nickname {
+       ignorepointer 1
+       position 0 0.065
+       size 1 0.055
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Bold
+       text "XXX"
+       font "gui/fonts/sdf_MetronBook24"
+       "bold text" 1
+       "exact text" 1
+       "exact text size" 22
+       text_proportion 0.8
+       "text halign" center
+       "text valign" center
+      }
+      TextWidgetClass txt_position {
+       visible 1
+       ignorepointer 1
+       position 0 0.34
+       size 1 0.055
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Bold
+       text "XXX"
+       font "gui/fonts/sdf_MetronBook24"
+       "exact text" 1
+       "exact text size" 21
+       "text halign" center
+       "text valign" center
+      }
+      PanelWidgetClass SideInfoPanelWidget {
+       visible 1
+       ignorepointer 1
+       keepsafezone 0
+       position 0 0.12
+       size 1 0.22
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style blank
+       {
+        TextWidgetClass txt_health0 {
+         ignorepointer 1
+         position 0 0
+         size 0.43 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "#STR_SP_PLAYER_HEALTH_TITLE :"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -5 0
+         "exact text" 1
+         "exact text size" 21
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass txt_health {
+         ignorepointer 1
+         position 0.43 0
+         size 0.53 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "bold text" 1
+         "exact text" 1
+         "exact text size" 21
+         "text valign" center
+        }
+        TextWidgetClass txt_blood0 {
+         ignorepointer 1
+         position 0 0.25
+         size 0.43 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "#STR_SP_PLAYER_BLOOD_TITLE :"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -5 0
+         "exact text" 1
+         "exact text size" 21
+         "text halign" right
+         "text valign" center
+        }
+        GridSpacerWidgetClass BloodGridSpacerWidget {
+         ignorepointer 1
+         position 0.43 0.25
+         size 0.53 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         Padding 5
+         Margin 5
+         Columns 5
+         Rows 1
+         {
+          ImageWidgetClass BloodImageWidget0 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconBlood0"
+           mode blend
+           "src alpha" 1
+           filter 1
+          }
+          ImageWidgetClass BloodImageWidget1 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconBlood0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass BloodImageWidget2 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconBlood0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass BloodImageWidget3 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconBlood0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass BloodImageWidget4 {
+           visible 0
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconBlood0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+         }
+        }
+        TextWidgetClass txt_water0 {
+         ignorepointer 1
+         position 0 0.5
+         size 0.43 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "#STR_SP_PLAYER_WATER_TITLE :"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -5 0
+         "exact text" 1
+         "exact text size" 21
+         "text halign" right
+         "text valign" center
+        }
+        GridSpacerWidgetClass WaterGridSpacerWidget {
+         ignorepointer 1
+         position 0.43 0.5
+         size 0.53 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         Padding 5
+         Margin 5
+         Columns 5
+         Rows 1
+         {
+          ImageWidgetClass WaterImageWidget0 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconThirsty0"
+           mode blend
+           "src alpha" 1
+           filter 1
+          }
+          ImageWidgetClass WaterImageWidget1 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconThirsty0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass WaterImageWidget2 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconThirsty0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass WaterImageWidget3 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconThirsty0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass WaterImageWidget4 {
+           visible 0
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconThirsty0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+         }
+        }
+        TextWidgetClass txt_food0 {
+         ignorepointer 1
+         position 0 0.75
+         size 0.43 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "#STR_CfgFood0 :"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -5 0
+         "exact text" 1
+         "exact text size" 21
+         "text halign" right
+         "text valign" center
+        }
+        GridSpacerWidgetClass FoodGridSpacerWidget {
+         ignorepointer 1
+         position 0.43 0.75
+         size 0.53 0.25
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         Padding 5
+         Margin 5
+         Columns 5
+         Rows 1
+         {
+          ImageWidgetClass FoodImageWidget0 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconHungry0"
+           mode blend
+           "src alpha" 1
+           filter 1
+          }
+          ImageWidgetClass FoodImageWidget1 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconHungry0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass FoodImageWidget2 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconHungry0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass FoodImageWidget3 {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconHungry0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+          ImageWidgetClass FoodImageWidget4 {
+           visible 0
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           image0 "set:dayz_gui image:iconHungry0"
+           mode blend
+           "src alpha" 1
+           "stretch mode" invalid
+           filter 1
+          }
+         }
+        }
+        TextWidgetClass txt_food {
+         visible 0
+         ignorepointer 1
+         position 0.56 0.23
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         font "gui/fonts/metron"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+        TextWidgetClass txt_water {
+         visible 0
+         ignorepointer 1
+         position 0.56 0.23
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+        TextWidgetClass txt_blood {
+         visible 0
+         ignorepointer 1
+         position 0.56 0.18
+         size 0.43 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         "exact text" 0
+         text_proportion 0.8
+         "text valign" center
+        }
+       }
+      }
+      PanelWidgetClass PlayerListPanelWidget {
+       visible 1
+       ignorepointer 1
+       position 0 0.395
+       size 1 0.605
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 1
+       style blank
+       {
+        PanelWidgetClass TitlePanelWidget {
+         ignorepointer 1
+         color 0.1137 0.1137 0.1137 1
+         position 0 0
+         size 1 0.105
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style rover_sim_colorable
+         {
+          TextWidgetClass OnlinePlayerTitle {
+           ignorepointer 1
+           color 0.7216 0.2667 0.2667 1
+           position 0 0
+           size 1 1
+           hexactpos 1
+           vexactpos 1
+           hexactsize 0
+           vexactsize 0
+           style Bold
+           text "#STR_SP_ONLINE_PLAYERS_TITLE"
+           font "gui/fonts/sdf_MetronBook24"
+           "text color" 0.7216 0.2667 0.2667 1
+           "bold text" 1
+           "exact text" 1
+           "exact text size" 26
+           "text halign" center
+           "text valign" center
+          }
+         }
+        }
+        ScrollWidgetClass PlayerListScrollWidget {
+         ignorepointer 1
+         color 0.3843 0.0824 0.1098 1
+         position 0 0.105
+         size 0.98 0.895
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style blank
+         "Scrollbar V" 1
+         {
+          MultilineTextWidgetClass Player_List {
+           ignorepointer 0
+           keepsafezone 0
+           position 0 0
+           size 1 1.05
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           scaled 1
+           draggable 0
+           style DayZNormal
+           text "sqqsq"
+           font "gui/fonts/sdf_MetronLight24"
+           "text offset" 10 5
+           "text spacing" 0 5
+           "exact text" 1
+           "exact text size" 22
+           "size to text v" 1
+           wrap 1
+          }
+         }
+        }
+       }
+      }
+      PanelWidgetClass LogoPanelWidget {
+       visible 1
+       ignorepointer 1
+       color 0.1137 0.1137 0.1137 1
+       position 0 0
+       size 1 0.28
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        ImageWidgetClass LogoImageWidget {
+         visible 1
+         ignorepointer 1
+         position 0 0
+         size 0.7 0.7
+         halign center_ref
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         image0 "set:dayz_gui image:ProgressDayZFull"
+         mode blend
+         "src alpha" 1
+         "clamp mode" invalid
+         "stretch mode" center
+         filter 0
+         nocache 0
+        }
+       }
+      }
+     }
+    }
+    ButtonWidgetClass btn_close_widget {
+     color 0.3843 0.0824 0.1098 1
+     position 0.97 0.01
+     size 0.02 0.04
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Colorable
+     {
+      ImageWidgetClass btn_close0 {
+       ignorepointer 1
+       position 0 0
+       size 1 1
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:dayz_gui image:Close"
+       mode blend
+       "src alpha" 1
+      }
+     }
+    }
+    FrameWidgetClass SPTabber {
+     ignorepointer 1
+     size 1 1
+     halign center_ref
+     valign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 1
+     draggable 0
+     scriptclass ""
+     {
+      PanelWidgetClass PanelTabs {
+       ignorepointer 1
+       position 0.01 0.15
+       size 0.77 0.77
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_black
+       {
+        PanelWidgetClass PanelTabBar {
+         ignorepointer 1
+         color 0.1255 0.1255 0.1255 0.7804
+         position 0 0
+         size 1 0.07
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style blank
+         {
+          GridSpacerWidgetClass SPTab_Control_Container {
+           ignorepointer 1
+           color 0.2 0.2 0.2 1
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style outline
+           Padding 0
+           Margin 5
+           content_valign center
+           Columns 6
+           Rows 1
+           {
+            ButtonWidgetClass ButtonTab_0 {
+             color 0.6 0.6 0.6 1
+             position 10 10
+             size 48 48
+             hexactpos 1
+             vexactpos 1
+             hexactsize 1
+             vexactsize 1
+             style DayZDefaultButtonNoBorder
+             text "XXX"
+             text_proportion 0.7
+             font "gui/fonts/sdf_MetronBook24"
+             switch normal
+            }
+            ButtonWidgetClass ButtonTab_1 {
+             color 0.2 0.2 0.2 1
+             position 10 10
+             size 48 48
+             hexactpos 1
+             vexactpos 1
+             hexactsize 1
+             vexactsize 1
+             style DayZDefaultButtonNoBorder
+             text "XXX"
+             text_proportion 0.7
+             font "gui/fonts/sdf_MetronBook24"
+            }
+            ButtonWidgetClass ButtonTab_2 {
+             color 0.2 0.2 0.2 1
+             position 10 10
+             size 48 48
+             hexactpos 1
+             vexactpos 1
+             hexactsize 1
+             vexactsize 1
+             style DayZDefaultButtonNoBorder
+             text "XXX"
+             text_proportion 0.7
+             font "gui/fonts/sdf_MetronBook24"
+            }
+            ButtonWidgetClass ButtonTab_3 {
+             color 0.2 0.2 0.2 1
+             position 10 10
+             size 48 48
+             hexactpos 1
+             vexactpos 1
+             hexactsize 1
+             vexactsize 1
+             style DayZDefaultButtonNoBorder
+             text "XXX"
+             text_proportion 0.7
+             font "gui/fonts/sdf_MetronBook24"
+            }
+            ButtonWidgetClass ButtonTab_4 {
+             color 0.2 0.2 0.2 1
+             position 10 10
+             size 48 48
+             hexactpos 1
+             vexactpos 1
+             hexactsize 1
+             vexactsize 1
+             style DayZDefaultButtonNoBorder
+             text "#STR_SP_CRAFTING_TAB_TITLE"
+             text_proportion 0.7
+             font "gui/fonts/sdf_MetronBook24"
+            }
+            ButtonWidgetClass ButtonTab_5 {
+             color 0.2 0.2 0.2 1
+             position 10 10
+             size 48 48
+             hexactpos 1
+             vexactpos 1
+             hexactsize 1
+             vexactsize 1
+             style DayZDefaultButtonNoBorder
+             text "#STR_SP_PLAYER_TAB_TITLE"
+             text_proportion 0.7
+             font "gui/fonts/sdf_MetronBook24"
+            }
+           }
+          }
+         }
+        }
+        PanelWidgetClass PanelTab {
+         ignorepointer 0
+         color 0.1255 0.1255 0.1255 0.7804
+         position 0 0.07
+         size 1 0.93
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style blank
+         {
+          PanelWidgetClass Tab_0 {
+           visible 1
+           ignorepointer 0
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           scaled 1
+           style blank
+           {
+            ScrollWidgetClass ScrollWidget0 {
+             visible 1
+             clipchildren 1
+             ignorepointer 0
+             keepsafezone 0
+             color 0.3843 0.0824 0.1098 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              RichTextWidgetClass Text_Tab0 {
+               visible 1
+               clipchildren 1
+               inheritalpha 0
+               ignorepointer 1
+               position 0 0
+               size 1 0.999
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
+               font "gui/fonts/sdf_MetronLight24"
+               "text offset" 10 0
+               "text sharpness" 1.5
+               "exact text" 1
+               "exact text size" 20
+               "size to text h" 0
+               "size to text v" 0
+               wrap 1
+              }
+             }
+            }
+           }
+          }
+          PanelWidgetClass Tab_1 {
+           visible 1
+           ignorepointer 0
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style blank
+           {
+            ScrollWidgetClass ScrollWidget1 {
+             visible 1
+             clipchildren 1
+             ignorepointer 0
+             color 0.3843 0.0824 0.1098 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              RichTextWidgetClass Text_Tab1 {
+               visible 1
+               clipchildren 1
+               inheritalpha 0
+               ignorepointer 1
+               position 0 0
+               size 1 0.999
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
+               font "gui/fonts/sdf_MetronLight24"
+               "text offset" 10 0
+               "text sharpness" 1.5
+               "exact text" 1
+               "exact text size" 20
+               "size to text h" 0
+               "size to text v" 0
+               wrap 1
+              }
+             }
+            }
+           }
+          }
+          PanelWidgetClass Tab_2 {
+           visible 1
+           ignorepointer 0
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style blank
+           {
+            ScrollWidgetClass ScrollWidget2 {
+             visible 1
+             ignorepointer 0
+             color 0.3843 0.0824 0.1098 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              RichTextWidgetClass Text_Tab2 {
+               visible 1
+               clipchildren 1
+               inheritalpha 0
+               ignorepointer 1
+               position 0 0
+               size 1 0.999
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
+               font "gui/fonts/sdf_MetronLight24"
+               "text offset" 10 0
+               "text sharpness" 1.5
+               "exact text" 1
+               "exact text size" 20
+               "size to text h" 0
+               "size to text v" 0
+               wrap 1
+              }
+             }
+            }
+           }
+          }
+          PanelWidgetClass Tab_3 {
+           visible 1
+           ignorepointer 0
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style blank
+           {
+            ScrollWidgetClass ScrollWidget3 {
+             visible 1
+             ignorepointer 0
+             color 0.3843 0.0824 0.1098 1
+             position 0 0
+             size 1 1
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             style blank
+             "Scrollbar V" 1
+             {
+              RichTextWidgetClass Text_Tab3 {
+               visible 1
+               clipchildren 1
+               inheritalpha 0
+               ignorepointer 1
+               position 0 0
+               size 1 0.999
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               scaled 1
+               style DayZNormal
+               text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
+               font "gui/fonts/sdf_MetronLight24"
+               "text offset" 10 0
+               "text sharpness" 1.5
+               "exact text" 1
+               "exact text size" 20
+               "size to text h" 0
+               "size to text v" 0
+               wrap 1
+              }
+             }
+            }
+           }
+          }
+          PanelWidgetClass Tab_4 {
+           visible 1
+           ignorepointer 0
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style blank
+          }
+          PanelWidgetClass Tab_5 {
+           visible 1
+           ignorepointer 1
+           position 0 0
+           size 1 1
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style blank
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+    ButtonWidgetClass btn_cancel {
+     color 0.1529 0.1529 0.1529 1
+     position 15 15
+     size 180 50
+     halign left_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style DayZDefaultButton
+     text "#main_menu_exit"
+     text_proportion 0.6
+     font "gui/fonts/sdf_MetronBook24"
+     "disabled text color" 0 0 0 0.902
+     "text sharpness" 1.3
+     switch normal
+    }
+    ButtonWidgetClass btn_donate {
+     color 0.3843 0.0824 0.1098 1
+     position 460 15
+     size 200 50
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style DayZDefaultButton
+     text "XXX"
+     text_proportion 0.6
+     font "gui/fonts/sdf_MetronBook24"
+     "text sharpness" 1.3
+    }
+    ButtonWidgetClass btn_website {
+     color 0.3843 0.0824 0.1098 1
+     position 240 15
+     size 200 50
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style DayZDefaultButton
+     text "XXX"
+     text_proportion 0.6
+     font "gui/fonts/sdf_MetronBook24"
+     "text sharpness" 1.3
+    }
+    ButtonWidgetClass btn_discord {
+     color 0.3843 0.0824 0.1098 1
+     position 20 15
+     size 200 50
+     halign right_ref
+     valign bottom_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     style DayZDefaultButton
+     text "XXX"
+     text_proportion 0.6
+     font "gui/fonts/sdf_MetronBook24"
+     "text sharpness" 1.3
+     switch normal
+    }
+    PanelWidgetClass MoneyPanelWidget {
+     visible 1
+     ignorepointer 1
+     position 0.335 0.93
+     size 0.283 0.055
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      ImageWidgetClass CurrencyIconWidget {
+       visible 1
+       disabled 0
+       clipchildren 1
+       inheritalpha 0
+       ignorepointer 1
+       ignoregloballv 0
+       keepsafezone 0
+       position 0 0
+       size 0.1 1
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 1
+       image0 ""
+       imageTexture "{C0C5BF8E3151DEB6}ServerPanel/GUI/imageset/iconMoney.edds"
+       mode blend
+       "src alpha" 1
+       "clamp mode" invalid
+       "stretch mode" fit_w_center
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      TextWidgetClass CurrencyTextWidget {
+       position 0.11 0
+       size 0.8 1
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "999999"
+       font "gui/fonts/sdf_MetronLight24"
+       "exact text" 1
+       "exact text size" 20
+       "size to text h" 1
+       "text valign" center
+      }
+     }
+    }
+   }
+  }
+ }
+}

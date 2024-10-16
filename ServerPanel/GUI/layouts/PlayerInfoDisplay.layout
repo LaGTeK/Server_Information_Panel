@@ -1,0 +1,982 @@
+FrameWidgetClass rootFrame {
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+  PanelWidgetClass Tab_5 {
+   visible 1
+   ignorepointer 0
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style blank
+   {
+    PanelWidgetClass LeftSidePanelWidget {
+     ignorepointer 1
+     position 0 0
+     size 0.5 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass PanelWidget3 {
+       ignorepointer 1
+       color 0.2549 0.2549 0.2549 1
+       position 0.01 0.01
+       size 0.98 0.07
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        TextWidgetClass menu_statisticsTextWidget {
+         ignorepointer 1
+         position 0 0
+         size 1 0.95
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "#main_menu_statistics"
+         font "gui/fonts/sdf_MetronBook24"
+         "exact text" 1
+         "exact text size" 24
+         "text halign" center
+         "text valign" center
+        }
+       }
+      }
+      GridSpacerWidgetClass GridSpacerWidget1 {
+       clipchildren 0
+       ignorepointer 1
+       position 0.07 0.08
+       size 0.91 0.35
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       "no focus" 0
+       content_halign center
+       content_valign center
+       Columns 2
+       Rows 5
+       {
+        TextWidgetClass distance {
+         ignorepointer 1
+         position 1007.69 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         text "#main_menu_distance"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "text valign" center
+        }
+        TextWidgetClass txt_distance {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass survivaltime {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         text "#main_menu_time"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "text valign" center
+        }
+        TextWidgetClass txt_survivalTime {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass ZKilled {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         text "#main_menu_infected_killed"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "text valign" center
+        }
+        TextWidgetClass txt_zKilled {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass PKilled {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         text "#main_menu_players_killed"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "text valign" center
+        }
+        TextWidgetClass txt_pKilled {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.493 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass longestShot {
+         clipchildren 0
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#main_menu_long_range_hit_player"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_longestShot {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+       }
+      }
+      ImageWidgetClass ImageDistance {
+       ignorepointer 1
+       position 0.02 0.095
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Distance"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImageSurvived {
+       ignorepointer 1
+       position 0.02 0.165
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:SurvivedTime"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ItemPreviewWidgetClass ItemPreview {
+       ignorepointer 0
+       position 0 0.0075
+       size 0.9 0.27
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+      ImageWidgetClass ImageZKilled {
+       ignorepointer 1
+       position 0.02 0.235
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:ZKilled"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImagePKilled {
+       ignorepointer 1
+       position 0.02 0.305
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:PKilled"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImageLongestShot {
+       ignorepointer 1
+       position 0.02 0.375
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Sniper"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      PanelWidgetClass PanelWidget7 {
+       ignorepointer 1
+       color 0.2549 0.2549 0.2549 1
+       position 0.01 0.44
+       size 0.98 0.07
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        TextWidgetClass Title {
+         ignorepointer 1
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "#STR_SP_PLAYER_CONDITIONS_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "exact text" 1
+         "exact text size" 24
+         "text halign" center
+         "text valign" center
+        }
+       }
+      }
+      GridSpacerWidgetClass GridSpacerWidget3 {
+       clipchildren 0
+       ignorepointer 1
+       position 0.07 0.51
+       size 0.91 0.21
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       "no focus" 0
+       content_halign center
+       content_valign center
+       Columns 2
+       {
+        TextWidgetClass ServerTime {
+         visible 1
+         clipchildren 0
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.04
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_SP_PLAYER_INGAME_DATE_TITLE "
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.6
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_serverTime {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass playtimesession {
+         clipchildren 0
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_SP_PLAYER_SESSION_TIME_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.6
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_playtime {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text " XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass itemhands {
+         clipchildren 0
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.04
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_SP_PLAYER_WHATS_IN_HANDS_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.6
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_itemhands {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
+       }
+      }
+      ImageWidgetClass ImageSession {
+       ignorepointer 1
+       position 0.02 0.525
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:SessionTime"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImagesTime {
+       visible 1
+       ignorepointer 1
+       position 0.02 0.595
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Clock"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImageHands {
+       ignorepointer 1
+       position 0.02 0.665
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Sword"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+     }
+    }
+    PanelWidgetClass RightSidePanelWidget {
+     ignorepointer 1
+     color 0.9255 0.9255 0.9255 0
+     position 0.5 0
+     size 0.5 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style blank
+     {
+      PlayerPreviewWidgetClass PlayerPreview {
+       clipchildren 1
+       ignorepointer 0
+       position 0.23 0.01
+       size 0.5 0.62
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       draggable 0
+      }
+      MultilineTextWidgetClass Dead {
+       ignorepointer 1
+       position 0.31 0.51
+       size 0.159 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "#STR_SP_LEGEND_DEAD"
+       font "gui/fonts/sdf_MetronLight24"
+       "text offset" 3 0
+       "exact text" 1
+       "exact text size" 15
+       "size to text h" 0
+       "size to text v" 0
+       "text valign" center
+       wrap 1
+      }
+      ProgressBarWidgetClass HealthBar {
+       ignorepointer 1
+       color 0.1569 0.6235 0.2745 1
+       position 0.04 0.01
+       size 0.03 0.55
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Stamina
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageHealth {
+       ignorepointer 1
+       position 0.0325 0.57
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Health"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      ProgressBarWidgetClass BloodBar {
+       ignorepointer 1
+       color 0.7686 0.1412 0.1412 1
+       position 0.12 0.01
+       size 0.03 0.55
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Stamina
+       maximum 5000
+       current 2500
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageBlood {
+       ignorepointer 1
+       position 0.1125 0.57
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Blood"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ProgressBarWidgetClass StaminaBar {
+       ignorepointer 1
+       color 0.0706 0.5608 0.5608 1
+       position 0.2 0.01
+       size 0.03 0.55
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Stamina
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageStamina {
+       ignorepointer 1
+       position 0.1925 0.57
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Stamina"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ProgressBarWidgetClass ShockBar {
+       ignorepointer 1
+       color 0.8745 0.1098 0.1098 1
+       position 0.28 0.01
+       size 0.03 0.55
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Quantity
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageHearth {
+       ignorepointer 1
+       position 0.2725 0.57
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Heart"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      MultilineTextWidgetClass Good {
+       ignorepointer 1
+       position 0.31 0.01
+       size 0.159 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "#STR_SP_LEGEND_ALIVE"
+       font "gui/fonts/sdf_MetronLight24"
+       "text offset" 6 0
+       "exact text" 1
+       "exact text size" 15
+       "size to text h" 0
+       "size to text v" 0
+       "text valign" center
+       wrap 1
+      }
+      GridSpacerWidgetClass GridSpacerWidget2 {
+       ignorepointer 1
+       position 0.02 0
+       size 0.91 0.28
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       "no focus" 0
+       content_halign center
+       content_valign center
+       Columns 2
+       Rows 4
+       {
+        TextWidgetClass Disease {
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.04
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_Tutorial_Disease"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_disease {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass sex {
+         ignorepointer 1
+         position 1007.69 82.58
+         size 1 1
+         hexactpos 1
+         vexactpos 1
+         hexactsize 0
+         vexactsize 0
+         text "#STR_SP_PLAYER_GENDER_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "text valign" center
+        }
+        TextWidgetClass txt_sex {
+         ignorepointer 1
+         position 1221.48999 82.58
+         size 211.48999 48
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass bloodtype {
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.04
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_SP_PLAYER_BLOOD_GROUP_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_bloodType {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+        TextWidgetClass weight {
+         visible 1
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.04
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_SP_INVENTORYWEIGHT"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_weight {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         "text halign" right
+         "text valign" center
+        }
+       }
+      }
+      PanelWidgetClass PanelWidget6 {
+       ignorepointer 1
+       color 0.2549 0.2549 0.2549 1
+       position 0.01 0.65
+       size 0.98 0.07
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        TextWidgetClass TextWidget2 {
+         ignorepointer 1
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "#STR_SP_PLAYER_CHARACTER_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "exact text" 1
+         "exact text size" 24
+         "text halign" center
+         "text valign" center
+        }
+       }
+      }
+      ImageWidgetClass ImagesDisease {
+       ignorepointer 1
+       position 0.015 0.735
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:dayz_gui image:iconBacteria"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImageWeight {
+       visible 1
+       ignorepointer 1
+       position 0.015 0.945
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       scaled 1
+       image0 "set:spicons image:Weight"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImageBloodType {
+       ignorepointer 1
+       position 0.015 0.875
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:BloodType"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ImageWidgetClass ImageSex {
+       ignorepointer 1
+       position 0.015 0.805
+       size 0.046 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:People"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+     }
+    }
+   }
+  }
+ }
+}
