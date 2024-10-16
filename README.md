@@ -16,7 +16,7 @@ On server:
 -   `ServerPanel.json` will be generated automaticatly at first start or updated from the previous config
 -   U can also leave a link blank & the button will disapear, same for tabs
 
-### Json File - [ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanel.json)
+### Json File - [ServerPanelConfig.json](https://github.com/LaGTeK/Server_Information_Panel/blob/master/Profiles/ServerPanel/ServerPanel.json)
 ```
 {
     "VERSION": "1.7",
