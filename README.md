@@ -11,50 +11,133 @@
 
 On server:
 
--   Copy file `LaGTeK.bikey` from `ServerPanel\keys` into server `keys` folder
--   Copy folder `ServerPanel` from mod folder to `[ServerProfilesFolder]`.
--   `ServerPanel.json` is now used to configure all the panel (buttons, links and ur Server Name, Ands différents Tabs Content)
-    (You are now able to add what u want, i've tried with some special character and only `|` and `#` can't be used ! ) Don't put more than 110 chars per line !
+-   Copy file `ServerPanel_V3.bikey` from `ServerPanel\keys` into server `keys` folder
+-   When servr will start config will be created automaticalty if not found (`ServerPanel`).
+-   `ServerPanel.json` will be generated automaticatly at first start or updated from the previous config
 -   U can also leave a link blank & the button will disapear, same for tabs
 
 ### Json File - [ServerPanelConfig.json](@Server_Information_Panel/ServerPanel/ServerPanel.json)
-
- - `ServerName = Your Server name`
- - `Button1Name = Your Button1Name`
- - `Button1Link = Your Button1Link`
- - `Button2Name = Your Button2Name`
- - `Button2Link = Your Button2Link`
- - `Button3Name = Your Button3Name`
- - `Button3Link = Your Button3Link`
- - `ButtonTab0Name = Name of the First Tab`
- - `ButtonTab1Name = Name of the Second Tab`
- - `ButtonTab2Name = Name of the Third Tab`
- - `ButtonTab3Name = Name of the Fourth Tab`
- - `PlayerInfo = You can display or hide player's side information with this parameter`
- - `PlayerTab = You can display or hide player Tab with this parameter`
- - `UseScriptLog = You can use separate log from script.log for Server Panel Mod `
- - `sServerTab0 = Content of the First Tab`
- - `sServerTab1 = Content of the Second Tab`
- - `sServerTab2 = Content of the Third Tab`
- - `sServerTab3 = Content of the Fourth Tab`
-
-### Old installation
-- You can also change the name of the two first Tab now
-(Exemple here: [@Server_Information_Panel/ServerPanel/ServerPanel.json](@Server_Information_Panel/ServerPanel/ServerPanel.json))
--   Old config files are not used used anymore, these files should be deleted and remplaced with `ServerPanel.json` automaticatly
-
+```
+{
+    "VERSION": "1.7",
+    "SERVERNAME": "Welcome on MyDayZ server !! - Hosted By MyDayZ.eu",
+    "LOGLEVEL": 1,
+    "BUTTON1NAME": "DISCORD",
+    "BUTTON1LINK": "https://discord.gg/KAgNn6K",
+    "BUTTON2NAME": "WEBSITE",
+    "BUTTON2LINK": "https://mydayz.eu",
+    "BUTTON3NAME": "DONATE",
+    "BUTTON3LINK": "https://www.paypal.me/MyDayZ",
+    "DISPLAYPLAYERINFO": 1,
+    "DISPLAYPLAYERTAB": 1,
+    "DISPLAYPLAYERLIST": 1,
+    "DISPLAYPLAYERPOSITION": 1,
+    "DISPLAYCRAFTTAB": 1,
+    "DISPLAYCURRENCY": 1,
+    "CURRENCYNAME": "Rubles",
+    "DISPLAYPLOGO": 1,
+    "LOGOPATH": "set:dayz_gui image:ProgressDayZFull",
+    "LOGO_WIDTH_PERCENTAGE": 87.0,
+    "LOGO_HEIGHT_PERCENTAGE": 83.0,
+    "BUTTONTAB0NAME": "TAB0",
+    "BUTTONTAB1NAME": "TAB1",
+    "BUTTONTAB2NAME": "TAB2",
+    "BUTTONTAB3NAME": "TAB3",
+    "sServerTab0": [
+        "<h1>Write your h1 Title 0</h1>",
+        "<p>Write your <b>information Tab0 1</b></p>",
+        "<p>Write your <b>information Tab0 2</b></p>",
+        "<p>Write your <b>information Tab0 3</b></p>",
+        "<p>Write your <b>information Tab0 4</b></p>",
+        "<h2>Write your h2 Title 5</h2>",
+        "<p>Write your <i>information Tab0 6</i></p>",
+        "<p>Write your <i>information Tab0 7</i></p>",
+        "<p>Write your <i>information Tab0 8</i></p>",
+        "<p>Write your <i>information Tab0 9</i></p>",
+        "<h2>Write your h2 Title 10</h2>",
+        "<p>Write your <i>information Tab0 11</i></p>",
+        "<p>Write your <i>information Tab0 12</i></p>",
+        "<p>Write your <i>information Tab0 13</i></p>",
+        "<p>Write your <i>information Tab0 14</i></p>",
+        "<h2>Write your h2 Title 15</h2>",
+        "<p>Write your <b>information Tab0 16</b></p>",
+        "<p>Write your <b>information Tab0 17</b></p>",
+        "<p>Write your <b>information Tab0 18</b></p>",
+        "<p>Write your <b>information Tab0 19</b></p>"
+    ],
+    "sServerTab1": [
+        "<h1>Write your h1 Title 0</h1>",
+        "<p>Write your <b>information Tab1 1</b></p>",
+        "<p>Write your <b>information Tab1 2</b></p>",
+        "<p>Write your <b>information Tab1 3</b></p>",
+        "<p>Write your <b>information Tab1 4</b></p>",
+        "<h2>Write your h2 Title 5</h2>",
+        "<p>Write your <i>information Tab1 6</i></p>",
+        "<p>Write your <i>information Tab1 7</i></p>",
+        "<p>Write your <i>information Tab1 8</i></p>",
+        "<p>Write your <i>information Tab1 9</i></p>",
+        "<h2>Write your h2 Title 10</h2>",
+        "<p>Write your <i>information Tab1 11</i></p>",
+        "<p>Write your <i>information Tab1 12</i></p>",
+        "<p>Write your <i>information Tab1 13</i></p>",
+        "<p>Write your <i>information Tab1 14</i></p>",
+        "<h2>Write your h2 Title 15</h2>",
+        "<p>Write your <b>information Tab1 16</b></p>",
+        "<p>Write your <b>information Tab1 17</b></p>",
+        "<p>Write your <b>information Tab1 18</b></p>",
+        "<p>Write your <b>information Tab1 19</b></p>"
+    ],
+    "sServerTab2": [
+        "<h1>Write your h1 Title 0</h1>",
+        "<p>Write your <b>information Tab2 1</b></p>",
+        "<p>Write your <b>information Tab2 2</b></p>",
+        "<p>Write your <b>information Tab2 3</b></p>",
+        "<p>Write your <b>information Tab2 4</b></p>",
+        "<h2>Write your h2 Title 5</h2>",
+        "<p>Write your <i>information Tab2 6</i></p>",
+        "<p>Write your <i>information Tab2 7</i></p>",
+        "<p>Write your <i>information Tab2 8</i></p>",
+        "<p>Write your <i>information Tab2 9</i></p>",
+        "<h2>Write your h2 Title 10</h2>",
+        "<p>Write your <i>information Tab2 11</i></p>",
+        "<p>Write your <i>information Tab2 12</i></p>",
+        "<p>Write your <i>information Tab2 13</i></p>",
+        "<p>Write your <i>information Tab2 14</i></p>",
+        "<h2>Write your h2 Title 15</h2>",
+        "<p>Write your <b>information Tab2 16</b></p>",
+        "<p>Write your <b>information Tab2 17</b></p>",
+        "<p>Write your <b>information Tab2 18</b></p>",
+        "<p>Write your <b>information Tab2 19</b></p>"
+    ],
+    "sServerTab3": [
+        "<h1>Write your h1 Title 0</h1>",
+        "<p>Write your <b>information Tab3 1</b></p>",
+        "<p>Write your <b>information Tab3 2</b></p>",
+        "<p>Write your <b>information Tab3 3</b></p>",
+        "<p>Write your <b>information Tab3 4</b></p>",
+        "<h2>Write your h2 Title 5</h2>",
+        "<p>Write your <i>information Tab3 6</i></p>",
+        "<p>Write your <i>information Tab3 7</i></p>",
+        "<p>Write your <i>information Tab3 8</i></p>",
+        "<p>Write your <i>information Tab3 9</i></p>",
+        "<h2>Write your h2 Title 10</h2>",
+        "<p>Write your <i>information Tab3 11</i></p>",
+        "<p>Write your <i>information Tab3 12</i></p>",
+        "<p>Write your <i>information Tab3 13</i></p>",
+        "<p>Write your <i>information Tab3 14</i></p>",
+        "<h2>Write your h2 Title 15</h2>",
+        "<p>Write your <b>information Tab3 16</b></p>",
+        "<p>Write your <b>information Tab3 17</b></p>",
+        "<p>Write your <b>information Tab3 18</b></p>",
+        "<p>Write your <b>information Tab3 19</b></p>"
+    ]
+}
+```
 
 ## Q: Can i change default menu key ?
 
-A: Sure, U can now change default menu key client side with editing `ServerPanelKey.json` file in your `Documents` folder (`C:\Users\%username%\Documents`).
-
-```"SPMenuKey": "KC_NUMPAD6"```
-
-And change `KC_PAUSE` (which stands for `PAUSE|BREAK` key on keyboard) to any key you want.
+A: Sure, U can now change default key in your Dayz Settings, by default key is `KC_PAUSE`.
 [Here is full list of available keys](https://github.com/DannyDog/DayZSAEnfScript/blob/master/dta/scripts.pbo/1_Core/proto/EnSystem.c#L156).
-
-Example of resulting line:
-* ```"SPMenuKey": "KC_BACKSLASH"```
 
 This is WIP, It's my first mod and I work on this in my spare time. I will my best try to bring updates frequently!
 
@@ -65,4 +148,5 @@ This is WIP, It's my first mod and I work on this in my spare time. I will my be
 - Special Thanks to Shix from Aftermath server for the tab effect.
 - Special Thanks to [Da0ne](https://github.com/Da0ne) from [Vanilla++](https://github.com/VanillaPlusPlus) for his help too :)
 - Special Thanks to [Vaker](https://github.com/Moondarker) from [ZomBerry Admin Tools](https://steamcommunity.com/sharedfiles/filedetails/?id=1582756848) for his help.
+- Special Thanks to HunterZ, TripleZ and Connor for your help with some translations :)
 
