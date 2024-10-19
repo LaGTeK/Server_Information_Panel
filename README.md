@@ -36,7 +36,7 @@ On server:
     "DISPLAYCURRENCY": 1,
     "CURRENCYNAME": "Rubles",
     "DISPLAYPLOGO": 1,
-    "LOGOPATH": "set:dayz_gui image:ProgressDayZFull",
+    "LOGOPATH": "set:dayz_gui image:ProgressDayZFull", //You Can use an Image set, edds file or PAA ex:("LOGOPATH": "ServerPanel/GUI/imageset/logo-server-panel.paa"). Your image File need to be stored inside your modpack/loading screen.
     "LOGO_WIDTH_PERCENTAGE": 87.0,
     "LOGO_HEIGHT_PERCENTAGE": 83.0,
     "BUTTONTAB0NAME": "TAB0",
