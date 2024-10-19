@@ -679,7 +679,7 @@ PanelWidgetClass ServerPanelMenu {
          mode blend
          "src alpha" 1
          "clamp mode" invalid
-         "stretch mode" center
+         "stretch mode" stretch_w_h
          filter 0
          nocache 0
         }
