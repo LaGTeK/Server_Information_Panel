@@ -849,7 +849,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		AdjustRichTextWidgetHeight(m_TextTab3, config.sServerTab3);
 	}
 
-	private void UpdateHeader() {
+	private void UpdateHeader() {		
 		string header = "#STR_SP_TITLE" + " | " + GetFormattedDateTime();
 		m_TitlePanel.SetText(header);
 	}
@@ -872,7 +872,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			case 2: // SPANISH
 			case 3: // ITALIAN
 			case 11: // PORTUGUESE
-				formattedDate = day.ToString() + "/" + month.ToString() + "/" + year.ToString() + " | " + hour.ToString() + ":" + minute.ToString() + ":" + second.ToString();
+				formattedDate = day.ToString() + "/" + month.ToString() + "/" + year.ToString() + " | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2) + ":" + second.ToStringLen(2);
 				break;
 
 			// DD.MM.YYYY | HH:MM
@@ -880,19 +880,19 @@ class ServerPanelMenu extends UIScriptedMenu {
 			case 5: // CZECH
 			case 6: // RUSSIAN
 			case 9: // POLISH
-				formattedDate = day.ToString() + "." + month.ToString() + "." + year.ToString() + " | " + hour.ToString() + ":" + minute.ToString() + ":" + second.ToString();
+				formattedDate = day.ToString() + "." + month.ToString() + "." + year.ToString() + " | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2) + ":" + second.ToStringLen(2);
 				break;
 
 			// YYYY年MM月DD日 | HH:MM
 			case 7: // CHINESE_TRADITIONAL
 			case 8: // CHINESE_SIMPLIFIED
 			case 10: // JAPANESE
-				formattedDate = year.ToString() + "年" + month.ToString() + "月" + day.ToString() + "日 | " + hour.ToString() + ":" + minute.ToString() + ":" + second.ToString();
+				formattedDate = year.ToString() + "年" + month.ToString() + "月" + day.ToString() + "日 | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2) + ":" + second.ToStringLen(2);
 				break;
 
 			// Default format if none matches
 			default:
-				formattedDate = day.ToString() + "/" + month.ToString() + "/" + year.ToString() + " | " + hour.ToString() + ":" + minute.ToString() + ":" + second.ToString();
+				formattedDate = day.ToString() + "/" + month.ToString() + "/" + year.ToString() + " | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2) + ":" + second.ToStringLen(2);
 				break;
 		}
 

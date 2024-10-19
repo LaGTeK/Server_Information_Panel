@@ -23,7 +23,7 @@ class PlayerInfoDisplay {
 		
 		// Appels à CallLater pour des mises à jour périodiques ou uniques
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ServerDate, 10000, true);  // Appelle ServerDate toutes les 10 secondes
-		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SessionTime, 10000, true);     // Appelle SessionTime une seule fois après 10000 ms soit 10s
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SessionTime, 1000, true);     // Appelle SessionTime une seule fois après 10000 ms soit 10s
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SPPlayerPreview, 500, false); // Appelle SPPlayerPreview une seule fois après 500 ms
 		
 	}
@@ -207,10 +207,52 @@ class PlayerInfoDisplay {
 	}
 
 	private void ServerDate() {
+		string m_ServerDateTime = GetFormattedServerDateTime();
+		m_ServerTime.SetText(m_ServerDateTime);
+	}
+
+	string GetFormattedServerDateTime()
+	{
 		int year, month, day, hour, minute;
 		g_Game.GetWorld().GetDate(year, month, day, hour, minute);
-		string serverDate = "" + day + "/" + month + "/" + year + " | " + hour + ":" + minute;
-		m_ServerTime.SetText(serverDate);
+
+		//DayZGame game = DayZGame.Cast(GetGame());
+		int langIdx = g_Game.GetDisplayLanguage();
+		string formattedDate;
+
+		switch (langIdx)
+		{
+			// MM/DD/YYYY | HH:MM
+			case 0: // ENGLISH
+			case 1: // FRENCH
+			case 2: // SPANISH
+			case 3: // ITALIAN
+			case 11: // PORTUGUESE
+				formattedDate = day.ToString() + "/" + month.ToString() + "/" + year.ToString() + " | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2);
+				break;
+
+			// DD.MM.YYYY | HH:MM
+			case 4: // GERMAN
+			case 5: // CZECH
+			case 6: // RUSSIAN
+			case 9: // POLISH
+				formattedDate = day.ToString() + "." + month.ToString() + "." + year.ToString() + " | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2);
+				break;
+
+			// YYYY年MM月DD日 | HH:MM
+			case 7: // CHINESE_TRADITIONAL
+			case 8: // CHINESE_SIMPLIFIED
+			case 10: // JAPANESE
+				formattedDate = year.ToString() + "年" + month.ToString() + "月" + day.ToString() + "日 | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2);
+				break;
+
+			// Default format if none matches
+			default:
+				formattedDate = day.ToString() + "/" + month.ToString() + "/" + year.ToString() + " | " + hour.ToStringLen(2) + ":" + minute.ToStringLen(2);
+				break;
+		}
+
+		return formattedDate;
 	}
 
 	private void SessionTime() {
@@ -220,7 +262,7 @@ class PlayerInfoDisplay {
 		int sMinutes = Math.Floor(sUpTimeBis / 60) - (sHours * 60);  // Utilise une soustraction au lieu de %
 		int sSeconds = sUpTimeBis - (sHours * 3600) - (sMinutes * 60);
 
-		m_PlayTime.SetText("" + sHours + "#STR_time_unit_abbrev_hour_0" + " " + sMinutes + "#STR_time_unit_abbrev_minute_0" + " " + sSeconds + "#STR_time_unit_abbrev_second_0");
+		m_PlayTime.SetText("" + sHours.ToStringLen(2) + "#STR_time_unit_abbrev_hour_0" + " " + sMinutes.ToStringLen(2) + "#STR_time_unit_abbrev_minute_0" + " " + sSeconds.ToStringLen(2) + "#STR_time_unit_abbrev_second_0");
 	}
 
 	/*private void SPItemPreview()	{
