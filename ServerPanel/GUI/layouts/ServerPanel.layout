@@ -1034,7 +1034,6 @@ PanelWidgetClass ServerPanelMenu {
              vexactpos 0
              hexactsize 0
              vexactsize 0
-             style blank
              "Scrollbar V" 1
              {
               RichTextWidgetClass Text_Tab3 {

@@ -816,14 +816,24 @@ class ServerPanelMenu extends UIScriptedMenu {
 	// Fonction qui retourne la hauteur en pourcentage pour chaque ligne en fonction de son contenu
 	float GetLineHeightPercentage(string lineText) {
 		if (lineText.Contains("<h1>")) {
+			return 12.35; // 5% pour <h1>
+		} else if (lineText.Contains("<h2>")) {
+			return 9.3; // 4% pour <h2>
+		} else if (lineText.Contains("<p>")) {
+			return 6.6; // 2% pour <p>
+		} else {
+			return 4.0; // 1% par défaut pour du texte sans balises spécifiques
+		}
+
+		/*if (lineText.Contains("<h1>")) {
 			return 12.15; // 5% pour <h1>
 		} else if (lineText.Contains("<h2>")) {
 			return 9.1; // 4% pour <h2>
 		} else if (lineText.Contains("<p>")) {
 			return 6.4; // 2% pour <p>
 		} else {
-			return 3.5; // 1% par défaut pour du texte sans balises spécifiques
-		}
+			return 4.5; // 1% par défaut pour du texte sans balises spécifiques
+		}*/
 	}
 	// Fonction pour ajuster la hauteur du widget RichText en fonction des balises HTML et du nombre de lignes
 	void AdjustRichTextWidgetHeight(RichTextWidget widget, TStringArray lines) {

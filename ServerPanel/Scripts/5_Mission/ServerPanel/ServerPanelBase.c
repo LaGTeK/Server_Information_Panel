@@ -95,7 +95,8 @@ class ServerPanelBase {
 			playerName = sender.GetName();
 			playerId = sender.GetId();
 			PlayerBase requestingPlayer = PlayerBase.Cast(sender.GetPlayer());
-			if (requestingPlayer) {
+			if (requestingPlayer) 
+			{
 				plyIData.Insert(requestingPlayer.GetHealth());
 				plyIData.Insert(requestingPlayer.GetHealth("", "Blood"));
 				plyFData.Insert(requestingPlayer.GetHealth("", "Shock"));
@@ -106,7 +107,20 @@ class ServerPanelBase {
 				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_INFECTED_KILLED));
 				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_LONGEST_SURVIVOR_HIT));
 				m_HasDisease = requestingPlayer.HasDisease();
-			} else {
+
+				// Ajoute l'uptime du serveur à la fin de plyFData
+				MissionServer missionServer = MissionServer.Cast(GetGame().GetMission());
+				if (missionServer) {
+					plyFData.Insert(missionServer.GetServerUptime());
+				} else {
+					plyFData.Insert(0); // Par défaut à 0 si l'uptime est indisponible
+				}
+
+				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_CONNECTION_TIME));
+
+			} 
+			else 
+			{
 				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelStatsRPC", "Failed to cast sender's player.");
 			}
 		}	

@@ -23,6 +23,7 @@ class SPRecipeManager {
         m_ExcludedClasses.Insert("FillSyringe");
         m_ExcludedClasses.Insert("AttachHolsterPouch");
         m_ExcludedClasses.Insert("AttachPouchesHolster");
+        m_ExcludedClasses.Insert("CraftRag");
         // Ajoutez plus de classes à exclure si nécessaire
 
         LoadRecipes();
