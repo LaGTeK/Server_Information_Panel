@@ -135,9 +135,7 @@ On server:
 ```
 
 ## Q: Can i change default menu key ?
-
 A: Sure, U can now change default key in your Dayz Settings, by default key is `KC_PAUSE`.
-[Here is full list of available keys](https://github.com/DannyDog/DayZSAEnfScript/blob/master/dta/scripts.pbo/1_Core/proto/EnSystem.c#L156).
 
 This is WIP, It's my first mod and I work on this in my spare time. I will my best try to bring updates frequently!
 
