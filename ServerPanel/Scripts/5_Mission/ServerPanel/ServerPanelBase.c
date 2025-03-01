@@ -52,7 +52,9 @@ class ServerPanelBase {
 		}
 	}
 
-    void GetConfigRequest(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)	{
+    //void GetConfigRequest(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)	
+	void GetConfigRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
 		if (!GetGame().IsServer())
 			return;
 		GetRPCManager().SendRPC("ServerPanelConfigRPC", "GetConfigResponse", new Param1<ref ServerPanelServerConfig>(g_ServerConfig), true, sender);
@@ -62,7 +64,9 @@ class ServerPanelBase {
 		}
 	}
 
-	void GetConfigResponse(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) {
+	//void GetConfigResponse(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) 
+	void GetConfigResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
 		if (!GetGame().IsClient()) return;
 
 		Param1<ref ServerPanelServerConfig> data;
@@ -79,7 +83,8 @@ class ServerPanelBase {
 		}
 	}
 
-	void SyncPlayerStatsRequest(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) {
+	void SyncPlayerStatsRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
 		if (type != CallType.Server || !GetGame().IsServer()) return;
 
 		ref TIntArray plyIData = new TIntArray();
@@ -116,7 +121,7 @@ class ServerPanelBase {
 					plyFData.Insert(0); // Par défaut à 0 si l'uptime est indisponible
 				}
 
-				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_CONNECTION_TIME));
+				//plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_CONNECTION_TIME));
 
 			} 
 			else 
@@ -137,7 +142,8 @@ class ServerPanelBase {
 		}
 	}
 
-	void SyncSidePanelInfoRequest(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) {
+	void SyncSidePanelInfoRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target) 
+	{
 		if (type != CallType.Server || !GetGame().IsServer()) return;
 
 		ref TStringArray playerListS = new TStringArray();

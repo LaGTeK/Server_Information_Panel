@@ -1,6 +1,6 @@
 class ServerPanelServerConfig
 {
-	string VERSION;  // Use float for versioning, now at the top
+	string VERSION;  // Use text for versioning, now at the top
 	string SERVERNAME;
 	int LOGLEVEL;
 	string BUTTON1NAME;

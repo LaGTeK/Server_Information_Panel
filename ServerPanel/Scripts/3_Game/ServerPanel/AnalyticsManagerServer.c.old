@@ -20,18 +20,20 @@ modded class AnalyticsManagerServer
     }
 
     // Lors de la déconnexion du joueur
-    /*override void OnPlayerDisconnect(Man player)
+    override void OnPlayerDisconnect(Man player)
     {
         super.OnPlayerDisconnect(player); // Appel à la méthode d'origine pour mettre à jour les autres stats
         
+        player.StatUpdate(STAT_CONNECTION_TIME, 0);
+        
         // Calculer la durée de connexion
-        float disconnectTime = Math.Round(g_Game.GetTime() / 1000); // Heure actuelle en secondes
+        /*float disconnectTime = Math.Round(g_Game.GetTime() / 1000); // Heure actuelle en secondes
         float connectionTime = player.StatGet(STAT_CONNECTION_TIME); // Récupérer l'heure de connexion enregistrée
         
         // Calculer la durée de session (temps passé connecté)
         float sessionDuration = disconnectTime - connectionTime;
 
         // Mettre à jour le temps total de jeu
-        player.StatUpdate(STAT_CONNECTION_TIME, sessionDuration);
-    }*/
+        player.StatUpdate(STAT_CONNECTION_TIME, sessionDuration);*/
+    }
 };

@@ -21,20 +21,14 @@ class PlayerInfoDisplay {
 
 	private ref FullTimeData m_TimeSurvivedFull;
 
-	private float m_ConnectionTime; // Heure de connexion en secondes
-
 	void PlayerInfoDisplay(PlayerBase player) {
 		m_Player = player;
 
 		m_TimeSurvivedFull = new FullTimeData();
 		//m_TimeSessionFull = new FullTimeData();
-    
-		// Enregistre l'heure de connexion en secondes
-		//m_ConnectionTime = g_Game.GetTime() / 1000;
 		
 		// Appels à CallLater pour des mises à jour périodiques ou uniques
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ServerDate, 10000, true);  // Appelle ServerDate toutes les 10 secondes
-		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SessionTime, 1000, false);     // Appelle SessionTime une seule fois après 10000 ms soit 10s
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SPPlayerPreview, 500, false); // Appelle SPPlayerPreview une seule fois après 500 ms
 		
 	}
@@ -42,7 +36,6 @@ class PlayerInfoDisplay {
 	void ~PlayerInfoDisplay() {
 		// Retirer les appels CallLater lorsqu'on détruit l'instance
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.ServerDate);
-		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.SessionTime);
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.SPPlayerPreview);
 	}
 
@@ -82,12 +75,12 @@ class PlayerInfoDisplay {
 		DisplayPlayerTotalWeight();
 		SPBloodName();
 		ServerDate();
-		SessionTime();
 		SPGender();
 	}
 
 	// Méthode pour recevoir les données du joueur
-	void UpdatePlayerInfo(ref TIntArray PlayerDataI, ref TFloatArray PlayerDataF, bool sDisease)
+	//void UpdatePlayerInfo(ref TIntArray PlayerDataI, ref TFloatArray PlayerDataF, bool sDisease)
+	void UpdatePlayerInfo(TIntArray PlayerDataI, TFloatArray PlayerDataF, bool sDisease)
 	{
 		int sHealth = PlayerDataI[0];
 		int sBlood = PlayerDataI[1];
@@ -99,7 +92,7 @@ class PlayerInfoDisplay {
 		float sInfected_killed = PlayerDataF[5];
 		float sLongest_survivor_hit = PlayerDataF[6];
 		float sServer_uptime = PlayerDataF[7];
-		m_ConnectionTime = PlayerDataF[8];
+		//float m_ConnectionTime = PlayerDataF[8];
 
 		m_HealthBar.SetCurrent(sHealth);
 		m_BloodBar.SetCurrent(sBlood);
@@ -133,14 +126,6 @@ class PlayerInfoDisplay {
 			m_ServerUptime.SetText("N/A");
 		}
 
-		//int days = sPlaytime / 86400; // 86400 = nombre de secondes dans une journée
-		//int remainingTime = sPlaytime - (days * 86400); // Soustraire le temps utilisé pour les jours
-		//int hours = remainingTime / 3600; // 3600 = nombre de secondes dans une heure
-		//remainingTime = remainingTime - (hours * 3600); // Soustraire le temps utilisé pour les heures
-		//int minutes = remainingTime / 60; // 60 = nombre de secondes dans une minute
-		//int seconds = remainingTime - (minutes * 60); // Ce qui reste sont les secondes
-		//m_SurvivalTime.SetText("" + days + "#STR_time_unit_abbrev_day_0 " + hours + "#STR_time_unit_abbrev_hour_0 " + minutes + "#STR_time_unit_abbrev_minute_0 " + seconds + "#STR_time_unit_abbrev_second_0");
-
 		// Blood Color Coding
 		if (sBlood <= 3000) {
 			//m_TextPlayerBlood.SetColor(ServerPanelConstants.RED);
@@ -158,6 +143,8 @@ class PlayerInfoDisplay {
 		} else if (sHealth <= PlayerConstants.SL_HEALTH_NORMAL) {
 			m_HealthBar.SetColor(ServerPanelConstants.YELLOW);
 		}
+
+		//SessionTime(m_ConnectionTime);
 	}
 
 	void Update(float timeslice) {
@@ -281,25 +268,7 @@ class PlayerInfoDisplay {
 		return formattedDate;
 	}
 
-	/*private void SessionTime() 
-	{		
-		FullTimeData m_TimeSessionFull = new FullTimeData();
-
-		float sUpTimeBis = Math.Round(g_Game.GetTime() / 1000);
-
-		//int sHours = Math.Floor(sUpTimeBis / 3600);
-		//int sMinutes = Math.Floor(sUpTimeBis / 60) - (sHours * 60);  // Utilise une soustraction au lieu de %
-		//int sSeconds = sUpTimeBis - (sHours * 3600) - (sMinutes * 60);
-
-		//m_PlayTime.SetText("" + sHours.ToStringLen(2) + "#STR_time_unit_abbrev_hour_0" + " " + sMinutes.ToStringLen(2) + "#STR_time_unit_abbrev_minute_0" + " " + sSeconds.ToStringLen(2) + "#STR_time_unit_abbrev_second_0");
-		
-		// Affiche l’uptime (par exemple)
-		TimeConversions.ConvertSecondsToFullTime(sUpTimeBis, m_TimeSessionFull);
-		string formattedSessionTime = m_TimeSessionFull.FormatedNonZero();
-		m_PlayTime.SetText(formattedSessionTime);
-	}*/
-
-	private void SessionTime()
+	/*private void SessionTime(float m_ConnectionTime)
     {
         if (m_ConnectionTime != 0)
         {
@@ -315,23 +284,7 @@ class PlayerInfoDisplay {
             // Afficher le temps de session
             m_PlayTime.SetText(formattedSessionTime);
         }
-    }
-
-	/*private void SPItemPreview()	{
-		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
-			if (m_Player.GetItemInHands()) m_ItemPreview.SetItem(m_Player.GetItemInHands());
-		}
-	}*/
-
-	/*private void UpdateItemPreview(ItemPreviewWidget widget, EntityAI item) {
-		if(GetGame().IsClient() || !GetGame().IsMultiplayer()) {
-			if (widget && item) {
-				widget.SetItem(item);
-			} else {
-				widget.SetItem(null);  // Effacer si l'élément n'existe pas
-			}
-		}
-	}*/
+    }*/
 
 	private void SPPlayerPreview() {
 		if (GetGame().IsClient() || !GetGame().IsMultiplayer()) {

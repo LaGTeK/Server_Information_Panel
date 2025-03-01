@@ -103,7 +103,7 @@ class ServerPanelConfigManager {
 		config.BUTTONTAB3NAME = "TAB3";
 
 		// Populate the default values
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 60; i++) {
 			if (i == 0) {
 				config.sServerTab0.Insert("<h1>Write your h1 Title " + i + "</h1>");
 				config.sServerTab1.Insert("<h1>Write your h1 Title " + i + "</h1>");
@@ -160,7 +160,8 @@ class ServerPanelConfigManager {
 		return config;
 	}
 
-	static void UpgradeConfig(ref ServerPanelServerConfig config) {
+	static void UpgradeConfig(ServerPanelServerConfig config) 
+	{
 		ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Upgrading configuration file...");
 
 		if (config.VERSION.ToFloat() < SP_CONFIG_VERSION.ToFloat()) {			
@@ -229,7 +230,8 @@ class ServerPanelConfigManager {
 	}
 
 	// Méthode renommée pour être plus explicite
-	static void AddHtmlTagsToTabs(ref TStringArray tab) {
+	static void AddHtmlTagsToTabs(TStringArray tab) 
+	{
 		TStringArray upgradedTab = new TStringArray;
 
 		for (int i = 0; i < tab.Count(); i++) {

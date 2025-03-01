@@ -179,7 +179,7 @@ class CraftingDisplay
 		}
 	}*/
 	// Sort the recipes alphabetically by display name in either ascending (A-Z) or descending (Z-A) order
-	void SortRecipesAlphabetically(ref array<ref CraftingRecipe> recipesArray, bool isAscending) {
+	void SortRecipesAlphabetically(array<ref CraftingRecipe> recipesArray, bool isAscending) {
 		for (int i = 0; i < recipesArray.Count() - 1; i++) {
 			for (int j = i + 1; j < recipesArray.Count(); j++) {
 				string recipeNameI = recipesArray[i].GetDisplayName();
@@ -578,7 +578,7 @@ class CraftingDisplay
 			m_Ingredient1ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
 		}
 		
-		EntityAI previewItem = GetGame().CreateObjectEx(FilterClassName(ingredientClassName), "0 0 0", ECE_LOCAL);
+		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(ingredientClassName), "0 0 0", ECE_LOCAL));
 		if (previewItem) {
 			m_Ingredient1ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
 		} else {
@@ -593,7 +593,7 @@ class CraftingDisplay
 			m_Ingredient2ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
 		}
 		
-		EntityAI previewItem = GetGame().CreateObjectEx(FilterClassName(ingredientClassName), "0 0 0", ECE_LOCAL);
+		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(ingredientClassName), "0 0 0", ECE_LOCAL));
 		if (previewItem) {
 			m_Ingredient2ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
 		} else {
@@ -608,9 +608,10 @@ class CraftingDisplay
 			m_ResultCraft0ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
 		}
 		
-		EntityAI previewItem = GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL);
+		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL));
 		if (previewItem) {
-			m_ResultCraft0ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
+			//m_ResultCraft0ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
+			m_ResultCraft0ItemPreviewWidget.SetItem(previewItem);  // Afficher l'aperçu du nouvel ingrédient
 		} else {
 			Print("Erreur DisplayResultPreview0 : Impossible de créer un aperçu pour la classe : " + resultClassName);
 		}
@@ -623,9 +624,10 @@ class CraftingDisplay
 			m_ResultCraft1ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
 		}
 		
-		EntityAI previewItem = GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL);
+		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL));
 		if (previewItem) {
-			m_ResultCraft1ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
+			//m_ResultCraft1ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
+			m_ResultCraft1ItemPreviewWidget.SetItem(previewItem);  // Afficher l'aperçu du nouvel ingrédient
 		} else {
 			Print("Erreur DisplayResultPreview1 : Impossible de créer un aperçu pour la classe : " + resultClassName);
 		}
@@ -638,9 +640,10 @@ class CraftingDisplay
 			m_ResultCraft2ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
 		}
 		
-		EntityAI previewItem = GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL);
+		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL));
 		if (previewItem) {
-			m_ResultCraft2ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
+			//m_ResultCraft2ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
+			m_ResultCraft2ItemPreviewWidget.SetItem(previewItem);  // Afficher l'aperçu du nouvel ingrédient
 		} else {
 			Print("Erreur DisplayResultPreview2 : Impossible de créer un aperçu pour la classe : " + resultClassName);
 		}

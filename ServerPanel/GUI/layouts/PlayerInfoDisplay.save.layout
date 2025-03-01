@@ -57,8 +57,8 @@ FrameWidgetClass rootFrame {
       GridSpacerWidgetClass GridSpacerWidget1 {
        clipchildren 0
        ignorepointer 1
-       position 0.07 0.09
-       size 0.91 0.32
+       position 0.07 0.08
+       size 0.91 0.3
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -238,7 +238,7 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageDistance {
        ignorepointer 1
-       position 0.02 0.1025
+       position 0.02 0.09
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -254,7 +254,7 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageSurvived {
        ignorepointer 1
-       position 0.02 0.165
+       position 0.02 0.15
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -268,9 +268,20 @@ FrameWidgetClass rootFrame {
        filter 1
        nocache 0
       }
+      ItemPreviewWidgetClass ItemPreview {
+       ignorepointer 0
+       position 0 0.0075
+       size 0.9 0.27
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
       ImageWidgetClass ImageZKilled {
        ignorepointer 1
-       position 0.02 0.23
+       position 0.02 0.21
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -286,7 +297,7 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImagePKilled {
        ignorepointer 1
-       position 0.02 0.295
+       position 0.02 0.27
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -302,7 +313,7 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageLongestShot {
        ignorepointer 1
-       position 0.02 0.355
+       position 0.02 0.33
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -321,7 +332,7 @@ FrameWidgetClass rootFrame {
       PanelWidgetClass PanelWidget7 {
        ignorepointer 1
        color 0.2549 0.2549 0.2549 1
-       position 0.01 0.43
+       position 0.01 0.4
        size 0.98 0.07
        hexactpos 0
        vexactpos 0
@@ -349,8 +360,8 @@ FrameWidgetClass rootFrame {
       GridSpacerWidgetClass GridSpacerWidget3 {
        clipchildren 0
        ignorepointer 1
-       position 0.07 0.51
-       size 0.91 0.19
+       position 0.07 0.47
+       size 0.91 0.23
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -360,6 +371,7 @@ FrameWidgetClass rootFrame {
        content_halign center
        content_valign center
        Columns 2
+       Rows 4
        {
         TextWidgetClass ServerTime {
          visible 1
@@ -401,7 +413,6 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
         TextWidgetClass playtimesession {
-         visible 0
          clipchildren 0
          ignorepointer 1
          position 0 0
@@ -421,7 +432,7 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
         TextWidgetClass txt_playtime {
-         visible 0
+         visible 1
          ignorepointer 1
          position 0.5 0
          size 0.5 0.05
@@ -478,11 +489,49 @@ FrameWidgetClass rootFrame {
          "text halign" right
          "text valign" center
         }
+        TextWidgetClass itemhands {
+         clipchildren 0
+         ignorepointer 1
+         position 0 0
+         size 0.5 0.04
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "#STR_SP_PLAYER_WHATS_IN_HANDS_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" 6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.6
+         "size to text h" 0
+         "text valign" center
+        }
+        TextWidgetClass txt_itemhands {
+         visible 1
+         ignorepointer 1
+         position 0.5 0
+         size 0.5 0.05
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Bold
+         text "XXX"
+         font "gui/fonts/sdf_MetronBook24"
+         "text offset" -6 0
+         "exact text" 1
+         "exact text size" 22
+         text_proportion 0.8
+         "text halign" right
+         "text valign" center
+        }
        }
       }
       ImageWidgetClass ImageSession {
        ignorepointer 1
-       position 0.02 0.52
+       position 0.02 0.48
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -499,9 +548,9 @@ FrameWidgetClass rootFrame {
        nocache 0
       }
       ImageWidgetClass ImagesTime {
-       visible 0
+       visible 1
        ignorepointer 1
-       position 0.02 0.555
+       position 0.02 0.535
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -518,7 +567,7 @@ FrameWidgetClass rootFrame {
       ImageWidgetClass ImagesUptime {
        visible 1
        ignorepointer 1
-       position 0.02 0.5825
+       position 0.02 0.5925
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -532,38 +581,209 @@ FrameWidgetClass rootFrame {
        filter 1
        nocache 0
       }
-      PanelWidgetClass PanelWidget6 {
+      ImageWidgetClass ImageHands {
        ignorepointer 1
-       color 0.2549 0.2549 0.2549 1
-       position 0.01 0.66
-       size 0.98 0.07
+       position 0.02 0.65
+       size 0.046 0.041
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style rover_sim_colorable
-       {
-        TextWidgetClass TextWidget2 {
-         ignorepointer 1
-         position 0 0
-         size 1 1
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         text "#STR_SP_PLAYER_CHARACTER_TITLE"
-         font "gui/fonts/sdf_MetronBook24"
-         "exact text" 1
-         "exact text size" 24
-         "text halign" center
-         "text valign" center
-        }
-       }
+       image0 "set:spicons image:Sword"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+     }
+    }
+    PanelWidgetClass RightSidePanelWidget {
+     ignorepointer 1
+     color 0.9255 0.9255 0.9255 0
+     position 0.5 0
+     size 0.5 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style blank
+     {
+      PlayerPreviewWidgetClass PlayerPreview {
+       clipchildren 1
+       ignorepointer 0
+       position 0.2275 0.015
+       size 0.51 0.65
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       draggable 0
+      }
+      MultilineTextWidgetClass Dead {
+       ignorepointer 1
+       position 0.31 0.55
+       size 0.159 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "#STR_SP_LEGEND_DEAD"
+       font "gui/fonts/sdf_MetronLight24"
+       "text offset" 3 0
+       "exact text" 1
+       "exact text size" 15
+       "size to text h" 0
+       "size to text v" 0
+       "text valign" center
+       wrap 1
+      }
+      ProgressBarWidgetClass HealthBar {
+       ignorepointer 1
+       color 0.1569 0.6235 0.2745 1
+       position 0.04 0.02
+       size 0.03 0.59
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Stamina
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageHealth {
+       ignorepointer 1
+       position 0.0325 0.62
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Health"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      ProgressBarWidgetClass BloodBar {
+       ignorepointer 1
+       color 0.7686 0.1412 0.1412 1
+       position 0.12 0.02
+       size 0.03 0.59
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Stamina
+       maximum 5000
+       current 2500
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageBlood {
+       ignorepointer 1
+       position 0.1125 0.62
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Blood"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ProgressBarWidgetClass StaminaBar {
+       ignorepointer 1
+       color 0.0706 0.5608 0.5608 1
+       position 0.2 0.02
+       size 0.03 0.59
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Stamina
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageStamina {
+       ignorepointer 1
+       position 0.1925 0.62
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Stamina"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       filter 1
+       nocache 0
+      }
+      ProgressBarWidgetClass ShockBar {
+       ignorepointer 1
+       color 0.8745 0.1098 0.1098 1
+       position 0.28 0.02
+       size 0.03 0.59
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Quantity
+       vertical 1
+       flipped 1
+      }
+      ImageWidgetClass ImageHearth {
+       ignorepointer 1
+       position 0.2725 0.62
+       size 0.045 0.041
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "set:spicons image:Heart"
+       mode additive
+       "src alpha" 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
+       "flip u" 0
+       "flip v" 0
+       filter 1
+       nocache 0
+      }
+      MultilineTextWidgetClass Good {
+       ignorepointer 1
+       position 0.31 0.03
+       size 0.159 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "#STR_SP_LEGEND_ALIVE"
+       font "gui/fonts/sdf_MetronLight24"
+       "text offset" 6 0
+       "exact text" 1
+       "exact text size" 15
+       "size to text h" 0
+       "size to text v" 0
+       "text valign" center
+       wrap 1
       }
       GridSpacerWidgetClass GridSpacerWidget2 {
        ignorepointer 1
-       position 0.02 0.02
-       size 0.91 0.24
+       position 0.02 0.01
+       size 0.91 0.23
        halign center_ref
        valign bottom_ref
        hexactpos 0
@@ -717,9 +937,37 @@ FrameWidgetClass rootFrame {
         }
        }
       }
+      PanelWidgetClass PanelWidget6 {
+       ignorepointer 1
+       color 0.2549 0.2549 0.2549 1
+       position 0.01 0.69
+       size 0.98 0.07
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        TextWidgetClass TextWidget2 {
+         ignorepointer 1
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "#STR_SP_PLAYER_CHARACTER_TITLE"
+         font "gui/fonts/sdf_MetronBook24"
+         "exact text" 1
+         "exact text size" 24
+         "text halign" center
+         "text valign" center
+        }
+       }
+      }
       ImageWidgetClass ImagesDisease {
        ignorepointer 1
-       position 0.015 0.75
+       position 0.015 0.77
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -736,7 +984,7 @@ FrameWidgetClass rootFrame {
       ImageWidgetClass ImageWeight {
        visible 1
        ignorepointer 1
-       position 0.015 0.93
+       position 0.015 0.94
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -753,7 +1001,7 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageBloodType {
        ignorepointer 1
-       position 0.015 0.87
+       position 0.015 0.8825
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
@@ -769,293 +1017,13 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageSex {
        ignorepointer 1
-       position 0.015 0.81
+       position 0.015 0.8275
        size 0.046 0.041
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        image0 "set:spicons image:People"
-       mode additive
-       "src alpha" 1
-       "clamp mode" clamp
-       "stretch mode" stretch_w_h
-       filter 1
-       nocache 0
-      }
-     }
-    }
-    PanelWidgetClass RightSidePanelWidget {
-     ignorepointer 1
-     color 0.9255 0.9255 0.9255 0
-     position 0.5 0
-     size 0.5 1
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style blank
-     {
-      PlayerPreviewWidgetClass PlayerPreview {
-       clipchildren 1
-       ignorepointer 0
-       position 0.2275 0.015
-       size 0.51 0.62
-       halign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       draggable 0
-      }
-      MultilineTextWidgetClass Dead {
-       ignorepointer 1
-       position 0.31 0.54
-       size 0.159 0.05
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "#STR_SP_LEGEND_DEAD"
-       font "gui/fonts/sdf_MetronLight24"
-       "text offset" 3 0
-       "exact text" 1
-       "exact text size" 15
-       "size to text h" 0
-       "size to text v" 0
-       "text valign" center
-       wrap 1
-      }
-      ProgressBarWidgetClass HealthBar {
-       ignorepointer 1
-       color 0.1569 0.6235 0.2745 1
-       position 0.04 0.02
-       size 0.03 0.57
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style Stamina
-       vertical 1
-       flipped 1
-      }
-      ImageWidgetClass ImageHealth {
-       ignorepointer 1
-       position 0.0325 0.595
-       size 0.045 0.041
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       image0 "set:spicons image:Health"
-       mode additive
-       "src alpha" 1
-       "clamp mode" clamp
-       "stretch mode" stretch_w_h
-       "flip u" 0
-       "flip v" 0
-       filter 1
-       nocache 0
-      }
-      ProgressBarWidgetClass BloodBar {
-       ignorepointer 1
-       color 0.7686 0.1412 0.1412 1
-       position 0.12 0.02
-       size 0.03 0.57
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style Stamina
-       maximum 5000
-       current 2500
-       vertical 1
-       flipped 1
-      }
-      ImageWidgetClass ImageBlood {
-       ignorepointer 1
-       position 0.1125 0.595
-       size 0.045 0.041
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       image0 "set:spicons image:Blood"
-       mode additive
-       "src alpha" 1
-       "clamp mode" clamp
-       "stretch mode" stretch_w_h
-       filter 1
-       nocache 0
-      }
-      ProgressBarWidgetClass StaminaBar {
-       ignorepointer 1
-       color 0.0706 0.5608 0.5608 1
-       position 0.2 0.02
-       size 0.03 0.57
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style Stamina
-       vertical 1
-       flipped 1
-      }
-      ImageWidgetClass ImageStamina {
-       ignorepointer 1
-       position 0.1925 0.595
-       size 0.045 0.041
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       image0 "set:spicons image:Stamina"
-       mode additive
-       "src alpha" 1
-       "clamp mode" clamp
-       "stretch mode" stretch_w_h
-       filter 1
-       nocache 0
-      }
-      ProgressBarWidgetClass ShockBar {
-       ignorepointer 1
-       color 0.8745 0.1098 0.1098 1
-       position 0.28 0.02
-       size 0.03 0.57
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style Quantity
-       vertical 1
-       flipped 1
-      }
-      ImageWidgetClass ImageHearth {
-       ignorepointer 1
-       position 0.2725 0.595
-       size 0.045 0.041
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       image0 "set:spicons image:Heart"
-       mode additive
-       "src alpha" 1
-       "clamp mode" clamp
-       "stretch mode" stretch_w_h
-       "flip u" 0
-       "flip v" 0
-       filter 1
-       nocache 0
-      }
-      MultilineTextWidgetClass Good {
-       ignorepointer 1
-       position 0.31 0.03
-       size 0.159 0.05
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "#STR_SP_LEGEND_ALIVE"
-       font "gui/fonts/sdf_MetronLight24"
-       "text offset" 6 0
-       "exact text" 1
-       "exact text size" 15
-       "size to text h" 0
-       "size to text v" 0
-       "text valign" center
-       wrap 1
-      }
-      PanelWidgetClass PanelWidget0 {
-       ignorepointer 1
-       color 0.2549 0.2549 0.2549 1
-       position 0.01 0.65
-       size 0.98 0.07
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style rover_sim_colorable
-       {
-        GridSpacerWidgetClass GridSpacerWidget0 {
-         ignorepointer 1
-         position 0.01 0
-         size 0.98 0.9
-         halign right_ref
-         valign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         Columns 2
-         Rows 1
-         {
-          MultilineTextWidgetClass itemhands {
-           clipchildren 0
-           ignorepointer 1
-           position 0 0
-           size 0.5 0.04
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           scaled 1
-           text "#STR_SP_PLAYER_WHATS_IN_HANDS_TITLE"
-           font "gui/fonts/sdf_MetronBook24"
-           "text offset" -5 0
-           "exact text" 1
-           "exact text size" 22
-           text_proportion 0.6
-           "size to text h" 0
-           "text halign" center
-           "text valign" center
-           wrap 1
-          }
-          MultilineTextWidgetClass txt_itemhands {
-           visible 1
-           ignorepointer 1
-           position 0.5 0
-           size 0.5 0.05
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           style DayZNormal
-           text "XXX"
-           font "gui/fonts/sdf_MetronBook24"
-           "text offset" -6 0
-           "bold text" 1
-           "exact text" 1
-           "exact text size" 23
-           "text halign" center
-           "text valign" center
-           wrap 1
-          }
-         }
-        }
-       }
-      }
-      ItemPreviewWidgetClass ItemPreview {
-       ignorepointer 0
-       position 0 0.0075
-       size 0.9 0.27
-       halign center_ref
-       valign bottom_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-      }
-      ImageWidgetClass ImageHands {
-       visible 0
-       ignorepointer 1
-       position 0.03 0.665
-       size 0.046 0.041
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       image0 "set:spicons image:Sword"
        mode additive
        "src alpha" 1
        "clamp mode" clamp

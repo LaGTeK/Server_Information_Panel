@@ -48,15 +48,15 @@ class ServerPanelMenu extends UIScriptedMenu {
 	private float 						m_LogoWidth,m_LogoHeight;
 	//bool m_LogLevel;//Current Tab
 
-	Widget 								m_CurrentTabPanel;
-	ServerPanelTab 						m_CurrentTab;
+	//Widget 								m_CurrentTabPanel;
+	//ServerPanelTab 						m_CurrentTab;
 
 	//Transition
-	int currentTransitionStep;
-	float centerX, leftX;
-	bool Transitioning 						= false;
-	const int TRANSITION_ANIMATION_STEPS 	= 40;
-	const float TAB_OFFSET 					= 0.05;
+	//int currentTransitionStep;
+	//float centerX, leftX;
+	//bool Transitioning 						= false;
+	//const int TRANSITION_ANIMATION_STEPS 	= 40;
+	//const float TAB_OFFSET 					= 0.05;
 
 	void ServerPanelMenu()	{
 		config = GetServerPanelServerConfig();	
@@ -123,30 +123,37 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_TextPlayerHealth 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_health" ) );
 		m_TextPlayerPos 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_position" ) );
 		m_PlayerTitle 					=	TextWidget.Cast( layoutRoot.FindAnyWidget( "OnlinePlayerTitle" ) );
-		//m_TextPlayerBlood 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_blood" ) );
-		//m_TextPlayerWater 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_water" ) );
-		//m_TextPlayerEnergy 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_food" ) );
+		//m_TextPlayerBlood 			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_blood" ) );
+		//m_TextPlayerWater 			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_water" ) );
+		//m_TextPlayerEnergy 			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_food" ) );
 
 		m_PlayerListScrollWidget		=	ScrollWidget.Cast( layoutRoot.FindAnyWidget( "PlayerListScrollWidget" ) );
 		m_PlayersList 					=	MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "Player_List" ) );
 
 		//Tab Transisition
-		m_CurrentTab 					=	ServerPanelTab.Tab0;
-		m_CurrentTabPanel 				=	m_Tab0;
+		//m_CurrentTab 					=	ServerPanelTab.Tab0;
+		//m_CurrentTabPanel 				=	m_Tab0;
 
-		float x, y, w, h;
-		m_CurrentTabPanel.GetPos(x, y);
-		m_CurrentTabPanel.GetSize(w, h);
+		//float x, y, w, h;
+		//m_CurrentTabPanel.GetPos(x, y);
+		//m_CurrentTabPanel.GetSize(w, h);
 
-		centerX = x;
+		//centerX = x;
 
-		float neededX = (x - w) - TAB_OFFSET;
-		leftX = neededX;
-		m_Tab1.SetPos(neededX, y, true);
-		m_Tab2.SetPos(neededX, y, true);
-		m_Tab3.SetPos(neededX, y, true);
-		m_Tab4.SetPos(neededX, y, true);
-		m_Tab5.SetPos(neededX, y, true);
+		//float neededX = (x - w) - TAB_OFFSET;
+		//leftX = neededX;
+		//m_Tab1.SetPos(neededX, y, true);
+		//m_Tab2.SetPos(neededX, y, true);
+		//m_Tab3.SetPos(neededX, y, true);
+		//m_Tab4.SetPos(neededX, y, true);
+		//m_Tab5.SetPos(neededX, y, true);
+		
+		m_Tab0.Show(true);
+		m_Tab1.Show(false);
+		m_Tab2.Show(false);
+		m_Tab3.Show(false);
+		m_Tab4.Show(false);
+		m_Tab5.Show(false);
 
 		//Money Widget
 		//EXPANSIONMARKET
@@ -160,16 +167,22 @@ class ServerPanelMenu extends UIScriptedMenu {
 		UpdateHeader();
 		FillFilesInformations();		
 
-		if (m_DisplayCraftingTab) {
+		if (m_DisplayCraftingTab) 
+		{
             m_CraftingDisplay.Init(layoutRoot);  // Delegate crafting UI to the CraftingDisplay class
-        } else {
+        } 
+		else 
+		{
             m_Tab4.Show(false);
             m_btnTabTitle4.Show(false);
         }
 
-		if (m_DisplayPlayerTab) {
+		if (m_DisplayPlayerTab) 
+		{
             m_PlayerInfoDisplay.Init(layoutRoot);  // Delegate crafting UI to the CraftingDisplay class
-        } else {
+        } 
+		else 
+		{
             m_Tab5.Show(false);
             m_btnTabTitle5.Show(false);
         }
@@ -364,7 +377,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		else m_BtnDonate.Show(false);
 	}
 
-	void SyncPlayerStats(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) 
+	void SyncPlayerStats(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target) 
 	{
 		Param3<ref TIntArray, ref TFloatArray, bool> syncDataS;
 
@@ -385,7 +398,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_PlayerInfoDisplay.UpdatePlayerInfo(PlayerDataI, PlayerDataF, sDisease);
 	}
 
-	void SyncSidePanelInfo(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) 
+	void SyncSidePanelInfo(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target) 
 	{
 		Param5<ref TStringArray, ref TIntArray, ref TFloatArray, vector, string> syncDataS;
 		ref TStringArray PlayerListC = new TStringArray;
@@ -484,7 +497,8 @@ class ServerPanelMenu extends UIScriptedMenu {
             m_PlayerInfoDisplay.Update(timeslice);  // Met à jour les infos du joueur
         }
 	}
-	override bool OnClick(Widget w, int x, int y, int button) {
+	override bool OnClick(Widget w, int x, int y, int button) 
+	{
 		if (button == MouseState.LEFT)
 		{
 			if (w == m_BtnCancel || w == m_BtnClose)
@@ -515,98 +529,125 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 		return false;
 	}
+
 	protected bool OnDiscordBtnClick()	{
 		g_Game.OpenURL(m_Link3);
 		//Print("CLICKED THIRD BUTTON");
 		return true;
 	}
+
 	protected bool OnBtnLeftClick()	{
 		g_Game.OpenURL(m_Link2);
 		//Print("CLICKED SECOND BUTTON");
 		return true;
 	}
+
 	protected bool OnBtnRightClick()	{
 		g_Game.OpenURL( m_Link1 );
 		//Print("CLICKED FIRST BUTTON");
 		return true;
 	}
+
 	protected bool OnBtnCloseClick()	{
 		Back();
 		return true;
 	}
-	protected bool OnBtnTabClick(Widget w)	{
-		if (Transitioning)
-			return true;
 
-		if (w == m_btnTabTitle0)	{
-			if (m_CurrentTabPanel != m_Tab0){
-				TransitionTab(m_Tab0, m_CurrentTabPanel);
-				m_btnTabTitle0.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-				m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			}
-
+	protected bool OnBtnTabClick(Widget w)	
+	{
+		if (w == m_btnTabTitle0)	
+		{
+			m_Tab0.Show(true);
+			m_Tab1.Show(false);
+			m_Tab2.Show(false);
+			m_Tab3.Show(false);
+			m_Tab4.Show(false);
+			m_Tab5.Show(false);
+			m_btnTabTitle0.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
+			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
 		}
-		else if (w == m_btnTabTitle1)	{
-			if (m_CurrentTabPanel != m_Tab1){
-				TransitionTab(m_Tab1, m_CurrentTabPanel);
-				m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle1.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-				m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			}
+		else if (w == m_btnTabTitle1)	
+		{
+			m_Tab0.Show(false);
+			m_Tab1.Show(true);
+			m_Tab2.Show(false);
+			m_Tab3.Show(false);
+			m_Tab4.Show(false);
+			m_Tab5.Show(false);
+			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle1.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
+			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
 		}
-		else if (w == m_btnTabTitle2)	{
-			if (m_CurrentTabPanel != m_Tab2){				
-				TransitionTab(m_Tab2, m_CurrentTabPanel);
-				m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle2.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-				m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			}
+		else if (w == m_btnTabTitle2)	
+		{
+			m_Tab0.Show(false);
+			m_Tab1.Show(false);
+			m_Tab2.Show(true);
+			m_Tab3.Show(false);
+			m_Tab4.Show(false);
+			m_Tab5.Show(false);
+			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle2.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
+			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
 		}
-		else if (w == m_btnTabTitle3)	{
-			if (m_CurrentTabPanel != m_Tab3) {
-				TransitionTab(m_Tab3, m_CurrentTabPanel);
-				m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle3.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-				m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			}
+		else if (w == m_btnTabTitle3)	
+		{
+			m_Tab0.Show(false);
+			m_Tab1.Show(false);
+			m_Tab2.Show(false);
+			m_Tab3.Show(true);
+			m_Tab4.Show(false);
+			m_Tab5.Show(false);
+			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle3.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
+			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
 		}
-		else if (w == m_btnTabTitle4)	{
-			if (m_CurrentTabPanel != m_Tab4){
-				TransitionTab(m_Tab4, m_CurrentTabPanel);
-				m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle4.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-				m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			}
+		else if (w == m_btnTabTitle4)	
+		{
+			m_Tab0.Show(false);
+			m_Tab1.Show(false);
+			m_Tab2.Show(false);
+			m_Tab3.Show(false);
+			m_Tab4.Show(true);
+			m_Tab5.Show(false);
+			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle4.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
+			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
 		}
-		else if (w == m_btnTabTitle5)	{
-			if (m_CurrentTabPanel != m_Tab5) {
-				TransitionTab(m_Tab5, m_CurrentTabPanel);
-				m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-				m_btnTabTitle5.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-			}
+		else if (w == m_btnTabTitle5)	
+		{
+			m_Tab0.Show(false);
+			m_Tab1.Show(false);
+			m_Tab2.Show(false);
+			m_Tab3.Show(false);
+			m_Tab4.Show(false);
+			m_Tab5.Show(true);
+			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			m_btnTabTitle5.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
 		}
 		return true;
 	}
+
 	void Back() {
 		// Reset input and re-enable player controls when closing the menu
 		g_Game.GetInput().ResetGameFocus();
@@ -621,12 +662,16 @@ class ServerPanelMenu extends UIScriptedMenu {
 		if (Player)
 			Player.GetInputController().SetDisabled(false);
 	}
-	void Hide()	{
+
+	void Hide()	
+	{
 		//SetFocus(NULL);
 		OnHide();
 		//layoutRoot.Show(false);
 	}
-	override void OnHide() {
+
+	override void OnHide() 
+	{
 		super.OnHide();
 
 		// Hide the layout
@@ -635,7 +680,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 		// Stop any scheduled UI updates
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
 	}
-	override void OnShow() {
+
+	override void OnShow() 
+	{
 
 		super.OnShow();
 
@@ -651,7 +698,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 			GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncSidePanelInfoRequest", new Param1<int>(0), true, NULL);
 		}
 
-		PerformWidgetAdjustments();
+		//PerformWidgetAdjustments();
 
 		layoutRoot.Show(true); // Show the layout
 
@@ -666,7 +713,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 	}
 
-	private void TransitionTab(Widget newTab, Widget oldTab)	{
+	/*private void TransitionTab(Widget newTab, Widget oldTab)	{
 		Transitioning = true;
 		float width, height, x, y;
 		m_CurrentTabPanel.GetSize(width, height); 
@@ -679,9 +726,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(TransitionStep, 10, true, newTab, oldTab, stepSize);
 
 		m_CurrentTabPanel = newTab;
-	}
+	}*/
 
-	private void TransitionStep(Widget newTab, Widget oldTab, float stepSize)	{
+	/*private void TransitionStep(Widget newTab, Widget oldTab, float stepSize)	{
 		currentTransitionStep++;
 		float x, y;
 		oldTab.GetPos(x, y);
@@ -695,9 +742,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 			oldTab.SetPos(leftX, y, true);
 			Transitioning = false;
 		}
-	}
+	}*/
 
-	void UpdateBloodDisplay(float sBlood) {
+	void UpdateBloodDisplay(float sBlood) 
+	{
 		// Création des widgets d'image pour le sang
 		ImageWidget bloodIcon0 = ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget0"));
 		ImageWidget bloodIcon1 = ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget1"));
@@ -732,7 +780,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 			SetIconState(bloodIcon3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
 		}
 	}	
-	void UpdateWaterDisplay(float sWater) {
+	void UpdateWaterDisplay(float sWater) 
+	{
 		// Création des widgets d'image pour l'eau
 		ImageWidget waterIcon0 = ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget0"));
 		ImageWidget waterIcon1 = ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget1"));
@@ -767,7 +816,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 			SetIconState(waterIcon3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
 		}
 	}
-	void UpdateFoodDisplay(float sEnergy) {
+	void UpdateFoodDisplay(float sEnergy) 
+	{
 		// Création des widgets d'image pour la nourriture
 		ImageWidget foodIcon0 = ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget0"));
 		ImageWidget foodIcon1 = ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget1"));
@@ -807,14 +857,16 @@ class ServerPanelMenu extends UIScriptedMenu {
 			SetIconState(foodIcon3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
 		}
 	}
-	void SetIconState(ImageWidget icon, string imagePath, int color) {
+	void SetIconState(ImageWidget icon, string imagePath, int color) 
+	{
 		icon.LoadImageFile(0, imagePath);
 		icon.SetColor(color);
 	}
 
 	//Due to wrong v size with some test i've to try to set up the height by myself
 	// Fonction qui retourne la hauteur en pourcentage pour chaque ligne en fonction de son contenu
-	float GetLineHeightPercentage(string lineText) {
+	float GetLineHeightPercentage(string lineText) 
+	{
 		if (lineText.Contains("<h1>")) {
 			return 12.35; // 5% pour <h1>
 		} else if (lineText.Contains("<h2>")) {
@@ -836,7 +888,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}*/
 	}
 	// Fonction pour ajuster la hauteur du widget RichText en fonction des balises HTML et du nombre de lignes
-	void AdjustRichTextWidgetHeight(RichTextWidget widget, TStringArray lines) {
+	void AdjustRichTextWidgetHeight(RichTextWidget widget, TStringArray lines) 
+	{
 		float totalHeightPercentage = 0.0;
 
 		// On parcourt chaque ligne du tableau `lines` pour calculer la hauteur totale en %
@@ -850,8 +903,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 		widget.GetSize(width, currentHeight);
 		widget.SetSize(width, totalHeightPercentage/100);
 	}
+
 	// Fonction pour appeler l'ajustement des widgets, avec les variables stockant le nombre de lignes
-	void PerformWidgetAdjustments() {
+	void PerformWidgetAdjustments() 
+	{
 		// Ajuster en fonction du contenu de chaque widget
 		AdjustRichTextWidgetHeight(m_TextTab0, config.sServerTab0); // S'il s'agit d'un tableau de lignes
 		AdjustRichTextWidgetHeight(m_TextTab1, config.sServerTab1);
@@ -859,7 +914,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 		AdjustRichTextWidgetHeight(m_TextTab3, config.sServerTab3);
 	}
 
-	private void UpdateHeader() {		
+	private void UpdateHeader() 
+	{		
 		string header = "#STR_SP_TITLE" + " | " + GetFormattedDateTime();
 		m_TitlePanel.SetText(header);
 	}
