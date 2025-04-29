@@ -1,22 +1,21 @@
-class ServerPanelBase {
-    ref ServerPanelServerConfig g_ServerConfig;
+class ServerPanelBase 
+{
 	bool m_LogLevel;
-	
-	//private bool displayPlayerTab = g_ServerConfig && g_ServerConfig.DISPLAYPLAYERTAB;
 
-    void ServerPanelBase() {
-        if (GetGame().IsServer()) {
+    void ServerPanelBase() 
+	{
+        if (GetGame().IsServer()) 
+		{
         	ServerPanelLogger.SwitchToCustomIO();
             // Load configuration when the server starts
             ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Reading Server Config");
-            g_ServerConfig = ServerPanelConfigManager.GetConfig();
-			m_LogLevel = g_ServerConfig.LOGLEVEL;
-
-            // Check if configuration loaded properly
-            if (!g_ServerConfig) {
-                ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelConfig", "Failed to load server configuration.");
-                return;
-            }
+            ServerPanelConfigManager.SetConfig(); // Charge la config depuis le fichier (serveur uniquement)
+			if (!ServerPanelConfigManager.GetConfig()) 
+			{
+				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelConfig", "Failed to load server configuration.");
+				return;
+			}
+			m_LogLevel = ServerPanelConfigManager.GetConfig().LOGLEVEL;
         }
 
         InitRPC();
@@ -57,7 +56,15 @@ class ServerPanelBase {
 	{
 		if (!GetGame().IsServer())
 			return;
-		GetRPCManager().SendRPC("ServerPanelConfigRPC", "GetConfigResponse", new Param1<ref ServerPanelServerConfig>(g_ServerConfig), true, sender);
+	
+		ref ServerPanelServerConfig config = ServerPanelConfigManager.GetConfig();
+		if (!config)
+		{
+			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelConfigRPC", "No server config available to send.");
+			return; // On n'envoie rien si pas prêt
+		}
+		
+		GetRPCManager().SendRPC("ServerPanelConfigRPC", "GetConfigResponse", new Param1<ref ServerPanelServerConfig>(ServerPanelConfigManager.GetConfig()), true, sender);
 		
 		if (m_LogLevel) {
 			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfigRPC", sender.GetName() + " (" + sender.GetId() + ") - Config sync");
@@ -76,7 +83,7 @@ class ServerPanelBase {
 		}
 
 		// Mise en cache de la configuration localement sur le client
-		g_ServerConfig = data.param1;
+		ServerPanelConfigManager.SetConfig(data.param1);
 		
 		if (m_LogLevel) {
 			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Configuration received and cached from server.");
@@ -154,7 +161,7 @@ class ServerPanelBase {
 		array<Man> players = new array<Man>();
 		GetGame().GetPlayers(players);
 
-		bool displayPlayerList = g_ServerConfig && g_ServerConfig.DISPLAYPLAYERLIST;
+		bool displayPlayerList = ServerPanelConfigManager.GetConfig() && ServerPanelConfigManager.GetConfig().DISPLAYPLAYERLIST;
 		
 		// Collect all player pseudonyms if displayPlayerList is true
 		if (displayPlayerList) {

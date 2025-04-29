@@ -9,8 +9,8 @@ static ServerPanelBase GetServerPanelBase() {
     return m_ServerPanelBase;
 }
 
-static ref ServerPanelServerConfig GetServerPanelServerConfig()	{
-	return GetServerPanelBase().g_ServerConfig;
+static ref ServerPanelServerConfig GetServerPanelServerConfig() {
+    return ServerPanelConfigManager.GetConfig();
 }
 
 static ServerPanelMenu GetServerPanelMenu() {
