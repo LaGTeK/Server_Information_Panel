@@ -38,11 +38,9 @@ class ServerPanelConfigManager {
 
 			JsonFileLoader<ServerPanelServerConfig>.JsonLoadFile(SP_FILE_PATH, config);
 
-
-			if (config.VERSION.ToFloat() != SP_CONFIG_VERSION.ToFloat())
+			if (config.VERSION != SP_CONFIG_VERSION)
 			{
 				BackupOldConfig();
-				Print("[ServerPanel] 'ServerPanelConfigManager' Upgrading configuration file...");
 				UpgradeConfig(config); // Upgrade après lecture
 			}
 			else

@@ -316,6 +316,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText0 += config.sServerTab0[m];
 			}
 			m_TextTab0.SetText(m_TabText0);
+			
+			if (m_TabText0=="") {
+				m_btnTabTitle0.Show(false);
+			}
 		}
 		else m_btnTabTitle0.Show(false);
 
@@ -329,6 +333,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText1 += config.sServerTab1[n];
 			}
 			m_TextTab1.SetText(m_TabText1);
+			
+			if (m_TabText1=="") {
+				m_btnTabTitle1.Show(false);
+			}
 		}
 		else m_btnTabTitle1.Show(false);
 
@@ -342,6 +350,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText2 += config.sServerTab2[o];
 			}
 			m_TextTab2.SetText(m_TabText2);
+			
+			if (m_TabText2=="") {
+				m_btnTabTitle2.Show(false);
+			}
 		}
 		else m_btnTabTitle2.Show(false);
 
@@ -355,6 +367,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText3 += config.sServerTab3[p];
 			}
 			m_TextTab3.SetText(m_TabText3);
+			
+			if (m_TabText3=="") {
+				m_btnTabTitle3.Show(false);
+			}
 		}
 		else m_btnTabTitle3.Show(false);
 

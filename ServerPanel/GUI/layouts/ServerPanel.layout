@@ -899,7 +899,7 @@ PanelWidgetClass ServerPanelMenu {
                vexactsize 1
                scaled 1
                style DayZNormal
-               text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
+               text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<i>bla blb</i> alb</p>"
                font "gui/fonts/sdf_MetronBook24"
                "text offset" 5 0
                "text sharpness" 1.5
