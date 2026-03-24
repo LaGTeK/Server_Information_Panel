@@ -59,7 +59,7 @@ class CraftingRecipe
 			case "#str_prepare0":
 			case "#str_split0":
             case "#sharpen":
-                if (Results.Count() > 1 && GetGame().IsKindOf(Results[m_TempMainIndex].classNames[0], "SeedBase"))
+                if (Results.Count() > 1 && g_Game.IsKindOf(Results[m_TempMainIndex].classNames[0], "SeedBase"))
                 {
                     recipeNameLower = "#str_cutoutseeds0";
                     displayName = "#str_cutoutseeds0";

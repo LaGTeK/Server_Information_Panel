@@ -128,7 +128,7 @@ modded class RecipeBase
 			foreach (string cfgSearch : cfgSearches)
 			{
 				string cfgPath = cfgSearch + " " + className;
-				if (GetGame().ConfigGetInt(cfgPath + " canBeSplit") && !GetGame().ConfigGetInt(cfgPath + " quantityBar"))
+				if (g_Game.ConfigGetInt(cfgPath + " canBeSplit") && !g_Game.ConfigGetInt(cfgPath + " quantityBar"))
 				{
 					return quantity;
 				}

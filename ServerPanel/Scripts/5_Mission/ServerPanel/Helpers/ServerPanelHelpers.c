@@ -18,11 +18,8 @@ static ServerPanelMenu GetServerPanelMenu() {
         m_ServerPanelMenu = new ServerPanelMenu();
         ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelHelpers", "Initialized ServerPanelMenu");
 
-        if (!GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncPlayerStats", m_ServerPanelMenu, SingeplayerExecutionType.Client)) {
-            ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelHelpers", "Failed to add RPC: SyncPlayerStats");
-        }
-        if (!GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncSidePanelInfo", m_ServerPanelMenu, SingeplayerExecutionType.Client)) {
-            ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelHelpers", "Failed to add RPC: SyncSidePanelInfo");
+        if (!GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncPanelStats", m_ServerPanelMenu, SingeplayerExecutionType.Client)) {
+            ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelHelpers", "Failed to add RPC: SyncPanelStats");
         }
     }
     return m_ServerPanelMenu;

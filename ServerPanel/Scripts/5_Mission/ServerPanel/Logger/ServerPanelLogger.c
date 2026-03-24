@@ -5,6 +5,7 @@ class ServerPanelLogger {
     static const int NO_LOG = 0;
     static const int LOG_LEVEL_INFO = 1;
     static const int LOG_LEVEL_WARN = 2;
+    static const int LOG_LEVEL_WARNING = 2;
     static const int LOG_LEVEL_ERROR = 3;
 
     static int m_LogLevel = LOG_LEVEL_INFO; // Définir le niveau de log par défaut
@@ -16,26 +17,45 @@ class ServerPanelLogger {
 
     // Méthode de log statique
     static void Log(int level, string module, string txt) {
-        // Use the server configuration log level for comparison
-        if (level > NO_LOG) {  // Check log level against server config setting
-            if (defaultIO) {
-                // Log to console if defaultIO is true
-                Print(GetDate() + " [" + module + "]: " + txt);
+        if (level <= NO_LOG) {
+            return;
+        }
+
+        // Filtering threshold:
+        // 0 = off, 1 = info+, 2 = warn+, 3 = error+
+        if (m_LogLevel == NO_LOG || level < m_LogLevel) {
+            return;
+        }
+
+        if (defaultIO) {
+            // Log to console if defaultIO is true
+            Print(GetDate() + " [" + module + "]: " + txt);
+        } else {
+            // Attempt to open the log file
+            FileHandle logFile = OpenFile(file_path, FileMode.APPEND);
+            if (logFile != 0) {
+                // Log to the file if it opens successfully
+                FPrintln(logFile, GetDate() + " [" + module + "]: " + txt);
+                CloseFile(logFile);
             } else {
-                // Attempt to open the log file
-                FileHandle logFile = OpenFile(file_path, FileMode.APPEND);
-                if (logFile != 0) {
-                    // Log to the file if it opens successfully
-                    FPrintln(logFile, GetDate() + " [" + module + "]: " + txt);
-                    CloseFile(logFile);
-                } else {
-                    // Fallback to console logging if file logging fails
-                    defaultIO = true;
-                    Print("!!! Falling back to scripts.txt, can't write to " + file_path);
-                    Print(GetDate() + " [" + module + "]: " + txt);
-                }
+                // Fallback to console logging if file logging fails
+                defaultIO = true;
+                Print("!!! Falling back to scripts.txt, can't write to " + file_path);
+                Print(GetDate() + " [" + module + "]: " + txt);
             }
         }
+    }
+
+    static void SetLogLevel(int level)
+    {
+        if (level < NO_LOG) level = NO_LOG;
+        if (level > LOG_LEVEL_ERROR) level = LOG_LEVEL_ERROR;
+        m_LogLevel = level;
+    }
+
+    static void SetConsoleOnly()
+    {
+        defaultIO = true;
     }
 
     // Méthode pour changer le système IO en statique

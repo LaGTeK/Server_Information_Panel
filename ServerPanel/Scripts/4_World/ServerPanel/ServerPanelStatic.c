@@ -4,7 +4,7 @@ class ServerPanelStatic
 
 	static bool IsItemExisting(string type_name)
 	{
-		return GetGame().ConfigIsExisting( CFG_VEHICLESPATH + " " + type_name ) || GetGame().ConfigIsExisting( CFG_WEAPONSPATH + " " + type_name ) || GetGame().ConfigIsExisting( CFG_MAGAZINESPATH + " " + type_name );
+		return g_Game.ConfigIsExisting( CFG_VEHICLESPATH + " " + type_name ) || g_Game.ConfigIsExisting( CFG_WEAPONSPATH + " " + type_name ) || g_Game.ConfigIsExisting( CFG_MAGAZINESPATH + " " + type_name );
 	}
       
 	//! @note this is for the rare cases where we only have a classname, not an object.
@@ -18,20 +18,20 @@ class ServerPanelStatic
 		{
 			return cfg_name;
 		}
-		else if ( GetGame().ConfigIsExisting( CFG_WEAPONSPATH + " " + type_name ) )
+		else if ( g_Game.ConfigIsExisting( CFG_WEAPONSPATH + " " + type_name ) )
 		{
 			cfg_name_path = CFG_WEAPONSPATH + " " + type_name + " displayName";
-			GetGame().ConfigGetText( cfg_name_path, cfg_name );
+			g_Game.ConfigGetText( cfg_name_path, cfg_name );
 		}
-		else if ( GetGame().ConfigIsExisting( CFG_VEHICLESPATH + " " + type_name ) )
+		else if ( g_Game.ConfigIsExisting( CFG_VEHICLESPATH + " " + type_name ) )
 		{
 			cfg_name_path = CFG_VEHICLESPATH + " " + type_name + " displayName";
-			GetGame().ConfigGetText( cfg_name_path, cfg_name );
+			g_Game.ConfigGetText( cfg_name_path, cfg_name );
 		}
-		else if ( GetGame().ConfigIsExisting( CFG_MAGAZINESPATH + " " + type_name ) )
+		else if ( g_Game.ConfigIsExisting( CFG_MAGAZINESPATH + " " + type_name ) )
 		{
 			cfg_name_path = CFG_MAGAZINESPATH + " " + type_name + " displayName";
-			GetGame().ConfigGetText( cfg_name_path, cfg_name );
+			g_Game.ConfigGetText( cfg_name_path, cfg_name );
 		}
 		if (!cfg_name)
 		{

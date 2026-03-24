@@ -1,28 +1,38 @@
 class ServerPanelBase 
 {
-	bool m_LogLevel;
+	int m_LogLevel;
 
     void ServerPanelBase() 
 	{
-        if (GetGame().IsServer()) 
+        if (g_Game.IsServer()) 
 		{
-        	ServerPanelLogger.SwitchToCustomIO();
-            // Load configuration when the server starts
-            ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Reading Server Config");
-            ServerPanelConfigManager.SetConfig(); // Charge la config depuis le fichier (serveur uniquement)
+			Print("[ServerPanel] Loading server configuration...");
+            ServerPanelConfigManager.SetConfig();
 			if (!ServerPanelConfigManager.GetConfig()) 
 			{
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelConfig", "Failed to load server configuration.");
+				Print("[ServerPanel] ERROR: Failed to load server configuration.");
 				return;
 			}
-			m_LogLevel = ServerPanelConfigManager.GetConfig().LOGLEVEL;
+
+			ServerPanelServerConfig cfg = ServerPanelConfigManager.GetConfig();
+			m_LogLevel = cfg.LOGLEVEL;
+			ServerPanelLogger.SetLogLevel(m_LogLevel);
+
+			if (cfg.DISABLE_PANEL_LOG_FILE) {
+				ServerPanelLogger.SetConsoleOnly();
+				Print("[ServerPanel] File logging disabled (DISABLE_PANEL_LOG_FILE). ServerPanelLogger -> console only (see LOGLEVEL).");
+			} else {
+				ServerPanelLogger.SwitchToCustomIO();
+			}
+
+			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Server configuration loaded.");
         }
 
         InitRPC();
     }
 
 	void InitRPC() {
-		if (GetGame().IsServer())	{
+		if (g_Game.IsServer())	{
 			//Server calls
 			if (m_LogLevel) {
 				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfigRPC", "GetConfigRequest");
@@ -30,15 +40,9 @@ class ServerPanelBase
 			GetRPCManager().AddRPC("ServerPanelConfigRPC", "GetConfigRequest", this, SingeplayerExecutionType.Server);
 			
 			if (m_LogLevel) {
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfigRPC", "SyncPlayerStatsRequest");
+				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelStatsRPC", "SyncPanelStatsRequest");
 			}
-			GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncPlayerStatsRequest", this, SingeplayerExecutionType.Server);
-
-			
-			if (m_LogLevel) {
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfigRPC", "SyncSidePanelInfoRequest");
-			}
-			GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncSidePanelInfoRequest", this, SingeplayerExecutionType.Server);
+			GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncPanelStatsRequest", this, SingeplayerExecutionType.Server);
 
 		}
 		else	{
@@ -54,7 +58,7 @@ class ServerPanelBase
     //void GetConfigRequest(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)	
 	void GetConfigRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
-		if (!GetGame().IsServer())
+		if (!g_Game.IsServer())
 			return;
 	
 		ref ServerPanelServerConfig config = ServerPanelConfigManager.GetConfig();
@@ -74,7 +78,7 @@ class ServerPanelBase
 	//void GetConfigResponse(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target) 
 	void GetConfigResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
-		if (!GetGame().IsClient()) return;
+		if (!g_Game.IsClient()) return;
 
 		Param1<ref ServerPanelServerConfig> data;
 		if (!ctx.Read(data)) {
@@ -84,137 +88,116 @@ class ServerPanelBase
 
 		// Mise en cache de la configuration localement sur le client
 		ServerPanelConfigManager.SetConfig(data.param1);
+		ServerPanelServerConfig cached = ServerPanelConfigManager.GetConfig();
+		if (cached) {
+			m_LogLevel = cached.LOGLEVEL;
+			ServerPanelLogger.SetLogLevel(m_LogLevel);
+		}
 		
 		if (m_LogLevel) {
 			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Configuration received and cached from server.");
 		}
 	}
 
-	void SyncPlayerStatsRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	// Payload selon ServerPanel.json serveur : side panel (DISPLAYPLAYERINFO), onglet joueur (DISPLAYPLAYERTAB), liste (DISPLAYPLAYERLIST).
+	// sideInts = [heure, sante, sang] si side ; sinon [sante, sang] seulement si onglet joueur seul.
+	void SyncPanelStatsRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
-		if (type != CallType.Server || !GetGame().IsServer()) return;
-
-		ref TIntArray plyIData = new TIntArray();
-		ref TFloatArray plyFData = new TFloatArray();
-		bool m_HasDisease = false;
-
-		// Corrected string assignment using standard if-else
-		string playerName;
-		string playerId;
-
-		// Collect stats for the requesting player only
-		if (sender) {
-			playerName = sender.GetName();
-			playerId = sender.GetId();
-			PlayerBase requestingPlayer = PlayerBase.Cast(sender.GetPlayer());
-			if (requestingPlayer) 
-			{
-				plyIData.Insert(requestingPlayer.GetHealth());
-				plyIData.Insert(requestingPlayer.GetHealth("", "Blood"));
-				plyFData.Insert(requestingPlayer.GetHealth("", "Shock"));
-				plyFData.Insert(requestingPlayer.GetStatStamina().Get());
-				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_DISTANCE));
-				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_PLAYTIME));
-				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_PLAYERS_KILLED));
-				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_INFECTED_KILLED));
-				plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_LONGEST_SURVIVOR_HIT));
-				m_HasDisease = requestingPlayer.HasDisease();
-
-				// Ajoute l'uptime du serveur à la fin de plyFData
-				MissionServer missionServer = MissionServer.Cast(GetGame().GetMission());
-				if (missionServer) {
-					plyFData.Insert(missionServer.GetServerUptime());
-				} else {
-					plyFData.Insert(0); // Par défaut à 0 si l'uptime est indisponible
-				}
-
-				//plyFData.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_CONNECTION_TIME));
-
-			} 
-			else 
-			{
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelStatsRPC", "Failed to cast sender's player.");
-			}
-		}	
-		else {
-			playerName = "Unknown";
-			playerId = "Unknown ID";
-		}
-
-		// Send the data back to the client
-		GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncPlayerStats", new Param3<ref TIntArray, ref TFloatArray, bool>(plyIData, plyFData, m_HasDisease), true, sender);
-		
-		if (m_LogLevel) {
-			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelStatsRPC", playerName + " (" + playerId + ") - Player Stats sync");
-		}
-	}
-
-	void SyncSidePanelInfoRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target) 
-	{
-		if (type != CallType.Server || !GetGame().IsServer()) return;
+		if (type != CallType.Server || !g_Game.IsServer()) return;
 
 		ref TStringArray playerListS = new TStringArray();
-		ref TIntArray plyIData = new TIntArray();
-		ref TFloatArray plyFData = new TFloatArray();
-		vector plyPos;
+		ref TIntArray sideInts = new TIntArray();
+		ref TFloatArray playerTabFloats = new TFloatArray();
+		ref TFloatArray sideHydration = new TFloatArray();
+		vector plyPos = "0 0 0";
+		string playerName = "";
+		string playerId = "";
+		bool hasDisease = false;
+
+		ref ServerPanelServerConfig cfg = ServerPanelConfigManager.GetConfig();
+		bool wantSide = cfg && cfg.DISPLAYPLAYERINFO;
+		bool wantTab = cfg && cfg.DISPLAYPLAYERTAB;
+		bool wantList = wantSide && cfg && cfg.DISPLAYPLAYERLIST;
 
 		array<Man> players = new array<Man>();
-		GetGame().GetPlayers(players);
 
-		bool displayPlayerList = ServerPanelConfigManager.GetConfig() && ServerPanelConfigManager.GetConfig().DISPLAYPLAYERLIST;
-		
-		// Collect all player pseudonyms if displayPlayerList is true
-		if (displayPlayerList) {
+		if (wantList) {
+			g_Game.GetPlayers(players);
 			for (int i = 0; i < players.Count(); ++i) {
 				PlayerBase player = PlayerBase.Cast(players.Get(i));
 				if (!player) {
-					ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelStatsRPC", "Failed to cast player at index " + i);
+					ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_WARN, "ServerPanelStatsRPC", "Failed to cast player at index " + i);
 					continue;
 				}
 
 				PlayerIdentity plyIdent = player.GetIdentity();
 				if (!plyIdent) {
-					ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelStatsRPC", "Player identity is null for player at index " + i);
+					ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_WARN, "ServerPanelStatsRPC", "Player identity is null for player at index " + i);
 					continue;
 				}
 
 				playerListS.Insert(plyIdent.GetName());
 			}
-		} else {
-			playerListS=new TStringArray();
 		}
 
-		// Corrected string assignment using standard if-else
-		string playerName;
-		string playerId;
-
-		// Collect stats for the requesting player only
 		if (sender) {
-			playerName = sender.GetName();
 			playerId = sender.GetId();
 			PlayerBase requestingPlayer = PlayerBase.Cast(sender.GetPlayer());
-			if (requestingPlayer) {
-				plyIData.Insert(GetGame().GetTime());
-				plyIData.Insert(requestingPlayer.GetHealth());
-				plyIData.Insert(requestingPlayer.GetHealth("", "Blood"));
-				plyFData.Insert(requestingPlayer.GetStatWater().Get());
-				plyFData.Insert(requestingPlayer.GetStatEnergy().Get());
-				plyPos = requestingPlayer.GetPosition();
-			} 
-			else {
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "ServerPanelStatsRPC", "Failed to cast sender's player.");
+			if (wantSide) {
+				playerName = sender.GetName();
 			}
-		} 
-		else {
-			playerName = "Unknown";
+
+			if (requestingPlayer) {
+				if (wantSide) {
+					sideInts.Insert(g_Game.GetTime());
+					sideInts.Insert(requestingPlayer.GetHealth());
+					sideInts.Insert(requestingPlayer.GetHealth("", "Blood"));
+					sideHydration.Insert(requestingPlayer.GetStatWater().Get());
+					sideHydration.Insert(requestingPlayer.GetStatEnergy().Get());
+					plyPos = requestingPlayer.GetPosition();
+				}
+
+				if (wantTab) {
+					if (!wantSide) {
+						sideInts.Insert(requestingPlayer.GetHealth());
+						sideInts.Insert(requestingPlayer.GetHealth("", "Blood"));
+					}
+
+					playerTabFloats.Insert(requestingPlayer.GetHealth("", "Shock"));
+					playerTabFloats.Insert(requestingPlayer.GetStatStamina().Get());
+					playerTabFloats.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_DISTANCE));
+					playerTabFloats.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_PLAYTIME));
+					playerTabFloats.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_PLAYERS_KILLED));
+					playerTabFloats.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_INFECTED_KILLED));
+					playerTabFloats.Insert(requestingPlayer.StatGet(AnalyticsManagerServer.STAT_LONGEST_SURVIVOR_HIT));
+
+					MissionServer missionServer = MissionServer.Cast(g_Game.GetMission());
+					if (missionServer) {
+						playerTabFloats.Insert(missionServer.GetServerUptime());
+					} else {
+						playerTabFloats.Insert(0);
+					}
+
+					hasDisease = requestingPlayer.HasDisease();
+				}
+			} else {
+				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_WARN, "ServerPanelStatsRPC", "Failed to cast sender's player.");
+			}
+		} else {
 			playerId = "Unknown ID";
 		}
 
-		// Send the data back to the client
-		GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncSidePanelInfo", new Param5<ref TStringArray, ref TIntArray, ref TFloatArray, vector, string>(playerListS, plyIData, plyFData, plyPos, playerName), true, sender);
-		
+		GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncPanelStats", new Param7<ref TStringArray, ref TIntArray, ref TFloatArray, ref TFloatArray, vector, string, bool>(playerListS, sideInts, playerTabFloats, sideHydration, plyPos, playerName, hasDisease), true, sender);
+
 		if (m_LogLevel) {
-			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelStatsRPC", playerName + " (" + playerId + ") - Player Minimum Stats sync");
+			string logNick = playerName;
+			if (logNick == "" && sender) {
+				logNick = sender.GetName();
+			}
+			if (logNick == "") {
+				logNick = "Unknown";
+			}
+			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelStatsRPC", logNick + " (" + playerId + ") - Panel stats sync");
 		}
 	}
 };

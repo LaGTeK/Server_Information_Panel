@@ -4,7 +4,7 @@ modded class InGameMenu extends UIScriptedMenu
 
 	override Widget Init()
 	{
-		layoutRoot = GetGame().GetWorkspace().CreateWidgets("ServerPanel/GUI/layouts/day_z_ingamemenu.layout");
+		layoutRoot = g_Game.GetWorkspace().CreateWidgets("ServerPanel/GUI/layouts/day_z_ingamemenu.layout");
 
 		m_ContinueButton			= layoutRoot.FindAnyWidget("continuebtn");
 		m_SeparatorPanel			= layoutRoot.FindAnyWidget("separator_red");
@@ -27,7 +27,7 @@ modded class InGameMenu extends UIScriptedMenu
 
 		m_Panel = layoutRoot.FindAnyWidget("panelbtn");
 
-		if (GetGame().IsMultiplayer())
+		if (g_Game.IsMultiplayer())
 		{
 			ButtonSetText(m_RestartButton, "#main_menu_respawn");
 		}
@@ -54,7 +54,7 @@ modded class InGameMenu extends UIScriptedMenu
 
 		if (w == m_Panel)
 		{
-			PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+			PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
 			if (player && player.IsAlive())  // Check if the player is alive
 			{
 				EnterScriptedMenu(SERVER_PANEL);

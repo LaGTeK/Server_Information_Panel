@@ -3,7 +3,15 @@ class SPRecipeManager {
     private ref array<string> m_ExcludedTerms;
     private ref array<string> m_ExcludedClasses;
 
+    // Cache session : rempli seulement si au moins une recette (evite de figer une liste vide si le plugin n'est pas pret au premier essai).
+    private static ref array<ref CraftingRecipe> s_SessionRecipeCache;
+
     void SPRecipeManager() {
+        if (s_SessionRecipeCache) {
+            m_AllRecipes = s_SessionRecipeCache;
+            return;
+        }
+
         m_AllRecipes = new array<ref CraftingRecipe>();
         m_ExcludedTerms = new array<string>();
         m_ExcludedClasses = new array<string>();
@@ -27,14 +35,22 @@ class SPRecipeManager {
         // Ajoutez plus de classes à exclure si nécessaire
 
         LoadRecipes();
+        if (m_AllRecipes.Count() > 0) {
+            s_SessionRecipeCache = m_AllRecipes;
+        }
     }
 
     void LoadRecipes() {
         PluginRecipesManager recipes = PluginRecipesManager.Cast(GetPlugin(PluginRecipesManager));
+        if (!recipes || !recipes.m_RecipeList) {
+            return;
+        }
         foreach (RecipeBase recipeBase : recipes.m_RecipeList) {
             if (recipeBase && IsValidRecipe(recipeBase)) {
-                CraftingRecipe craftingRecipe = new CraftingRecipe(recipeBase); // Convert RecipeBase to CraftingRecipe
-                m_AllRecipes.Insert(craftingRecipe);
+                CraftingRecipe craftingRecipe = new CraftingRecipe(recipeBase);
+                if (craftingRecipe.IsValid()) {
+                    m_AllRecipes.Insert(craftingRecipe);
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 class ServerPanelConfigManager {
 	private static ref ServerPanelServerConfig m_Config = NULL; // Static configuration instance
+	private static const string SP_FILE_BACKUP = SP_FILE_PATH + ".bak";
+	private static const string SP_FILE_BACKUP_REJECTED = SP_FILE_PATH + ".bak.rejected";
 
 	static ServerPanelServerConfig GetConfig() {
 		if (!m_Config) {
@@ -15,18 +17,190 @@ class ServerPanelConfigManager {
 
 	static void SetConfig(ServerPanelServerConfig config)
 	{
-		if (!m_Config) {
-			m_Config = config;
+		if (!config) {
 			return;
 		}
 
-		if (m_Config.VERSION == config.VERSION) {
-			return; // Même version déjà chargée, inutile de remplacer
+		if (!m_Config) {
+			m_Config = config;
+			FixMissingOrInvalidFields(m_Config);
+			return;
 		}
 
-		m_Config = config; // Sinon on met à jour
+		// Même VERSION: on fusionne quand même (RPC / hot reload) pour ne pas garder une config client périmée.
+		if (m_Config.VERSION == config.VERSION) {
+			MergeConfigSnapshot(m_Config, config);
+			FixMissingOrInvalidFields(m_Config);
+			return;
+		}
+
+		m_Config = config;
+		FixMissingOrInvalidFields(m_Config);
 	}
 
+	private static void MergeStringTabs(ServerPanelServerConfig dest, ServerPanelServerConfig src)
+	{
+		if (!dest.sServerTab0) {
+			dest.sServerTab0 = new array<string>();
+		}
+		if (!dest.sServerTab1) {
+			dest.sServerTab1 = new array<string>();
+		}
+		if (!dest.sServerTab2) {
+			dest.sServerTab2 = new array<string>();
+		}
+		if (!dest.sServerTab3) {
+			dest.sServerTab3 = new array<string>();
+		}
+
+		dest.sServerTab0.Clear();
+		dest.sServerTab1.Clear();
+		dest.sServerTab2.Clear();
+		dest.sServerTab3.Clear();
+
+		if (src.sServerTab0) {
+			foreach (string line0 : src.sServerTab0) {
+				dest.sServerTab0.Insert(line0);
+			}
+		}
+		if (src.sServerTab1) {
+			foreach (string line1 : src.sServerTab1) {
+				dest.sServerTab1.Insert(line1);
+			}
+		}
+		if (src.sServerTab2) {
+			foreach (string line2 : src.sServerTab2) {
+				dest.sServerTab2.Insert(line2);
+			}
+		}
+		if (src.sServerTab3) {
+			foreach (string line3 : src.sServerTab3) {
+				dest.sServerTab3.Insert(line3);
+			}
+		}
+	}
+
+	private static void MergeConfigSnapshot(ServerPanelServerConfig dest, ServerPanelServerConfig src)
+	{
+		if (!dest || !src) {
+			return;
+		}
+
+		dest.VERSION = src.VERSION;
+		dest.SERVERNAME = src.SERVERNAME;
+		dest.LOGLEVEL = src.LOGLEVEL;
+		dest.DISABLE_PANEL_LOG_FILE = src.DISABLE_PANEL_LOG_FILE;
+		dest.BUTTON1NAME = src.BUTTON1NAME;
+		dest.BUTTON1LINK = src.BUTTON1LINK;
+		dest.BUTTON2NAME = src.BUTTON2NAME;
+		dest.BUTTON2LINK = src.BUTTON2LINK;
+		dest.BUTTON3NAME = src.BUTTON3NAME;
+		dest.BUTTON3LINK = src.BUTTON3LINK;
+		dest.DISPLAYPLAYERINFO = src.DISPLAYPLAYERINFO;
+		dest.DISPLAYPLAYERTAB = src.DISPLAYPLAYERTAB;
+		dest.DISPLAYPLAYERLIST = src.DISPLAYPLAYERLIST;
+		dest.DISPLAYPLAYERPOSITION = src.DISPLAYPLAYERPOSITION;
+		dest.DISPLAYCRAFTTAB = src.DISPLAYCRAFTTAB;
+		dest.DISPLAYCURRENCY = src.DISPLAYCURRENCY;
+		dest.CURRENCYNAME = src.CURRENCYNAME;
+		dest.DISPLAYPLOGO = src.DISPLAYPLOGO;
+		dest.LOGOPATH = src.LOGOPATH;
+		dest.LOGO_WIDTH_PERCENTAGE = src.LOGO_WIDTH_PERCENTAGE;
+		dest.LOGO_HEIGHT_PERCENTAGE = src.LOGO_HEIGHT_PERCENTAGE;
+		dest.BUTTONTAB0NAME = src.BUTTONTAB0NAME;
+		dest.BUTTONTAB1NAME = src.BUTTONTAB1NAME;
+		dest.BUTTONTAB2NAME = src.BUTTONTAB2NAME;
+		dest.BUTTONTAB3NAME = src.BUTTONTAB3NAME;
+
+		MergeStringTabs(dest, src);
+	}
+
+
+	private static bool IsLoadedConfigUsable(ServerPanelServerConfig config)
+	{
+		if (!config) {
+			return false;
+		}
+		if (config.VERSION && config.VERSION != "") {
+			return true;
+		}
+		if (config.SERVERNAME && config.SERVERNAME != "") {
+			return true;
+		}
+		if (config.sServerTab0 && config.sServerTab0.Count() > 0) {
+			return true;
+		}
+		if (config.sServerTab1 && config.sServerTab1.Count() > 0) {
+			return true;
+		}
+		if (config.sServerTab2 && config.sServerTab2.Count() > 0) {
+			return true;
+		}
+		if (config.sServerTab3 && config.sServerTab3.Count() > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	// Evite de retenter le meme .bak corrompu a chaque demarrage (pas de boucle dans LoadConfig, mais spam / faux espoir).
+	private static void MoveCorruptBackupAside(string reason)
+	{
+		if (!FileExist(SP_FILE_BACKUP)) {
+			return;
+		}
+		if (FileExist(SP_FILE_BACKUP_REJECTED)) {
+			DeleteFile(SP_FILE_BACKUP_REJECTED);
+		}
+		if (!CopyFile(SP_FILE_BACKUP, SP_FILE_BACKUP_REJECTED)) {
+			Print("[ServerPanel] 'ServerPanelConfigManager' WARNING: Could not quarantine bad backup (" + reason + ").");
+			return;
+		}
+		DeleteFile(SP_FILE_BACKUP);
+		Print("[ServerPanel] 'ServerPanelConfigManager' Invalid backup moved to " + SP_FILE_BACKUP_REJECTED + " (" + reason + ").");
+	}
+
+	private static bool TryRecoverConfigFromBackup(ServerPanelServerConfig intoConfig)
+	{
+		if (!FileExist(SP_FILE_BACKUP) || !intoConfig) {
+			return false;
+		}
+
+		ServerPanelServerConfig recovered = new ServerPanelServerConfig();
+		JsonFileLoader<ServerPanelServerConfig>.JsonLoadFile(SP_FILE_BACKUP, recovered);
+		if (!IsLoadedConfigUsable(recovered)) {
+			Print("[ServerPanel] 'ServerPanelConfigManager' WARNING: Backup " + SP_FILE_BACKUP + " exists but is empty or invalid.");
+			MoveCorruptBackupAside("merge recovery");
+			return false;
+		}
+
+		Print("[ServerPanel] 'ServerPanelConfigManager' Recovered configuration from backup (previous data merged).");
+		MergeConfigSnapshot(intoConfig, recovered);
+		return true;
+	}
+
+	private static void RestoreMainConfigFromBackupFile()
+	{
+		EnsureDirectoriesExist();
+
+		ServerPanelServerConfig config = new ServerPanelServerConfig();
+		JsonFileLoader<ServerPanelServerConfig>.JsonLoadFile(SP_FILE_BACKUP, config);
+
+		if (!IsLoadedConfigUsable(config)) {
+			Print("[ServerPanel] 'ServerPanelConfigManager' Backup unusable, writing default configuration.");
+			MoveCorruptBackupAside("main missing, restore failed");
+			WriteDefaultServer(config);
+			return;
+		}
+
+		FixMissingOrInvalidFields(config);
+
+		if (config.VERSION != SP_CONFIG_VERSION) {
+			UpgradeConfig(config);
+		} else {
+			JsonFileLoader<ServerPanelServerConfig>.JsonSaveFile(SP_FILE_PATH, config);
+			Print("[ServerPanel] 'ServerPanelConfigManager' Main config recreated from backup (same VERSION).");
+		}
+	}
 
 	private static ServerPanelServerConfig LoadConfig() 
 	{
@@ -38,21 +212,39 @@ class ServerPanelConfigManager {
 
 			JsonFileLoader<ServerPanelServerConfig>.JsonLoadFile(SP_FILE_PATH, config);
 
+			bool repairedMainFromBackup = false;
+			if (!IsLoadedConfigUsable(config) && TryRecoverConfigFromBackup(config)) {
+				Print("[ServerPanel] 'ServerPanelConfigManager' Main file was empty or invalid; using merged data from " + SP_FILE_BACKUP + ".");
+				repairedMainFromBackup = true;
+			} else if (!IsLoadedConfigUsable(config)) {
+				Print("[ServerPanel] 'ServerPanelConfigManager' WARNING: Main config unusable and no valid backup; defaults will fill missing fields.");
+			}
+
 			if (config.VERSION != SP_CONFIG_VERSION)
 			{
 				BackupOldConfig();
-				UpgradeConfig(config); // Upgrade après lecture
+				UpgradeConfig(config); // Upgrade après lecture (conserve les champs existants, ajoute les nouveaux via Upgrade + FixMissing)
 			}
 			else
 			{
 				Print("[ServerPanel] 'ServerPanelConfigManager' Configuration loaded.");
+				if (repairedMainFromBackup) {
+					JsonFileLoader<ServerPanelServerConfig>.JsonSaveFile(SP_FILE_PATH, config);
+				}
 			}
-		} 
+		}
 		else 
 		{
-			Print("[ServerPanel] 'ServerPanelConfigManager' Configuration file not found, creating a default configuration.");
+			Print("[ServerPanel] 'ServerPanelConfigManager' Configuration file not found.");
 			EnsureDirectoriesExist();
-			WriteDefaultServer(config); // Créer la config par défaut
+			if (FileExist(SP_FILE_BACKUP)) {
+				Print("[ServerPanel] 'ServerPanelConfigManager' Restoring from " + SP_FILE_BACKUP + " (copying previous data into new main file).");
+				RestoreMainConfigFromBackupFile();
+				JsonFileLoader<ServerPanelServerConfig>.JsonLoadFile(SP_FILE_PATH, config);
+			} else {
+				Print("[ServerPanel] 'ServerPanelConfigManager' No backup; creating a default configuration.");
+				WriteDefaultServer(config);
+			}
 		}
 
 		FixMissingOrInvalidFields(config);
@@ -86,8 +278,10 @@ class ServerPanelConfigManager {
 		if (!config.BUTTONTAB2NAME) config.BUTTONTAB2NAME = "";
 		if (!config.BUTTONTAB3NAME) config.BUTTONTAB3NAME = "";
 
-		// Numeric
+		// Numeric (LOGLEVEL: 0 = aucun log via ServerPanelLogger ; 1–3 = info / warn / error)
 		if (config.LOGLEVEL < 0) config.LOGLEVEL = 0;
+		if (config.LOGLEVEL > 3) config.LOGLEVEL = 3;
+		if (config.DISABLE_PANEL_LOG_FILE != true && config.DISABLE_PANEL_LOG_FILE != false) config.DISABLE_PANEL_LOG_FILE = false;
 		if (config.LOGO_WIDTH_PERCENTAGE < 0) config.LOGO_WIDTH_PERCENTAGE = 0.0;
 		if (config.LOGO_HEIGHT_PERCENTAGE < 0) config.LOGO_HEIGHT_PERCENTAGE = 0.0;
 		
@@ -131,6 +325,7 @@ class ServerPanelConfigManager {
 		config.VERSION = SP_CONFIG_VERSION; // Set the default version for new configs
 		config.SERVERNAME = "Welcome on MyDayZ server !! - Hosted By MyDayZ.eu";
 		config.LOGLEVEL = 1;
+		config.DISABLE_PANEL_LOG_FILE = false;
 		config.BUTTON1NAME = "DISCORD";
 		config.BUTTON1LINK = "https://discord.gg/KAgNn6K";
 		config.BUTTON2NAME = "WEBSITE";
@@ -214,6 +409,8 @@ class ServerPanelConfigManager {
         JsonFileLoader<ServerPanelServerConfig>.JsonSaveFile(SP_FILE_PATH, config);
 	}
 
+	// Lors d'un bump de SP_CONFIG_VERSION : ajouter ici uniquement des defauts pour les *nouveaux* champs.
+	// Ne jamais ecraser les donnees utilisateur ; le JSON est deja charge dans `config` (ou fusionne depuis .bak).
 	static void UpgradeConfig(ServerPanelServerConfig config) 
 	{
 		Print("[ServerPanel] 'ServerPanelConfigManager' Upgrading configuration file...");
@@ -240,9 +437,12 @@ class ServerPanelConfigManager {
 				AddHtmlTagsToTabs(config.sServerTab2);
 				AddHtmlTagsToTabs(config.sServerTab3);
 
-				// LOGLEVEL
-				if (!config.LOGLEVEL) {
+				// LOGLEVEL : ne pas remplacer 0 (désactivé) ; seulement valeurs invalides
+				if (config.LOGLEVEL < 0) {
 					config.LOGLEVEL = 1;
+				}
+				if (config.LOGLEVEL > 3) {
+					config.LOGLEVEL = 3;
 				}
 
 				// LOGOPATH

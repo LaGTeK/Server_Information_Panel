@@ -2,7 +2,10 @@ class ServerPanelServerConfig
 {
 	string VERSION;  // Use text for versioning, now at the top
 	string SERVERNAME;
+	// 0 = aucun message ServerPanelLogger ; 1 = info+ ; 2 = warn+ ; 3 = erreurs seules. Les Print("[ServerPanel] ...") au demarrage restent cote serveur.
 	int LOGLEVEL;
+	// true = pas de fichier ServerPanel_*.log (Profiles/.../ServerPanel/Logs/) ; avec LOGLEVEL>0 les logs vont en console ; avec LOGLEVEL 0, quasi silencieux hors Print boot.
+	bool DISABLE_PANEL_LOG_FILE;
 	string BUTTON1NAME;
 	string BUTTON1LINK;
 	string BUTTON2NAME;

@@ -1,5 +1,6 @@
 modded class DayZPlayerImplement
 {
+	private UAInput m_SPOpenPanelInput;
 
 	//! DayZPlayer Command handler override
 	override void CommandHandler(float pDt, int pCurrentCommandID, bool pCurrentCommandFinished)
@@ -7,15 +8,16 @@ modded class DayZPlayerImplement
 		// call parent
 		super.CommandHandler(pDt,pCurrentCommandID,pCurrentCommandFinished);
 
-		UAInput SPKey = GetUApi().GetInputByName("SPOpenPanelMenu");
-		
-		if( SPKey.LocalPress() )
+		if (!m_SPOpenPanelInput)
+			m_SPOpenPanelInput = GetUApi().GetInputByName("SPOpenPanelMenu");
+
+		if (m_SPOpenPanelInput && m_SPOpenPanelInput.LocalPress())
 			ServerPanelMenuHandler();
 	}
 
 	void ServerPanelMenuHandler()
 	{
-		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+		PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
 		if (!player || !player.IsAlive())  // Check if the player is alive
 		{
 			return;  // Don't open the menu if the player is not alive

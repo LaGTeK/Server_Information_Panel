@@ -46,6 +46,33 @@ class ServerPanelMenu extends UIScriptedMenu {
 	
 	protected ImageWidget 				m_LogoImageWidget;
 	private float 						m_LogoWidth,m_LogoHeight;
+
+	// Side panel icon caches (widgets + last rendered state)
+	private ref array<ImageWidget> 		m_BloodIcons;
+	private ref array<ImageWidget> 		m_WaterIcons;
+	private ref array<ImageWidget> 		m_FoodIcons;
+	private ref TStringArray 			m_BloodIconPathsCache;
+	private ref TStringArray 			m_WaterIconPathsCache;
+	private ref TStringArray 			m_FoodIconPathsCache;
+	private ref TIntArray 				m_BloodIconColorsCache;
+	private ref TIntArray 				m_WaterIconColorsCache;
+	private ref TIntArray 				m_FoodIconColorsCache;
+
+	private ref array<Widget> 			m_TabPanels;
+	private ref array<ButtonWidget> 	m_TabButtons;
+	private int 						m_ActiveTabIndex;
+
+	private bool 						m_SidePanelHaveSnapshot;
+	private string 						m_SidePanelCachedHealthText;
+	private int 						m_SidePanelCachedHealthColor;
+	private string 						m_SidePanelCachedNick;
+	private string 						m_SidePanelCachedPlayerTitleText;
+	private string 						m_SidePanelCachedPlayerListText;
+	private string 						m_SidePanelCachedPosText;
+	private bool 						m_SidePanelCachedShowPos;
+	private int 						m_SidePanelCachedBlood;
+	private float 						m_SidePanelCachedWater;
+	private float 						m_SidePanelCachedEnergy;
 	//bool m_LogLevel;//Current Tab
 
 	//Widget 								m_CurrentTabPanel;
@@ -74,7 +101,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 	}
 
 	override Widget Init()	{	
-		layoutRoot 						=	GetGame().GetWorkspace().CreateWidgets( "ServerPanel/GUI/layouts/ServerPanel.layout" );
+		layoutRoot 						=	g_Game.GetWorkspace().CreateWidgets( "ServerPanel/GUI/layouts/ServerPanel.layout" );
 		layoutRoot.Show(false);
 		
 		m_PlayerInfo					=	Widget.Cast(layoutRoot.FindAnyWidget("PanelPlayerInformation"));
@@ -129,6 +156,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		m_PlayerListScrollWidget		=	ScrollWidget.Cast( layoutRoot.FindAnyWidget( "PlayerListScrollWidget" ) );
 		m_PlayersList 					=	MultilineTextWidget.Cast( layoutRoot.FindAnyWidget( "Player_List" ) );
+		InitSidePanelIconCache();
 
 		//Tab Transisition
 		//m_CurrentTab 					=	ServerPanelTab.Tab0;
@@ -148,12 +176,8 @@ class ServerPanelMenu extends UIScriptedMenu {
 		//m_Tab4.SetPos(neededX, y, true);
 		//m_Tab5.SetPos(neededX, y, true);
 		
-		m_Tab0.Show(true);
-		m_Tab1.Show(false);
-		m_Tab2.Show(false);
-		m_Tab3.Show(false);
-		m_Tab4.Show(false);
-		m_Tab5.Show(false);
+		InitTabArrays();
+		SetActiveTab(0);
 
 		//Money Widget
 		//EXPANSIONMARKET
@@ -203,7 +227,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		if (m_MarketModule)
 		{
 			array<int> monies = new array<int>;
-			int playerWorth = m_MarketModule.GetPlayerWorth(PlayerBase.Cast(GetGame().GetPlayer()), monies);
+			int playerWorth = m_MarketModule.GetPlayerWorth(PlayerBase.Cast(g_Game.GetPlayer()), monies);
 
 			// Convert playerWorth into a formatted string
 			string currencyString = ExpansionStatic.IntToCurrencyString(playerWorth, ",");
@@ -393,124 +417,168 @@ class ServerPanelMenu extends UIScriptedMenu {
 		else m_BtnDonate.Show(false);
 	}
 
-	void SyncPlayerStats(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target) 
+	void SyncPanelStats(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
-		Param3<ref TIntArray, ref TFloatArray, bool> syncDataS;
+		Param7<ref TStringArray, ref TIntArray, ref TFloatArray, ref TFloatArray, vector, string, bool> syncData;
 
-		ref TIntArray PlayerDataI = new TIntArray;
-		ref TFloatArray PlayerDataF = new TFloatArray;
+		ref TStringArray playerListC = new TStringArray;
+		ref TIntArray sideInts = new TIntArray;
+		ref TFloatArray playerTabFloats = new TFloatArray;
+		ref TFloatArray sideHydration = new TFloatArray;
+		vector playerPos;
+		string playerNick = "";
+		bool sDisease = false;
 
-		if (type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer()) {
-			if (!ctx.Read(syncDataS)) {
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "SyncPlayerStats", "Players sync data read error - possible version mismatch");
+		if ((type == CallType.Client && g_Game.IsClient()) || !g_Game.IsMultiplayer()) {
+			if (!ctx.Read(syncData)) {
+				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "SyncPanelStats", "Panel stats read error - possible version mismatch");
 				return;
 			}
 
-			PlayerDataI = syncDataS.param1;
-			PlayerDataF = syncDataS.param2;
-			bool sDisease = syncDataS.param3;
+			playerListC = syncData.param1;
+			sideInts = syncData.param2;
+			playerTabFloats = syncData.param3;
+			sideHydration = syncData.param4;
+			playerPos = syncData.param5;
+			playerNick = syncData.param6;
+			sDisease = syncData.param7;
 		}
 
-		m_PlayerInfoDisplay.UpdatePlayerInfo(PlayerDataI, PlayerDataF, sDisease);
+		if (m_DisplayPlayerTab && m_PlayerInfoDisplay && sideInts && playerTabFloats && playerTabFloats.Count() >= 8) {
+			ref TIntArray playerInfoInts = new TIntArray;
+			if (m_DisplaySidePanel && sideInts.Count() >= 3) {
+				playerInfoInts.Insert(sideInts[1]);
+				playerInfoInts.Insert(sideInts[2]);
+			} else if (sideInts.Count() >= 2) {
+				playerInfoInts.Insert(sideInts[0]);
+				playerInfoInts.Insert(sideInts[1]);
+			}
+			if (playerInfoInts.Count() == 2) {
+				m_PlayerInfoDisplay.UpdatePlayerInfo(playerInfoInts, playerTabFloats, sDisease);
+			}
+		}
+
+		if (m_DisplaySidePanel && sideInts && sideHydration && sideInts.Count() >= 3 && sideHydration.Count() >= 2) {
+			ApplySidePanelFromSync(playerListC, sideInts, sideHydration, playerPos, playerNick);
+		}
 	}
 
-	void SyncSidePanelInfo(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target) 
+	private void ApplySidePanelFromSync(TStringArray playerListC, TIntArray sideInts, TFloatArray hydration, vector PlayerPos, string m_playerName)
 	{
-		Param5<ref TStringArray, ref TIntArray, ref TFloatArray, vector, string> syncDataS;
-		ref TStringArray PlayerListC = new TStringArray;
-		ref TIntArray PlayerDataI = new TIntArray;
-		ref TFloatArray PlayerDataF = new TFloatArray;
+		int sHealth = sideInts[1];
+		int sBlood = sideInts[2];
+		float sWater = hydration[0];
+		float sEnergy = hydration[1];
 
-		int sHealth = 0;
-		int sBlood = 0;
-		float sEnergy = 0;
-		float sWater = 0;
-		string m_playerName ="";
-
-		if (type == CallType.Client && GetGame().IsClient() || !GetGame().IsMultiplayer()) {
-			if (!ctx.Read(syncDataS)) {
-				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_ERROR, "SyncSidePanelInfo", "Player sync data read error - possible version mismatch");
-				return;
-			}
-
-			PlayerListC = syncDataS.param1;
-			PlayerDataI = syncDataS.param2;
-			PlayerDataF = syncDataS.param3;
-			vector PlayerPos = syncDataS.param4;
-			m_playerName = syncDataS.param5;
-
-			if (PlayerDataI.Count() == 0) return;
+		if (!layoutRoot.IsVisible()) {
+			return;
 		}
 
-		// Set current player's stats
-		sHealth = PlayerDataI[1];
-		sBlood = PlayerDataI[2];
-		sWater = PlayerDataF[0];
-		sEnergy = PlayerDataF[1];
+		bool fullRefresh = !m_SidePanelHaveSnapshot;
 
-		if (layoutRoot.IsVisible()) {
+		string healthText = " " + sHealth.ToString();
+		if (fullRefresh || healthText != m_SidePanelCachedHealthText) {
+			m_TextPlayerHealth.SetText(healthText);
+			m_SidePanelCachedHealthText = healthText;
+		}
 
-			m_TextPlayerHealth.SetText(" " + sHealth.ToString());
-			//m_TextPlayerBlood.SetText(" " + sBlood.ToString());
+		int healthColor = GetSidePanelHealthColor(sHealth);
+		if (fullRefresh || healthColor != m_SidePanelCachedHealthColor) {
+			m_TextPlayerHealth.SetColor(healthColor);
+			m_SidePanelCachedHealthColor = healthColor;
+		}
 
+		if (fullRefresh || m_playerName != m_SidePanelCachedNick) {
 			m_TextPlayerNickname.SetText(m_playerName);
-
-			if (m_DisplayPlayerList) {
-				m_PlayerTitle.SetText("#STR_SP_ONLINE_PLAYERS_TXT" + ": " + PlayerListC.Count());
-				int y = 1;
-				string m_PlayerListText = "";
-				for (int i = 0; i < PlayerListC.Count(); ++i) {
-					m_PlayerListText += " " + y.ToString() + ": " + PlayerListC.Get(i) + "\n";  // Ajoutez \n pour un saut de ligne
-					y++;
-				}
-				m_PlayersList.SetText(m_PlayerListText);
-			}
-			
-			if (config.DISPLAYPLAYERPOSITION){
-				m_TextPlayerPos.Show(true);
-				m_TextPlayerPos.SetText("#STR_SP_POS_TXT" + " X: " + Math.Floor(PlayerPos[0]).ToString() + "  Y: " + Math.Floor(PlayerPos[2]).ToString());
-			} else {
-				m_TextPlayerPos.Show(false);
-			}	
-
-			// Health Color Coding based on PlayerConstants thresholds
-			if (sHealth <= PlayerConstants.SL_HEALTH_CRITICAL) { 
-				m_TextPlayerHealth.SetColor(ServerPanelConstants.RED); // Critical health
-			} else if (sHealth <= PlayerConstants.SL_HEALTH_LOW) {
-				m_TextPlayerHealth.SetColor(ServerPanelConstants.ORANGE); // Low health
-			} else if (sHealth <= PlayerConstants.SL_HEALTH_NORMAL) {
-				m_TextPlayerHealth.SetColor(ServerPanelConstants.YELLOW); // Normal health (moderate)
-			} else if (sHealth <= PlayerConstants.SL_HEALTH_HIGH) {
-				m_TextPlayerHealth.SetColor(ServerPanelConstants.WHITE); // High health
-			} else {
-				m_TextPlayerHealth.SetColor(ServerPanelConstants.WHITE); // Full health or above normal
-			}
-
-			// Blood Color Coding
-			UpdateBloodDisplay(sBlood);
-
-			// Energy Color Coding
-			UpdateWaterDisplay(sWater);
-
-			// Water Color Coding
-			UpdateFoodDisplay(sEnergy);
+			m_SidePanelCachedNick = m_playerName;
 		}
+
+		if (m_DisplayPlayerList && playerListC) {
+			string playerTitleText = "#STR_SP_ONLINE_PLAYERS_TXT" + ": " + playerListC.Count();
+			int y = 1;
+			string playerListText = "";
+			for (int i = 0; i < playerListC.Count(); ++i) {
+				playerListText += " " + y.ToString() + ": " + playerListC.Get(i) + "\n";
+				y++;
+			}
+
+			if (fullRefresh || playerTitleText != m_SidePanelCachedPlayerTitleText) {
+				m_PlayerTitle.SetText(playerTitleText);
+				m_SidePanelCachedPlayerTitleText = playerTitleText;
+			}
+
+			if (fullRefresh || playerListText != m_SidePanelCachedPlayerListText) {
+				m_PlayersList.SetText(playerListText);
+				m_SidePanelCachedPlayerListText = playerListText;
+			}
+		}
+
+		bool showPos = config.DISPLAYPLAYERPOSITION;
+		if (fullRefresh || showPos != m_SidePanelCachedShowPos) {
+			m_TextPlayerPos.Show(showPos);
+			m_SidePanelCachedShowPos = showPos;
+		}
+
+		if (showPos) {
+			string posText = "#STR_SP_POS_TXT" + " X: " + Math.Floor(PlayerPos[0]).ToString() + "  Y: " + Math.Floor(PlayerPos[2]).ToString();
+			if (fullRefresh || posText != m_SidePanelCachedPosText) {
+				m_TextPlayerPos.SetText(posText);
+				m_SidePanelCachedPosText = posText;
+			}
+		}
+
+		if (fullRefresh || sBlood != m_SidePanelCachedBlood) {
+			UpdateBloodDisplay(sBlood);
+			m_SidePanelCachedBlood = sBlood;
+		}
+
+		if (fullRefresh || sWater != m_SidePanelCachedWater) {
+			UpdateWaterDisplay(sWater);
+			m_SidePanelCachedWater = sWater;
+		}
+
+		if (fullRefresh || sEnergy != m_SidePanelCachedEnergy) {
+			UpdateFoodDisplay(sEnergy);
+			m_SidePanelCachedEnergy = sEnergy;
+		}
+
+		m_SidePanelHaveSnapshot = true;
+	}
+
+	private int GetSidePanelHealthColor(int sHealth)
+	{
+		if (sHealth <= PlayerConstants.SL_HEALTH_CRITICAL) {
+			return ServerPanelConstants.RED;
+		}
+		if (sHealth <= PlayerConstants.SL_HEALTH_LOW) {
+			return ServerPanelConstants.ORANGE;
+		}
+		if (sHealth <= PlayerConstants.SL_HEALTH_NORMAL) {
+			return ServerPanelConstants.YELLOW;
+		}
+		if (sHealth <= PlayerConstants.SL_HEALTH_HIGH) {
+			return ServerPanelConstants.WHITE;
+		}
+		return ServerPanelConstants.WHITE;
+	}
+
+	private void ResetSidePanelUiCache()
+	{
+		m_SidePanelHaveSnapshot = false;
 	}
 
 	override void Update(float timeslice) {
 		super.Update(timeslice);
 
-		if (KeyState(KeyCode.KC_ESCAPE) == 1 || GetGame().GetInput().LocalRelease("SPOpenPanelMenu"))
+		if (KeyState(KeyCode.KC_ESCAPE) == 1 || g_Game.GetInput().LocalRelease("SPOpenPanelMenu"))
 			Back();
 
-        // Update crafting display as needed
-        if (m_DisplayCraftingTab) {
+        if (m_DisplayCraftingTab && m_ActiveTabIndex == 4) {
             m_CraftingDisplay.Update(timeslice);
         }
 
-        // Autres mises à jour...
-        if (m_DisplayPlayerTab) {
-            m_PlayerInfoDisplay.Update(timeslice);  // Met à jour les infos du joueur
+        if (m_DisplayPlayerTab && m_ActiveTabIndex == 5) {
+            m_PlayerInfoDisplay.Update(timeslice);
         }
 	}
 	override bool OnClick(Widget w, int x, int y, int button) 
@@ -537,10 +605,16 @@ class ServerPanelMenu extends UIScriptedMenu {
 				OnDiscordBtnClick();
 				return true;
 			}
-			else if (w == m_btnTabTitle0 || w == m_btnTabTitle1 || w == m_btnTabTitle2 || w == m_btnTabTitle3 || w == m_btnTabTitle4 || w == m_btnTabTitle5)
+			else if (m_TabButtons)
 			{
-				OnBtnTabClick(w);
-				return true;
+				for (int tb = 0; tb < m_TabButtons.Count(); tb++)
+				{
+					if (w == m_TabButtons.Get(tb))
+					{
+						SetActiveTab(tb);
+						return true;
+					}
+				}
 			}
 		}
 		return false;
@@ -569,99 +643,57 @@ class ServerPanelMenu extends UIScriptedMenu {
 		return true;
 	}
 
-	protected bool OnBtnTabClick(Widget w)	
+	private void InitTabArrays()
 	{
-		if (w == m_btnTabTitle0)	
+		m_TabPanels = new array<Widget>();
+		m_TabPanels.Insert(m_Tab0);
+		m_TabPanels.Insert(m_Tab1);
+		m_TabPanels.Insert(m_Tab2);
+		m_TabPanels.Insert(m_Tab3);
+		m_TabPanels.Insert(m_Tab4);
+		m_TabPanels.Insert(m_Tab5);
+
+		m_TabButtons = new array<ButtonWidget>();
+		m_TabButtons.Insert(m_btnTabTitle0);
+		m_TabButtons.Insert(m_btnTabTitle1);
+		m_TabButtons.Insert(m_btnTabTitle2);
+		m_TabButtons.Insert(m_btnTabTitle3);
+		m_TabButtons.Insert(m_btnTabTitle4);
+		m_TabButtons.Insert(m_btnTabTitle5);
+	}
+
+	private void SetActiveTab(int activeIndex)
+	{
+		if (!m_TabPanels || !m_TabButtons)
+			return;
+
+		if (activeIndex < 0 || activeIndex >= m_TabPanels.Count() || activeIndex >= m_TabButtons.Count())
+			return;
+
+		for (int i = 0; i < m_TabPanels.Count(); i++)
 		{
-			m_Tab0.Show(true);
-			m_Tab1.Show(false);
-			m_Tab2.Show(false);
-			m_Tab3.Show(false);
-			m_Tab4.Show(false);
-			m_Tab5.Show(false);
-			m_btnTabTitle0.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			Widget tab = m_TabPanels.Get(i);
+			if (tab)
+				tab.Show(i == activeIndex);
 		}
-		else if (w == m_btnTabTitle1)	
+
+		for (int j = 0; j < m_TabButtons.Count(); j++)
 		{
-			m_Tab0.Show(false);
-			m_Tab1.Show(true);
-			m_Tab2.Show(false);
-			m_Tab3.Show(false);
-			m_Tab4.Show(false);
-			m_Tab5.Show(false);
-			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle1.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			ButtonWidget btn = m_TabButtons.Get(j);
+			if (btn)
+			{
+				if (j == activeIndex)
+					btn.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
+				else
+					btn.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+			}
 		}
-		else if (w == m_btnTabTitle2)	
-		{
-			m_Tab0.Show(false);
-			m_Tab1.Show(false);
-			m_Tab2.Show(true);
-			m_Tab3.Show(false);
-			m_Tab4.Show(false);
-			m_Tab5.Show(false);
-			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle2.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
+
+		m_ActiveTabIndex = activeIndex;
+
+		if (activeIndex == 4 && m_DisplayCraftingTab && m_CraftingDisplay) {
+			m_CraftingDisplay.EnsureRecipesLoadedOnce();
 		}
-		else if (w == m_btnTabTitle3)	
-		{
-			m_Tab0.Show(false);
-			m_Tab1.Show(false);
-			m_Tab2.Show(false);
-			m_Tab3.Show(true);
-			m_Tab4.Show(false);
-			m_Tab5.Show(false);
-			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle3.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-		}
-		else if (w == m_btnTabTitle4)	
-		{
-			m_Tab0.Show(false);
-			m_Tab1.Show(false);
-			m_Tab2.Show(false);
-			m_Tab3.Show(false);
-			m_Tab4.Show(true);
-			m_Tab5.Show(false);
-			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle4.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-			m_btnTabTitle5.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-		}
-		else if (w == m_btnTabTitle5)	
-		{
-			m_Tab0.Show(false);
-			m_Tab1.Show(false);
-			m_Tab2.Show(false);
-			m_Tab3.Show(false);
-			m_Tab4.Show(false);
-			m_Tab5.Show(true);
-			m_btnTabTitle0.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle1.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle2.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle3.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle4.SetColor(ServerPanelConstants.NORMAL_BUTTON_COLOR);
-			m_btnTabTitle5.SetColor(ServerPanelConstants.ACTIVE_BUTTON_COLOR);
-		}
-		return true;
 	}
 
 	void Back() {
@@ -695,6 +727,10 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		// Stop any scheduled UI updates
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(UpdateHeader);
+
+		if (m_DisplayPlayerTab && m_PlayerInfoDisplay) {
+			m_PlayerInfoDisplay.OnMenuHide();
+		}
 	}
 
 	override void OnShow() 
@@ -702,16 +738,21 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		super.OnShow();
 
+		ResetSidePanelUiCache();
+
+		if (m_DisplayPlayerTab && m_PlayerInfoDisplay) {
+			m_PlayerInfoDisplay.OnMenuShow();
+		}
+
+		if (m_DisplayCraftingTab && m_CraftingDisplay && m_ActiveTabIndex == 4) {
+			m_CraftingDisplay.EnsureRecipesLoadedOnce();
+		}
+
 		// Re-initialiser le joueur au cas où l'objet aurait changé
 		//Player = PlayerBase.Cast(g_Game.GetPlayer());
 
-		// Request synchronization of player stats, as required for the panel display
-		if (m_DisplayPlayerTab) {
-			GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncPlayerStatsRequest", new Param1<int>(0), true, NULL);
-		}
-
-		if (m_DisplaySidePanel) {
-			GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncSidePanelInfoRequest", new Param1<int>(0), true, NULL);
+		if (m_DisplayPlayerTab || m_DisplaySidePanel) {
+			GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncPanelStatsRequest", new Param1<int>(0), true, NULL);
 		}
 
 		//PerformWidgetAdjustments();
@@ -762,121 +803,150 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 	void UpdateBloodDisplay(float sBlood) 
 	{
-		// Création des widgets d'image pour le sang
-		ImageWidget bloodIcon0 = ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget0"));
-		ImageWidget bloodIcon1 = ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget1"));
-		ImageWidget bloodIcon2 = ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget2"));
-		ImageWidget bloodIcon3 = ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget3"));
-
 		// Mettre à jour les icônes de gouttes de sang en fonction des niveaux de sang
 		if (sBlood > PlayerConstants.SL_BLOOD_HIGH) {
-			SetIconState(bloodIcon0, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
-			SetIconState(bloodIcon1, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
-			SetIconState(bloodIcon2, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
-			SetIconState(bloodIcon3, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 0, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 1, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 2, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 3, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
 		} else if (sBlood > PlayerConstants.SL_BLOOD_NORMAL) {
-			SetIconState(bloodIcon0, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
-			SetIconState(bloodIcon1, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
-			SetIconState(bloodIcon2, "set:dayz_gui image:iconBlood2", ServerPanelConstants.WHITE);
-			SetIconState(bloodIcon3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 0, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 1, "set:dayz_gui image:iconBlood0", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 2, "set:dayz_gui image:iconBlood2", ServerPanelConstants.WHITE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.WHITE);
 		} else if (sBlood > PlayerConstants.SL_BLOOD_LOW) {
-			SetIconState(bloodIcon0, "set:dayz_gui image:iconBlood0", ServerPanelConstants.YELLOW);
-			SetIconState(bloodIcon1, "set:dayz_gui image:iconBlood2", ServerPanelConstants.YELLOW);
-			SetIconState(bloodIcon2, "set:dayz_gui image:iconBlood4", ServerPanelConstants.YELLOW);
-			SetIconState(bloodIcon3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.YELLOW);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 0, "set:dayz_gui image:iconBlood0", ServerPanelConstants.YELLOW);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 1, "set:dayz_gui image:iconBlood2", ServerPanelConstants.YELLOW);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 2, "set:dayz_gui image:iconBlood4", ServerPanelConstants.YELLOW);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.YELLOW);
 		} else if (sBlood > PlayerConstants.SL_BLOOD_CRITICAL) {
-			SetIconState(bloodIcon0, "set:dayz_gui image:iconBlood2", ServerPanelConstants.ORANGE);
-			SetIconState(bloodIcon1, "set:dayz_gui image:iconBlood4", ServerPanelConstants.ORANGE);
-			SetIconState(bloodIcon2, "set:dayz_gui image:iconBlood4", ServerPanelConstants.ORANGE);
-			SetIconState(bloodIcon3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.ORANGE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 0, "set:dayz_gui image:iconBlood2", ServerPanelConstants.ORANGE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 1, "set:dayz_gui image:iconBlood4", ServerPanelConstants.ORANGE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 2, "set:dayz_gui image:iconBlood4", ServerPanelConstants.ORANGE);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.ORANGE);
 		} else {
-			SetIconState(bloodIcon0, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
-			SetIconState(bloodIcon1, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
-			SetIconState(bloodIcon2, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
-			SetIconState(bloodIcon3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 0, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 1, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 2, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
+			SetIconState(m_BloodIcons, m_BloodIconPathsCache, m_BloodIconColorsCache, 3, "set:dayz_gui image:iconBlood4", ServerPanelConstants.RED);
 		}
 	}	
 	void UpdateWaterDisplay(float sWater) 
 	{
-		// Création des widgets d'image pour l'eau
-		ImageWidget waterIcon0 = ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget0"));
-		ImageWidget waterIcon1 = ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget1"));
-		ImageWidget waterIcon2 = ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget2"));
-		ImageWidget waterIcon3 = ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget3"));
-
 		// Mettre à jour les icônes de bouteilles d'eau en fonction des niveaux d'eau
 		if (sWater >= PlayerConstants.SL_WATER_HIGH) {
-			SetIconState(waterIcon0, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
-			SetIconState(waterIcon1, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
-			SetIconState(waterIcon2, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
-			SetIconState(waterIcon3, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 0, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 1, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 2, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 3, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
 		} else if (sWater > PlayerConstants.SL_WATER_NORMAL) {
-			SetIconState(waterIcon0, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
-			SetIconState(waterIcon1, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
-			SetIconState(waterIcon2, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
-			SetIconState(waterIcon3, "set:dayz_gui image:iconThirsty2", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 0, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 1, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 2, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.WHITE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 3, "set:dayz_gui image:iconThirsty2", ServerPanelConstants.WHITE);
 		} else if (sWater > PlayerConstants.SL_WATER_LOW) {
-			SetIconState(waterIcon0, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.YELLOW);
-			SetIconState(waterIcon1, "set:dayz_gui image:iconThirsty2", ServerPanelConstants.YELLOW);
-			SetIconState(waterIcon2, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.YELLOW);
-			SetIconState(waterIcon3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.YELLOW);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 0, "set:dayz_gui image:iconThirsty0", ServerPanelConstants.YELLOW);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 1, "set:dayz_gui image:iconThirsty2", ServerPanelConstants.YELLOW);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 2, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.YELLOW);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.YELLOW);
 		} else if (sWater > PlayerConstants.SL_WATER_CRITICAL) {
-			SetIconState(waterIcon0, "set:dayz_gui image:iconThirsty2", ServerPanelConstants.ORANGE);
-			SetIconState(waterIcon1, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.ORANGE);
-			SetIconState(waterIcon2, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.ORANGE);
-			SetIconState(waterIcon3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.ORANGE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 0, "set:dayz_gui image:iconThirsty2", ServerPanelConstants.ORANGE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 1, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.ORANGE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 2, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.ORANGE);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.ORANGE);
 		} else {
-			SetIconState(waterIcon0, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
-			SetIconState(waterIcon1, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
-			SetIconState(waterIcon2, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
-			SetIconState(waterIcon3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 0, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 1, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 2, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
+			SetIconState(m_WaterIcons, m_WaterIconPathsCache, m_WaterIconColorsCache, 3, "set:dayz_gui image:iconThirsty4", ServerPanelConstants.RED);
 		}
 	}
 	void UpdateFoodDisplay(float sEnergy) 
 	{
-		// Création des widgets d'image pour la nourriture
-		ImageWidget foodIcon0 = ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget0"));
-		ImageWidget foodIcon1 = ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget1"));
-		ImageWidget foodIcon2 = ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget2"));
-		ImageWidget foodIcon3 = ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget3"));
-
 		// Mettre à jour les icônes de nourriture en fonction des niveaux d'énergie
 		if (sEnergy >= PlayerConstants.SL_ENERGY_HIGH) {
-			SetIconState(foodIcon0, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
-			SetIconState(foodIcon1, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
-			SetIconState(foodIcon2, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
-			SetIconState(foodIcon3, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 0, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 1, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 2, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 3, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
 
 		} else if (sEnergy >= PlayerConstants.SL_ENERGY_NORMAL) {
-			SetIconState(foodIcon0, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
-			SetIconState(foodIcon1, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
-			SetIconState(foodIcon2, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
-			SetIconState(foodIcon3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 0, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 1, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 2, "set:dayz_gui image:iconHungry0", ServerPanelConstants.WHITE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.WHITE);
 
 		} else if (sEnergy >= PlayerConstants.SL_ENERGY_LOW) {
-			SetIconState(foodIcon0, "set:dayz_gui image:iconHungry0", ServerPanelConstants.YELLOW);
-			SetIconState(foodIcon1, "set:dayz_gui image:iconHungry2", ServerPanelConstants.YELLOW);
-			SetIconState(foodIcon2, "set:dayz_gui image:iconHungry4", ServerPanelConstants.YELLOW);
-			SetIconState(foodIcon3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.YELLOW);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 0, "set:dayz_gui image:iconHungry0", ServerPanelConstants.YELLOW);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 1, "set:dayz_gui image:iconHungry2", ServerPanelConstants.YELLOW);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 2, "set:dayz_gui image:iconHungry4", ServerPanelConstants.YELLOW);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.YELLOW);
 
 		} else if (sEnergy > PlayerConstants.SL_ENERGY_CRITICAL) {
-			SetIconState(foodIcon0, "set:dayz_gui image:iconHungry2", ServerPanelConstants.ORANGE);
-			SetIconState(foodIcon1, "set:dayz_gui image:iconHungry4", ServerPanelConstants.ORANGE);
-			SetIconState(foodIcon2, "set:dayz_gui image:iconHungry4", ServerPanelConstants.ORANGE);
-			SetIconState(foodIcon3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.ORANGE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 0, "set:dayz_gui image:iconHungry2", ServerPanelConstants.ORANGE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 1, "set:dayz_gui image:iconHungry4", ServerPanelConstants.ORANGE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 2, "set:dayz_gui image:iconHungry4", ServerPanelConstants.ORANGE);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.ORANGE);
 
 		} else {
 			// Critical state: set blinking
-			SetIconState(foodIcon0, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
-			SetIconState(foodIcon1, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
-			SetIconState(foodIcon2, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
-			SetIconState(foodIcon3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 0, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 1, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 2, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
+			SetIconState(m_FoodIcons, m_FoodIconPathsCache, m_FoodIconColorsCache, 3, "set:dayz_gui image:iconHungry4", ServerPanelConstants.RED);
 		}
 	}
-	void SetIconState(ImageWidget icon, string imagePath, int color) 
+	void SetIconState(array<ImageWidget> icons, TStringArray pathCache, TIntArray colorCache, int index, string imagePath, int color) 
 	{
-		icon.LoadImageFile(0, imagePath);
-		icon.SetColor(color);
+		if (!icons || !pathCache || !colorCache) {
+			return;
+		}
+
+		if (index < 0 || index >= icons.Count() || index >= pathCache.Count() || index >= colorCache.Count()) {
+			return;
+		}
+
+		ImageWidget icon = icons.Get(index);
+		if (!icon) {
+			return;
+		}
+
+		if (pathCache.Get(index) != imagePath) {
+			icon.LoadImageFile(0, imagePath);
+			pathCache.Set(index, imagePath);
+		}
+
+		if (colorCache.Get(index) != color) {
+			icon.SetColor(color);
+			colorCache.Set(index, color);
+		}
+	}
+
+	private void InitSidePanelIconCache()
+	{
+		m_BloodIcons = new array<ImageWidget>();
+		m_WaterIcons = new array<ImageWidget>();
+		m_FoodIcons = new array<ImageWidget>();
+		m_BloodIconPathsCache = new TStringArray();
+		m_WaterIconPathsCache = new TStringArray();
+		m_FoodIconPathsCache = new TStringArray();
+		m_BloodIconColorsCache = new TIntArray();
+		m_WaterIconColorsCache = new TIntArray();
+		m_FoodIconColorsCache = new TIntArray();
+
+		for (int i = 0; i < 4; i++) {
+			m_BloodIcons.Insert(ImageWidget.Cast(layoutRoot.FindAnyWidget("BloodImageWidget" + i.ToString())));
+			m_WaterIcons.Insert(ImageWidget.Cast(layoutRoot.FindAnyWidget("WaterImageWidget" + i.ToString())));
+			m_FoodIcons.Insert(ImageWidget.Cast(layoutRoot.FindAnyWidget("FoodImageWidget" + i.ToString())));
+
+			m_BloodIconPathsCache.Insert("");
+			m_WaterIconPathsCache.Insert("");
+			m_FoodIconPathsCache.Insert("");
+
+			m_BloodIconColorsCache.Insert(-1);
+			m_WaterIconColorsCache.Insert(-1);
+			m_FoodIconColorsCache.Insert(-1);
+		}
 	}
 
 	//Due to wrong v size with some test i've to try to set up the height by myself
@@ -942,7 +1012,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		GetHourMinuteSecond(hour, minute, second);
 		GetYearMonthDay(year, month, day);
 
-		//DayZGame game = DayZGame.Cast(GetGame());
+		//DayZGame game = DayZGame.Cast(g_Game);
 		int langIdx = g_Game.GetDisplayLanguage();
 		string formattedDate;
 

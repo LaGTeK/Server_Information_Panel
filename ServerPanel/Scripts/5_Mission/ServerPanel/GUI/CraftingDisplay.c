@@ -31,17 +31,36 @@ class CraftingDisplay
 	protected Widget m_SelectedPreviewWidget;
 
 	private bool m_IsAscendingSort = true;  // Indique si le tri est en mode A-Z (true) ou Z-A (false)
+	private string m_LastIngredient1Class = "";
+	private string m_LastIngredient2Class = "";
+	private string m_LastResult0Class = "";
+	private string m_LastResult1Class = "";
+	private string m_LastResult2Class = "";
+
+	private const int SEARCH_DEBOUNCE_MS = 150;
+	private string m_SearchDebounceLastSnapshot = "";
+
+	// Evite ClearItems/AddItem massifs si la liste affichable n'a pas change (vanilla + mods = beaucoup de recettes).
+	private int m_LastDisplayedListFingerprint = -1;
+	private bool m_FilteredRecipesNeedResort = true;
+	private bool m_LastSortedAscending = true;
+	private bool m_RecipesLoadedOnce = false;
 
     void CraftingDisplay() {
         m_AllRecipes = new array<ref CraftingRecipe>;
         m_FilteredRecipes = new array<ref CraftingRecipe>;
         m_SearchText = "";
+		m_FilteredRecipesNeedResort = true;
     }
+
+	void ~CraftingDisplay() {
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.ApplySearchDebounced);
+	}
 
     // Initialize the UI components from layout
     void Init(Widget rootWidget) {
 		
-		m_RootWidget = GetGame().GetWorkspace().CreateWidgets("ServerPanel/GUI/layouts/CraftingDisplay.layout", rootWidget.FindAnyWidget("Tab_4"));
+		m_RootWidget = g_Game.GetWorkspace().CreateWidgets("ServerPanel/GUI/layouts/CraftingDisplay.layout", rootWidget.FindAnyWidget("Tab_4"));
 
         m_CraftListTextListboxWidget = TextListboxWidget.Cast(m_RootWidget.FindAnyWidget("CraftListTextListboxWidget"));
 
@@ -83,38 +102,72 @@ class CraftingDisplay
 
 		WidgetEventHandler.GetInstance().RegisterOnMouseButtonUp(m_SortButtonWidget, this, "OnSortButtonClicked");
 
-        // Charger toutes les recettes dans la liste
+		if (m_SearchEditBoxWidget) {
+			m_SearchDebounceLastSnapshot = m_SearchEditBoxWidget.GetText();
+		}
+    }
+
+	// Premier passage sur l'onglet Craft : PluginRecipesManager est pret ; cache session dans SPRecipeManager.
+	void EnsureRecipesLoadedOnce() {
+		if (m_RecipesLoadedOnce) {
+			return;
+		}
+
 		LoadAllRecipes();
-		
-		// Copie manuelle des recettes dans m_FilteredRecipes
-		m_FilteredRecipes.Clear();  // S'assurer que la liste est vide avant de remplir
+		if (!m_AllRecipes || m_AllRecipes.Count() == 0) {
+			return;
+		}
+
+		m_RecipesLoadedOnce = true;
+
+		m_FilteredRecipes.Clear();
 		foreach (CraftingRecipe recipe : m_AllRecipes) {
 			m_FilteredRecipes.Insert(recipe);
 		}
-		
-		DisplayFilteredRecipes();  // Afficher les recettes immédiatement
 
-		// Sélection automatique de la première recette
+		m_FilteredRecipesNeedResort = true;
+		DisplayFilteredRecipes();
+
 		if (m_FilteredRecipes.Count() > 0) {
 			m_CraftListTextListboxWidget.SelectRow(0);
 			DisplayRecipeDetails(m_FilteredRecipes[0]);
 		}
-    }
 
-    // Load all recipes dynamically
+		if (m_SearchEditBoxWidget) {
+			m_SearchDebounceLastSnapshot = m_SearchEditBoxWidget.GetText();
+		}
+	}
+
     void LoadAllRecipes() {
         SPRecipeManager recipeManager = new SPRecipeManager();
-        m_AllRecipes = recipeManager.GetAllRecipes();  // Assuming SPRecipeManager handles the filtering
+        m_AllRecipes = recipeManager.GetAllRecipes();
     }
 
     // Update method to handle search
     void Update(float timeslice) {
-        if (m_SearchText != m_SearchEditBoxWidget.GetText()) {
-            m_SearchText = m_SearchEditBoxWidget.GetText();
-            FilterRecipes();
-            DisplayFilteredRecipes();
-        }
+		if (!m_SearchEditBoxWidget) {
+			return;
+		}
+
+		string currentSearch = m_SearchEditBoxWidget.GetText();
+		if (currentSearch == m_SearchDebounceLastSnapshot) {
+			return;
+		}
+
+		m_SearchDebounceLastSnapshot = currentSearch;
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.ApplySearchDebounced);
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ApplySearchDebounced, SEARCH_DEBOUNCE_MS, false);
     }
+
+	private void ApplySearchDebounced() {
+		if (!m_SearchEditBoxWidget) {
+			return;
+		}
+
+		m_SearchText = m_SearchEditBoxWidget.GetText();
+		FilterRecipes();
+		DisplayFilteredRecipes();
+	}
 
 	// Function to remove unwanted characters
 	string RemoveSpecialCharacters(string text) {
@@ -133,6 +186,7 @@ class CraftingDisplay
 	// Filter recipes based on the search text
 	void FilterRecipes() {
 		m_FilteredRecipes.Clear();
+		m_FilteredRecipesNeedResort = true;
 		
 		// Convert the search text to lowercase in place, then remove special characters
 		m_SearchText.ToLower();
@@ -180,35 +234,72 @@ class CraftingDisplay
 	}*/
 	// Sort the recipes alphabetically by display name in either ascending (A-Z) or descending (Z-A) order
 	void SortRecipesAlphabetically(array<ref CraftingRecipe> recipesArray, bool isAscending) {
-		for (int i = 0; i < recipesArray.Count() - 1; i++) {
-			for (int j = i + 1; j < recipesArray.Count(); j++) {
-				string recipeNameI = recipesArray[i].GetDisplayName();
-				recipeNameI.ToLower();  // Modifier directement la chaîne en minuscules
+		if (!recipesArray || recipesArray.Count() <= 1) {
+			return;
+		}
 
-				string recipeNameJ = recipesArray[j].GetDisplayName();
-				recipeNameJ.ToLower();  // Modifier directement la chaîne en minuscules
+		QuickSortRecipes(recipesArray, 0, recipesArray.Count() - 1, isAscending);
+	}
 
-				// Comparer en fonction de l'ordre croissant ou décroissant
-				bool shouldSwap = false;
+	private void QuickSortRecipes(array<ref CraftingRecipe> recipesArray, int low, int high, bool isAscending)
+	{
+		if (low >= high) {
+			return;
+		}
 
-				if (isAscending) {
-					if (recipeNameJ < recipeNameI) {
-						shouldSwap = true;
-					}
-				} else {
-					if (recipeNameJ > recipeNameI) {
-						shouldSwap = true;
-					}
-				}
+		int i = low;
+		int j = high;
+		CraftingRecipe pivotRecipe = recipesArray[(low + high) / 2];
 
-				// Si on doit échanger les éléments, on le fait ici
-				if (shouldSwap) {
-					CraftingRecipe temp = recipesArray[i];
-					recipesArray[i] = recipesArray[j];
-					recipesArray[j] = temp;
-				}
+		while (i <= j) {
+			while (CompareRecipeNames(recipesArray[i], pivotRecipe, isAscending) < 0) {
+				i++;
+			}
+
+			while (CompareRecipeNames(recipesArray[j], pivotRecipe, isAscending) > 0) {
+				j--;
+			}
+
+			if (i <= j) {
+				CraftingRecipe temp = recipesArray[i];
+				recipesArray[i] = recipesArray[j];
+				recipesArray[j] = temp;
+				i++;
+				j--;
 			}
 		}
+
+		if (low < j) {
+			QuickSortRecipes(recipesArray, low, j, isAscending);
+		}
+
+		if (i < high) {
+			QuickSortRecipes(recipesArray, i, high, isAscending);
+		}
+	}
+
+	private int CompareRecipeNames(CraftingRecipe left, CraftingRecipe right, bool isAscending)
+	{
+		string leftName = left.GetDisplayName();
+		string rightName = right.GetDisplayName();
+		leftName.ToLower();
+		rightName.ToLower();
+
+		if (leftName == rightName) {
+			return 0;
+		}
+
+		if (isAscending) {
+			if (leftName < rightName) {
+				return -1;
+			}
+			return 1;
+		}
+
+		if (leftName > rightName) {
+			return -1;
+		}
+		return 1;
 	}
 
 	// Called when the sort button is clicked
@@ -240,14 +331,42 @@ class CraftingDisplay
 	}*/
 	// Display filtered recipes in the listbox
 	void DisplayFilteredRecipes() {
-		// Trier les recettes en fonction de l'état actuel (A-Z ou Z-A)
-		SortRecipesAlphabetically(m_FilteredRecipes, m_IsAscendingSort);
-		
+		if (m_FilteredRecipesNeedResort || m_LastSortedAscending != m_IsAscendingSort) {
+			SortRecipesAlphabetically(m_FilteredRecipes, m_IsAscendingSort);
+			m_FilteredRecipesNeedResort = false;
+			m_LastSortedAscending = m_IsAscendingSort;
+		}
+
+		int fingerprint = ComputeDisplayedListFingerprint();
+		if (fingerprint == m_LastDisplayedListFingerprint && m_CraftListTextListboxWidget) {
+			return;
+		}
+
+		m_LastDisplayedListFingerprint = fingerprint;
+
 		m_CraftListTextListboxWidget.ClearItems();
-		
+
 		foreach (CraftingRecipe recipe : m_FilteredRecipes) {
 			m_CraftListTextListboxWidget.AddItem(recipe.GetDisplayName(), recipe, 0);
 		}
+	}
+
+	private int ComputeDisplayedListFingerprint()
+	{
+		int fp = 29;
+		if (m_IsAscendingSort) {
+			fp = 17;
+		}
+		int cnt = m_FilteredRecipes.Count();
+		fp = fp * 1000003 + cnt;
+
+		foreach (CraftingRecipe recipe : m_FilteredRecipes) {
+			string recipeLabel = recipe.GetDisplayName();
+			fp = fp * 1000003 + recipeLabel.Length();
+			fp = fp * 1000003 + recipeLabel.Hash();
+		}
+
+		return fp;
 	}
 
 
@@ -348,7 +467,7 @@ class CraftingDisplay
 			
 			EntityAI currentResultItem0 = m_ResultCraft0ItemPreviewWidget.GetItem();
 			if (currentResultItem0) {
-				GetGame().ObjectDelete(currentResultItem0);  // Supprimer l'objet actuel si existant
+				g_Game.ObjectDelete(currentResultItem0);  // Supprimer l'objet actuel si existant
 				m_ResultCraft0ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
 			}
 			//resultItem0 = recipe.Results[0].displayName;
@@ -572,80 +691,51 @@ class CraftingDisplay
 	}
 
 	void DisplayIngredientPreview1(string ingredientClassName) {
-		EntityAI currentItem = m_Ingredient1ItemPreviewWidget.GetItem();
-		if (currentItem) {
-			GetGame().ObjectDelete(currentItem);  // Supprimer l'objet actuel si existant
-			m_Ingredient1ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
-		}
-		
-		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(ingredientClassName), "0 0 0", ECE_LOCAL));
-		if (previewItem) {
-			m_Ingredient1ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
-		} else {
-			Print("Erreur DisplayIngredientPreview1 : Impossible de créer un aperçu pour la classe : " + ingredientClassName);
-		}
+		UpdatePreviewWidget(m_Ingredient1ItemPreviewWidget, ingredientClassName, m_LastIngredient1Class, "DisplayIngredientPreview1");
 	}
 
 	void DisplayIngredientPreview2(string ingredientClassName) {
-		EntityAI currentItem = m_Ingredient2ItemPreviewWidget.GetItem();
-		if (currentItem) {
-			GetGame().ObjectDelete(currentItem);  // Supprimer l'objet actuel si existant
-			m_Ingredient2ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
-		}
-		
-		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(ingredientClassName), "0 0 0", ECE_LOCAL));
-		if (previewItem) {
-			m_Ingredient2ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
-		} else {
-			Print("Erreur DisplayIngredientPreview2 : Impossible de créer un aperçu pour la classe : " + ingredientClassName);
-		}
+		UpdatePreviewWidget(m_Ingredient2ItemPreviewWidget, ingredientClassName, m_LastIngredient2Class, "DisplayIngredientPreview2");
 	}
 
 	void DisplayResultPreview0(string resultClassName) {
-		EntityAI currentItem = m_ResultCraft0ItemPreviewWidget.GetItem();
-		if (currentItem) {
-			GetGame().ObjectDelete(currentItem);  // Supprimer l'objet actuel si existant
-			m_ResultCraft0ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
-		}
-		
-		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL));
-		if (previewItem) {
-			//m_ResultCraft0ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
-			m_ResultCraft0ItemPreviewWidget.SetItem(previewItem);  // Afficher l'aperçu du nouvel ingrédient
-		} else {
-			Print("Erreur DisplayResultPreview0 : Impossible de créer un aperçu pour la classe : " + resultClassName);
-		}
+		UpdatePreviewWidget(m_ResultCraft0ItemPreviewWidget, resultClassName, m_LastResult0Class, "DisplayResultPreview0");
 	}
 
 	void DisplayResultPreview1(string resultClassName) {
-		EntityAI currentItem = m_ResultCraft1ItemPreviewWidget.GetItem();
-		if (currentItem) {
-			GetGame().ObjectDelete(currentItem);  // Supprimer l'objet actuel si existant
-			m_ResultCraft1ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
-		}
-		
-		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL));
-		if (previewItem) {
-			//m_ResultCraft1ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
-			m_ResultCraft1ItemPreviewWidget.SetItem(previewItem);  // Afficher l'aperçu du nouvel ingrédient
-		} else {
-			Print("Erreur DisplayResultPreview1 : Impossible de créer un aperçu pour la classe : " + resultClassName);
-		}
+		UpdatePreviewWidget(m_ResultCraft1ItemPreviewWidget, resultClassName, m_LastResult1Class, "DisplayResultPreview1");
 	}
 
 	void DisplayResultPreview2(string resultClassName) {
-		EntityAI currentItem = m_ResultCraft2ItemPreviewWidget.GetItem();
-		if (currentItem) {
-			GetGame().ObjectDelete(currentItem);  // Supprimer l'objet actuel si existant
-			m_ResultCraft2ItemPreviewWidget.SetItem(null);  // Réinitialiser l'aperçu pour éviter tout conflit
+		UpdatePreviewWidget(m_ResultCraft2ItemPreviewWidget, resultClassName, m_LastResult2Class, "DisplayResultPreview2");
+	}
+
+	private void UpdatePreviewWidget(ItemPreviewWidget previewWidget, string className, out string lastClassName, string logContext)
+	{
+		if (!previewWidget || className == "") {
+			return;
 		}
-		
-		EntityAI previewItem = EntityAI.Cast(GetGame().CreateObjectEx(FilterClassName(resultClassName), "0 0 0", ECE_LOCAL));
+
+		string filteredClassName = FilterClassName(className);
+
+		// Skip object recreation if this slot already displays the same class.
+		if (lastClassName == filteredClassName && previewWidget.GetItem()) {
+			return;
+		}
+
+		EntityAI currentItem = previewWidget.GetItem();
+		if (currentItem) {
+			g_Game.ObjectDelete(currentItem);
+			previewWidget.SetItem(null);
+		}
+
+		EntityAI previewItem = EntityAI.Cast(g_Game.CreateObjectEx(filteredClassName, "0 0 0", ECE_LOCAL));
 		if (previewItem) {
-			//m_ResultCraft2ItemPreviewWidget.SetItem(EntityAI.Cast(previewItem));  // Afficher l'aperçu du nouvel ingrédient
-			m_ResultCraft2ItemPreviewWidget.SetItem(previewItem);  // Afficher l'aperçu du nouvel ingrédient
+			previewWidget.SetItem(previewItem);
+			lastClassName = filteredClassName;
 		} else {
-			Print("Erreur DisplayResultPreview2 : Impossible de créer un aperçu pour la classe : " + resultClassName);
+			Print("Erreur " + logContext + " : Impossible de creer un apercu pour la classe : " + className);
+			lastClassName = "";
 		}
 	}
 

@@ -20,27 +20,58 @@ class PlayerInfoDisplay {
 	protected ImageWidget 						m_ImgNight,m_ImgSun,m_ImgCloud,m_ImgStorm,m_ImgRain,m_ImgFog,m_ImgWind;
 
 	private ref FullTimeData m_TimeSurvivedFull;
+	private ref FullTimeData m_ServerUptimeFull;
+
+	private bool m_PlayerInfoHaveSnapshot;
+	private int m_LastPIHealth;
+	private int m_LastPIBlood;
+	private float m_LastPIShock;
+	private float m_LastPIStamina;
+	private float m_LastPIServerUptime;
+	private bool m_LastPIDisease;
+	private string m_LastPILongestShotText;
+	private string m_LastPIPKilledText;
+	private string m_LastPIZKilledText;
+	private string m_LastPIDistanceText;
+	private string m_LastPISurvivalText;
+	private string m_LastPIServerUptimeText;
+	private int m_LastPIHealthBarColor;
+	private int m_LastPIBloodBarColor;
 
 	void PlayerInfoDisplay(PlayerBase player) {
 		m_Player = player;
 
 		m_TimeSurvivedFull = new FullTimeData();
-		//m_TimeSessionFull = new FullTimeData();
-		
-		// Appels à CallLater pour des mises à jour périodiques ou uniques
-		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ServerDate, 10000, true);  // Appelle ServerDate toutes les 10 secondes
-		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SPPlayerPreview, 500, false); // Appelle SPPlayerPreview une seule fois après 500 ms
-		
+		m_ServerUptimeFull = new FullTimeData();
+
+		m_LastPIHealth = -1;
+		m_LastPIBlood = -1;
+		m_LastPIShock = -1;
+		m_LastPIStamina = -1;
+		m_LastPIServerUptime = -1;
+		m_LastPIHealthBarColor = -1;
+		m_LastPIBloodBarColor = -1;
 	}
 
 	void ~PlayerInfoDisplay() {
-		// Retirer les appels CallLater lorsqu'on détruit l'instance
+		OnMenuHide();
+	}
+
+	void OnMenuShow() {
+		m_PlayerInfoHaveSnapshot = false;
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.ServerDate);
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.SPPlayerPreview);
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ServerDate, 10000, true);
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SPPlayerPreview, 500, false);
+	}
+
+	void OnMenuHide() {
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.ServerDate);
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(this.SPPlayerPreview);
 	}
 
 	void Init(Widget rootWidget) {
-		m_RootWidget = GetGame().GetWorkspace().CreateWidgets("ServerPanel/GUI/layouts/PlayerInfoDisplay.layout", rootWidget.FindAnyWidget("Tab_5"));
+		m_RootWidget = g_Game.GetWorkspace().CreateWidgets("ServerPanel/GUI/layouts/PlayerInfoDisplay.layout", rootWidget.FindAnyWidget("Tab_5"));
 		
 		// Initialize UI elements
 		m_Sex                           = TextWidget.Cast(m_RootWidget.FindAnyWidget("txt_sex"));
@@ -82,6 +113,17 @@ class PlayerInfoDisplay {
 	//void UpdatePlayerInfo(ref TIntArray PlayerDataI, ref TFloatArray PlayerDataF, bool sDisease)
 	void UpdatePlayerInfo(TIntArray PlayerDataI, TFloatArray PlayerDataF, bool sDisease)
 	{
+		if (!PlayerDataI || !PlayerDataF || PlayerDataI.Count() < 2 || PlayerDataF.Count() < 8)
+		{
+			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_WARNING, "UpdatePlayerInfo", "Invalid player info payload size - expected I>=2 and F>=8");
+			m_ServerUptime.SetText("N/A");
+			m_SurvivalTime.SetText("N/A");
+			m_PlayerInfoHaveSnapshot = false;
+			return;
+		}
+
+		bool full = !m_PlayerInfoHaveSnapshot;
+
 		int sHealth = PlayerDataI[0];
 		int sBlood = PlayerDataI[1];
 		float sShock = PlayerDataF[0];
@@ -92,59 +134,115 @@ class PlayerInfoDisplay {
 		float sInfected_killed = PlayerDataF[5];
 		float sLongest_survivor_hit = PlayerDataF[6];
 		float sServer_uptime = PlayerDataF[7];
-		//float m_ConnectionTime = PlayerDataF[8];
 
-		m_HealthBar.SetCurrent(sHealth);
-		m_BloodBar.SetCurrent(sBlood);
-		m_ShockBar.SetCurrent(sShock);
-		m_StaminaBar.SetCurrent(sStamina);
-
-		m_LongestShot.SetText(GetDistanceString(sLongest_survivor_hit));
-		m_PKilled.SetText(GetValueString(sPlayers_killed));
-		m_ZKilled.SetText(GetValueString(sInfected_killed));
-		m_DistanceTravelled.SetText(GetDistanceString(sDistance));
-
-		
-		if (sDisease)
-			m_Condition.SetText("#STR_SP_DISEASE_SICK");
-		else
-			m_Condition.SetText("#STR_SP_DISEASE_GOOD");
-
-		TimeConversions.ConvertSecondsToFullTime(sPlaytime, m_TimeSurvivedFull);			
-		m_SurvivalTime.SetText(m_TimeSurvivedFull.FormatedNonZero());
-		
-		if (sServer_uptime)
-		{			
-			// Affiche l’uptime (par exemple)
-			FullTimeData serverUptimeData = new FullTimeData();
-			TimeConversions.ConvertSecondsToFullTime(sServer_uptime, serverUptimeData);
-			string formattedServerUptime = serverUptimeData.FormatedNonZero();
-			m_ServerUptime.SetText(formattedServerUptime);
+		if (full || sHealth != m_LastPIHealth) {
+			m_HealthBar.SetCurrent(sHealth);
+			m_LastPIHealth = sHealth;
 		}
-		else
-		{	
-			m_ServerUptime.SetText("N/A");
+		if (full || sBlood != m_LastPIBlood) {
+			m_BloodBar.SetCurrent(sBlood);
+			m_LastPIBlood = sBlood;
+		}
+		if (full || sShock != m_LastPIShock) {
+			m_ShockBar.SetCurrent(sShock);
+			m_LastPIShock = sShock;
+		}
+		if (full || sStamina != m_LastPIStamina) {
+			m_StaminaBar.SetCurrent(sStamina);
+			m_LastPIStamina = sStamina;
 		}
 
-		// Blood Color Coding
-		if (sBlood <= 3000) {
-			//m_TextPlayerBlood.SetColor(ServerPanelConstants.RED);
-		} else if (sBlood <= 3500) {
-			m_BloodBar.SetColor(ServerPanelConstants.ORANGE);
-		} else if (sBlood <= 4000) {
-			m_BloodBar.SetColor(ServerPanelConstants.YELLOW);
-		} else if (sBlood <= 4500) {
-			m_BloodBar.SetColor(ServerPanelConstants.GREEN);
-		}			
+		string longestTxt = GetDistanceString(sLongest_survivor_hit);
+		if (full || longestTxt != m_LastPILongestShotText) {
+			m_LongestShot.SetText(longestTxt);
+			m_LastPILongestShotText = longestTxt;
+		}
 
-		// Health Color Coding based on PlayerConstants thresholds
+		string pKillTxt = GetValueString(sPlayers_killed);
+		if (full || pKillTxt != m_LastPIPKilledText) {
+			m_PKilled.SetText(pKillTxt);
+			m_LastPIPKilledText = pKillTxt;
+		}
+
+		string zKillTxt = GetValueString(sInfected_killed);
+		if (full || zKillTxt != m_LastPIZKilledText) {
+			m_ZKilled.SetText(zKillTxt);
+			m_LastPIZKilledText = zKillTxt;
+		}
+
+		string distTxt = GetDistanceString(sDistance);
+		if (full || distTxt != m_LastPIDistanceText) {
+			m_DistanceTravelled.SetText(distTxt);
+			m_LastPIDistanceText = distTxt;
+		}
+
+		if (full || sDisease != m_LastPIDisease) {
+			if (sDisease) {
+				m_Condition.SetText("#STR_SP_DISEASE_SICK");
+			} else {
+				m_Condition.SetText("#STR_SP_DISEASE_GOOD");
+			}
+			m_LastPIDisease = sDisease;
+		}
+
+		TimeConversions.ConvertSecondsToFullTime(sPlaytime, m_TimeSurvivedFull);
+		string survivalTxt = m_TimeSurvivedFull.FormatedNonZero();
+		if (full || survivalTxt != m_LastPISurvivalText) {
+			m_SurvivalTime.SetText(survivalTxt);
+			m_LastPISurvivalText = survivalTxt;
+		}
+
+		string uptimeTxt;
+		if (sServer_uptime) {
+			TimeConversions.ConvertSecondsToFullTime(sServer_uptime, m_ServerUptimeFull);
+			uptimeTxt = m_ServerUptimeFull.FormatedNonZero();
+		} else {
+			uptimeTxt = "N/A";
+		}
+		if (full || sServer_uptime != m_LastPIServerUptime || uptimeTxt != m_LastPIServerUptimeText) {
+			m_ServerUptime.SetText(uptimeTxt);
+			m_LastPIServerUptime = sServer_uptime;
+			m_LastPIServerUptimeText = uptimeTxt;
+		}
+
+		int bloodCol = GetPlayerInfoBloodBarColor(sBlood);
+		if (full || bloodCol != m_LastPIBloodBarColor) {
+			m_BloodBar.SetColor(bloodCol);
+			m_LastPIBloodBarColor = bloodCol;
+		}
+
+		int healthCol = GetPlayerInfoHealthBarColor(sHealth);
+		if (full || healthCol != m_LastPIHealthBarColor) {
+			m_HealthBar.SetColor(healthCol);
+			m_LastPIHealthBarColor = healthCol;
+		}
+
+		m_PlayerInfoHaveSnapshot = true;
+	}
+
+	private int GetPlayerInfoBloodBarColor(int sBlood)
+	{
+		if (sBlood <= 3500) {
+			return ServerPanelConstants.ORANGE;
+		}
+		if (sBlood <= 4000) {
+			return ServerPanelConstants.YELLOW;
+		}
+		if (sBlood <= 4500) {
+			return ServerPanelConstants.GREEN;
+		}
+		return ServerPanelConstants.WHITE;
+	}
+
+	private int GetPlayerInfoHealthBarColor(int sHealth)
+	{
 		if (sHealth <= PlayerConstants.SL_HEALTH_LOW) {
-			m_HealthBar.SetColor(ServerPanelConstants.ORANGE);
-		} else if (sHealth <= PlayerConstants.SL_HEALTH_NORMAL) {
-			m_HealthBar.SetColor(ServerPanelConstants.YELLOW);
+			return ServerPanelConstants.ORANGE;
 		}
-
-		//SessionTime(m_ConnectionTime);
+		if (sHealth <= PlayerConstants.SL_HEALTH_NORMAL) {
+			return ServerPanelConstants.YELLOW;
+		}
+		return ServerPanelConstants.WHITE;
 	}
 
 	void Update(float timeslice) {
@@ -155,7 +253,7 @@ class PlayerInfoDisplay {
 
 	private void DisplayPlayerTotalWeight()
 	{
-		if (GetGame().IsClient() || !GetGame().IsMultiplayer()) {
+		if (g_Game.IsClient() || !g_Game.IsMultiplayer()) {
 			// Récupérer le poids total en incluant l'objet en main
 			float totalWeight = m_Player.GetPlayerLoad(); // Le poids est en grammes
 
@@ -186,7 +284,7 @@ class PlayerInfoDisplay {
 	}
 
 	private void SPGender()	{
-		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
+		if(g_Game.IsClient() || !g_Game.IsMultiplayer())	{
 			if (m_Player){
 				if (m_Player.IsMale() )
 					m_Sex.SetText("#STR_SP_MALE_GENDER");
@@ -197,7 +295,7 @@ class PlayerInfoDisplay {
 	}
 
 	private void SPBloodName()	{
-		if(GetGame().IsClient() || !GetGame().IsMultiplayer())	{
+		if(g_Game.IsClient() || !g_Game.IsMultiplayer())	{
 			Class.CastTo(m_Player, g_Game.GetPlayer() );
 			
 			if( m_Player )	{
@@ -229,7 +327,7 @@ class PlayerInfoDisplay {
 		int year, month, day, hour, minute;
 		g_Game.GetWorld().GetDate(year, month, day, hour, minute);
 
-		//DayZGame game = DayZGame.Cast(GetGame());
+		//DayZGame game = DayZGame.Cast(g_Game);
 		int langIdx = g_Game.GetDisplayLanguage();
 		string formattedDate;
 
@@ -287,7 +385,7 @@ class PlayerInfoDisplay {
     }*/
 
 	private void SPPlayerPreview() {
-		if (GetGame().IsClient() || !GetGame().IsMultiplayer()) {
+		if (g_Game.IsClient() || !g_Game.IsMultiplayer()) {
 			// Obtient le joueur actuel
 			//PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
 			if (m_Player) {
