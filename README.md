@@ -9,34 +9,54 @@
 -   Add `CF` (Community Framework) and `Server_Information_Panel` to your game and server launch options. For example:
     `-mod=@CF;@Server_Information_Panel;`
 
+**Use the same mod version on client and server** (RPC / config sync must match).
+
 On server:
 
 -   Copy file `ServerPanel_V3.bikey` from `ServerPanel\keys` into server `keys` folder
--   When servr will start config will be created automaticalty if not found (`ServerPanel`).
--   `ServerPanel.json` will be generated automaticatly at first start or updated from the previous config
--   U can also leave a link blank & the button will disapear, same for tabs
+-   When the server starts, config will be created automatically if not found under **`$profile:\ServerPanel\`**
+-   **`ServerPanel.json`** is generated or upgraded on first start. The **authoritative** file for multiplayer is on the **server**; clients receive settings from the server.
+-   On version upgrade, the mod copies the current file to **`ServerPanel.json.bak`** before saving. If a backup cannot be used, it may be moved to **`ServerPanel.json.bak.rejected`**.
+-   You can leave a link blank and the button will disappear, same for tabs
 
-### Json File - [ServerPanelConfig.json](https://github.com/LaGTeK/Server_Information_Panel/blob/master/Profiles/ServerPanel/ServerPanel.json)
+### Json file — [`ServerPanel.json`](https://github.com/LaGTeK/Server_Information_Panel/blob/master/Profiles/ServerPanel/ServerPanel.json)
+
+The file name is **`ServerPanel.json`** (not `ServerPanelConfig.json`).
+
+**`LOGLEVEL`** (module logger only; some `Print("[ServerPanel] …")` boot lines may still appear):
+
+| Value | Effect |
+|-------|--------|
+| `0` | No `ServerPanelLogger` output |
+| `1` | Info, warnings, errors |
+| `2` | Warnings and errors only |
+| `3` | Errors only |
+
+**`DISABLE_PANEL_LOG_FILE`**: `true` = do not create `ServerPanel_*.log` under `Profiles\...\ServerPanel\Logs\` (logging goes to console only, still filtered by `LOGLEVEL`). `false` = log file when possible.
+
+Standard JSON does **not** allow `//` comments inside the file. Use the **field reference** table below the example for what each key does.
+
 ```
 {
     "VERSION": "1.7",
     "SERVERNAME": "Welcome on MyDayZ server !! - Hosted By MyDayZ.eu",
     "LOGLEVEL": 1,
+    "DISABLE_PANEL_LOG_FILE": false,
     "BUTTON1NAME": "DISCORD",
     "BUTTON1LINK": "https://discord.gg/KAgNn6K",
     "BUTTON2NAME": "WEBSITE",
     "BUTTON2LINK": "https://mydayz.eu",
     "BUTTON3NAME": "DONATE",
     "BUTTON3LINK": "https://www.paypal.me/MyDayZ",
-    "DISPLAYPLAYERINFO": 1,
-    "DISPLAYPLAYERTAB": 1,
-    "DISPLAYPLAYERLIST": 1,
-    "DISPLAYPLAYERPOSITION": 1,
-    "DISPLAYCRAFTTAB": 1,
-    "DISPLAYCURRENCY": 1,
+    "DISPLAYPLAYERINFO": true,
+    "DISPLAYPLAYERTAB": true,
+    "DISPLAYPLAYERLIST": true,
+    "DISPLAYPLAYERPOSITION": true,
+    "DISPLAYCRAFTTAB": true,
+    "DISPLAYCURRENCY": true,
     "CURRENCYNAME": "Rubles",
-    "DISPLAYPLOGO": 1,
-    "LOGOPATH": "set:dayz_gui image:ProgressDayZFull", //You Can use an Image set, edds file or PAA ex:("LOGOPATH": "ServerPanel/GUI/imageset/logo-server-panel.paa"). Your image File need to be stored inside your modpack/loading screen.
+    "DISPLAYPLOGO": true,
+    "LOGOPATH": "set:dayz_gui image:ProgressDayZFull",
     "LOGO_WIDTH_PERCENTAGE": 87.0,
     "LOGO_HEIGHT_PERCENTAGE": 83.0,
     "BUTTONTAB0NAME": "TAB0",
@@ -134,8 +154,35 @@ On server:
 }
 ```
 
+### Field reference (`ServerPanel.json`)
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `VERSION` | string | Config format version the mod expects; used when loading, upgrading, and merging defaults. Should match the version shipped with your mod build (see release notes). |
+| `SERVERNAME` | string | Title shown in the panel header. |
+| `LOGLEVEL` | int `0`–`3` | Filters `ServerPanelLogger` output only; see the table earlier in this README. Some boot `Print("[ServerPanel] …")` lines may still appear on the server. |
+| `DISABLE_PANEL_LOG_FILE` | bool | `true` = no `ServerPanel_*.log` files under `ServerPanel\Logs\` (console only when `LOGLEVEL` allows). `false` = write log files when possible. |
+| `BUTTON1NAME` … `BUTTON3NAME` | string | Label for each of the three top link buttons. |
+| `BUTTON1LINK` … `BUTTON3LINK` | string | URL for each button. If a link is empty, that button is hidden. |
+| `DISPLAYPLAYERINFO` | bool | `true` = show the **left side panel** (player quick info / layout slot). |
+| `DISPLAYPLAYERTAB` | bool | `true` = show the **player stats** tab. |
+| `DISPLAYPLAYERLIST` | bool | `true` = show the **player list** in the side area (only meaningful when `DISPLAYPLAYERINFO` is `true`). |
+| `DISPLAYPLAYERPOSITION` | bool | `true` = show the player’s **world coordinates** where the UI supports it. |
+| `DISPLAYCRAFTTAB` | bool | `true` = show the **crafting / recipes** tab. |
+| `DISPLAYCURRENCY` | bool | `true` = show the **currency / money** block **only if** the mod was built with Expansion Market support (`EXPANSIONMODMARKET`). Otherwise the block stays hidden. |
+| `CURRENCYNAME` | string | Display name for the currency (e.g. `Rubles`) when the currency block is shown. |
+| `DISPLAYPLOGO` | bool | `true` = show the **logo** above the player list when the list layout is active; `false` = no logo area. |
+| `LOGOPATH` | string | Path to the logo: DayZ **imageset** string, or `.edds` / `.paa` path. Example: `"set:dayz_gui image:ProgressDayZFull"` or a path to your own asset in the pack. |
+| `LOGO_WIDTH_PERCENTAGE` | float | Logo width as a **percentage** of the logo widget (e.g. `87.0` → 87%). |
+| `LOGO_HEIGHT_PERCENTAGE` | float | Logo height as a **percentage** of the logo widget (e.g. `83.0` → 83%). |
+| `BUTTONTAB0NAME` … `BUTTONTAB3NAME` | string | Tab button labels for the four **custom HTML** tabs. Empty or unused names can be adjusted to match your content. |
+| `sServerTab0` … `sServerTab3` | array of strings | Each entry is an **HTML fragment** (`<h1>`, `<p>`, `<b>`, `<i>`, etc.) rendered as lines in that tab’s content. Tab `0` uses `sServerTab0`, and so on. |
+
+Booleans can be written as JSON `true` / `false`. Older files may still use `1` / `0`; the mod normalizes them when loading.
+
 ## Q: Can i change default menu key ?
-A: Sure, U can now change default key in your Dayz Settings, by default key is `KC_PAUSE`.
+
+A: Yes — change the binding in **DayZ → Settings → Controls** for the mod action **`SPOpenPanelMenu`**. The default preset uses **Pause** (`KC_PAUSE`).
 
 This is WIP, It's my first mod and I work on this in my spare time. I will my best try to bring updates frequently!
 
@@ -147,4 +194,3 @@ This is WIP, It's my first mod and I work on this in my spare time. I will my be
 - Special Thanks to [Da0ne](https://github.com/Da0ne) from [Vanilla++](https://github.com/VanillaPlusPlus) for his help too :)
 - Special Thanks to [Vaker](https://github.com/Moondarker) from [ZomBerry Admin Tools](https://steamcommunity.com/sharedfiles/filedetails/?id=1582756848) for his help.
 - Special Thanks to HunterZ, TripleZ and Connor for your help with some translations :)
-
