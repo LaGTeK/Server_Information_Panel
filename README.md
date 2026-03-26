@@ -19,6 +19,19 @@ On server:
 -   On version upgrade, the mod copies the current file to **`ServerPanel.json.bak`** before saving. If a backup cannot be used, it may be moved to **`ServerPanel.json.bak.rejected`**.
 -   You can leave a link blank and the button will disappear, same for tabs
 
+## Recent changes (high-level)
+
+- **Config recovery and stability**
+  - The mod can recover configuration from `ServerPanel.json.bak` when the main file is missing/invalid.
+  - Invalid backups may be quarantined as `ServerPanel.json.bak.rejected` to avoid retry loops.
+- **UI performance**
+  - Reduced unnecessary UI updates (side panel snapshots, fewer redraws) for better responsiveness.
+- **Tab UX**
+  - Lightweight tab transitions when switching tabs.
+  - RichText content is fitted more reliably and tab scroll positions reset correctly.
+- **Auto-open on first join**
+  - Optional server setting to auto-open the panel once per player on that server (server-side persistence).
+
 ### Json file — [`ServerPanel.json`](https://github.com/LaGTeK/Server_Information_Panel/blob/master/Profiles/ServerPanel/ServerPanel.json)
 
 The file name is **`ServerPanel.json`** (not `ServerPanelConfig.json`).
@@ -38,8 +51,9 @@ Standard JSON does **not** allow `//` comments inside the file. Use the **field 
 
 ```
 {
-    "VERSION": "1.7",
+    "VERSION": "1.8",
     "SERVERNAME": "Welcome on MyDayZ server !! - Hosted By MyDayZ.eu",
+    "AUTO_OPEN_ON_FIRST_JOIN": true,
     "LOGLEVEL": 1,
     "DISABLE_PANEL_LOG_FILE": false,
     "BUTTON1NAME": "DISCORD",
@@ -160,6 +174,7 @@ Standard JSON does **not** allow `//` comments inside the file. Use the **field 
 |-----|------|-------------|
 | `VERSION` | string | Config format version the mod expects; used when loading, upgrading, and merging defaults. Should match the version shipped with your mod build (see release notes). |
 | `SERVERNAME` | string | Title shown in the panel header. |
+| `AUTO_OPEN_ON_FIRST_JOIN` | bool | If `true`, the panel auto-opens **once per player** (first join) on this server. The server tracks seen player IDs in `AutoOpenSeen.json` under `$profile:\ServerPanel\`. |
 | `LOGLEVEL` | int `0`–`3` | Filters `ServerPanelLogger` output only; see the table earlier in this README. Some boot `Print("[ServerPanel] …")` lines may still appear on the server. |
 | `DISABLE_PANEL_LOG_FILE` | bool | `true` = no `ServerPanel_*.log` files under `ServerPanel\Logs\` (console only when `LOGLEVEL` allows). `false` = write log files when possible. |
 | `BUTTON1NAME` … `BUTTON3NAME` | string | Label for each of the three top link buttons. |
