@@ -892,11 +892,11 @@ PanelWidgetClass ServerPanelMenu {
                ignoregloballv 0
                keepsafezone 0
                position 0 0
-               size 1 9999
+               size 1 1
                hexactpos 0
                vexactpos 0
                hexactsize 0
-               vexactsize 1
+               vexactsize 0
                scaled 1
                style DayZNormal
                text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<i>bla blb</i> alb</p>"
@@ -944,11 +944,11 @@ PanelWidgetClass ServerPanelMenu {
                inheritalpha 0
                ignorepointer 1
                position 0 0
-               size 1 9999
+               size 1 1
                hexactpos 0
                vexactpos 0
                hexactsize 0
-               vexactsize 1
+               vexactsize 0
                scaled 1
                style DayZNormal
                text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
@@ -995,11 +995,11 @@ PanelWidgetClass ServerPanelMenu {
                inheritalpha 0
                ignorepointer 1
                position 0 0
-               size 1 9999
+               size 1 1
                hexactpos 0
                vexactpos 0
                hexactsize 0
-               vexactsize 1
+               vexactsize 0
                scaled 1
                style DayZNormal
                text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"
@@ -1045,11 +1045,11 @@ PanelWidgetClass ServerPanelMenu {
                inheritalpha 0
                ignorepointer 1
                position 0 0
-               size 1 9999
+               size 1 1
                hexactpos 0
                vexactpos 0
                hexactsize 0
-               vexactsize 1
+               vexactsize 0
                scaled 1
                style DayZNormal
                text "<p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK</p><p><b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p><h1>blblla</h1><p>+ blbalfd lfds flsd</p><p>blablaOK<b>bla blb</b> alb</p>"

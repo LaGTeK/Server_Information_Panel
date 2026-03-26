@@ -26,6 +26,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 	//Tabs
 	private Widget 						m_Tab0,m_Tab1,m_Tab2,m_Tab3,m_Tab4,m_Tab5;
 
+	//Tab scroll areas
+	private ScrollWidget				m_TabScroll0, m_TabScroll1, m_TabScroll2, m_TabScroll3;
+
 	//Buttons Tab
 	private ButtonWidget 				m_btnTabTitle0,m_btnTabTitle1,m_btnTabTitle2,m_btnTabTitle3,m_btnTabTitle4,m_btnTabTitle5;
 
@@ -62,6 +65,22 @@ class ServerPanelMenu extends UIScriptedMenu {
 	private ref array<ButtonWidget> 	m_TabButtons;
 	private int 						m_ActiveTabIndex;
 
+	//Tab transition (lightweight, only on switch)
+	private bool						m_TabTransitioning;
+	private int							m_TabTransitionStep;
+	private Widget						m_TabTransitionOld;
+	private Widget						m_TabTransitionNew;
+	private float						m_TabTransitionY;
+	private float						m_TabTransitionOffX;
+	private const int					TAB_TRANSITION_STEPS = 18;
+	private const int					TAB_TRANSITION_MS = 10;
+
+	// Static tab content should be fitted once per menu open.
+	private bool						m_TabContentFitted0;
+	private bool						m_TabContentFitted1;
+	private bool						m_TabContentFitted2;
+	private bool						m_TabContentFitted3;
+
 	private bool 						m_SidePanelHaveSnapshot;
 	private string 						m_SidePanelCachedHealthText;
 	private int 						m_SidePanelCachedHealthColor;
@@ -91,6 +110,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_DisplayCraftingTab 	= config.DISPLAYCRAFTTAB;	
 		m_DisplayPlayerList 	= config.DISPLAYPLAYERLIST;		
 		m_DisplaySidePanel		= config.DISPLAYPLAYERINFO;
+
+		// Force initial SetActiveTab(...) to apply visibility correctly.
+		m_ActiveTabIndex = -1;
 
 		// Initialiser le Player une seule fois dans le constructeur
 		Player = PlayerBase.Cast(g_Game.GetPlayer());
@@ -145,6 +167,11 @@ class ServerPanelMenu extends UIScriptedMenu {
 		m_TextTab2						=	RichTextWidget.Cast(layoutRoot.FindAnyWidget("Text_Tab2"));
 		m_TextTab3						=	RichTextWidget.Cast(layoutRoot.FindAnyWidget("Text_Tab3"));
 
+		m_TabScroll0						=	ScrollWidget.Cast(layoutRoot.FindAnyWidget("ScrollWidget0"));
+		m_TabScroll1						=	ScrollWidget.Cast(layoutRoot.FindAnyWidget("ScrollWidget1"));
+		m_TabScroll2						=	ScrollWidget.Cast(layoutRoot.FindAnyWidget("ScrollWidget2"));
+		m_TabScroll3						=	ScrollWidget.Cast(layoutRoot.FindAnyWidget("ScrollWidget3"));
+
 		//Player Information Right Side
 		m_TextPlayerNickname			=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_Nickname" ) );
 		m_TextPlayerHealth 				=	TextWidget.Cast( layoutRoot.FindAnyWidget( "txt_health" ) );
@@ -190,6 +217,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 		//Settings & Title
 		UpdateHeader();
 		FillFilesInformations();		
+		ScheduleTabScrollResets();
 
 		if (m_DisplayCraftingTab) 
 		{
@@ -250,6 +278,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 	void FillFilesInformations()	{
 		if (!config)
 			return;
+
+		// Tab texts are static; re-fit once on next menu open/reset.
+		m_TabContentFitted0 = false;
+		m_TabContentFitted1 = false;
+		m_TabContentFitted2 = false;
+		m_TabContentFitted3 = false;
 
 		m_ServerName.SetText(config.SERVERNAME);
 
@@ -340,6 +374,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText0 += config.sServerTab0[m];
 			}
 			m_TextTab0.SetText(m_TabText0);
+			ScheduleTabScrollResets();
 			
 			if (m_TabText0=="") {
 				m_btnTabTitle0.Show(false);
@@ -357,6 +392,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText1 += config.sServerTab1[n];
 			}
 			m_TextTab1.SetText(m_TabText1);
+			ScheduleTabScrollResets();
 			
 			if (m_TabText1=="") {
 				m_btnTabTitle1.Show(false);
@@ -374,6 +410,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText2 += config.sServerTab2[o];
 			}
 			m_TextTab2.SetText(m_TabText2);
+			ScheduleTabScrollResets();
 			
 			if (m_TabText2=="") {
 				m_btnTabTitle2.Show(false);
@@ -391,6 +428,7 @@ class ServerPanelMenu extends UIScriptedMenu {
 				m_TabText3 += config.sServerTab3[p];
 			}
 			m_TextTab3.SetText(m_TabText3);
+			ScheduleTabScrollResets();
 			
 			if (m_TabText3=="") {
 				m_btnTabTitle3.Show(false);
@@ -670,12 +708,31 @@ class ServerPanelMenu extends UIScriptedMenu {
 		if (activeIndex < 0 || activeIndex >= m_TabPanels.Count() || activeIndex >= m_TabButtons.Count())
 			return;
 
+		if (activeIndex == m_ActiveTabIndex && m_ActiveTabIndex >= 0)
+			return;
+
+		Widget oldTab = null;
+		if (m_ActiveTabIndex >= 0 && m_ActiveTabIndex < m_TabPanels.Count())
+			oldTab = m_TabPanels.Get(m_ActiveTabIndex);
+
+		Widget newTab = m_TabPanels.Get(activeIndex);
+		if (!newTab)
+			return;
+
+		StopTabTransition();
+
+		// Ensure only the relevant tabs are visible for transition.
 		for (int i = 0; i < m_TabPanels.Count(); i++)
 		{
 			Widget tab = m_TabPanels.Get(i);
-			if (tab)
-				tab.Show(i == activeIndex);
+			if (!tab)
+				continue;
+			tab.Show(false);
 		}
+
+		if (oldTab)
+			oldTab.Show(true);
+		newTab.Show(true);
 
 		for (int j = 0; j < m_TabButtons.Count(); j++)
 		{
@@ -690,10 +747,178 @@ class ServerPanelMenu extends UIScriptedMenu {
 		}
 
 		m_ActiveTabIndex = activeIndex;
+		ScheduleTabScrollResets();
 
 		if (activeIndex == 4 && m_DisplayCraftingTab && m_CraftingDisplay) {
 			m_CraftingDisplay.EnsureRecipesLoadedOnce();
 		}
+
+		StartTabTransition(oldTab, newTab);
+	}
+
+	private void StartTabTransition(Widget oldTab, Widget newTab)
+	{
+		// If there is no old tab (first open), just snap.
+		if (!newTab)
+			return;
+
+		float y;
+		float dummy;
+		newTab.GetPos(dummy, y);
+		m_TabTransitionY = y;
+		m_TabTransitionOffX = 1.02; // slightly offscreen
+
+		// Start positions
+		newTab.SetPos(m_TabTransitionOffX, m_TabTransitionY, true);
+		if (oldTab)
+			oldTab.SetPos(0, m_TabTransitionY, true);
+
+		m_TabTransitionOld = oldTab;
+		m_TabTransitionNew = newTab;
+		m_TabTransitionStep = 0;
+		m_TabTransitioning = true;
+
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(DoTabTransitionStep, TAB_TRANSITION_MS, true);
+	}
+
+	private void StopTabTransition()
+	{
+		if (!m_TabTransitioning)
+			return;
+
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(DoTabTransitionStep);
+		m_TabTransitioning = false;
+		m_TabTransitionStep = 0;
+		m_TabTransitionOld = null;
+		m_TabTransitionNew = null;
+	}
+
+	private void DoTabTransitionStep()
+	{
+		if (!m_TabTransitioning || !m_TabTransitionNew)
+		{
+			StopTabTransition();
+			return;
+		}
+
+		m_TabTransitionStep++;
+
+		float t = m_TabTransitionStep / (float)TAB_TRANSITION_STEPS;
+		if (t > 1)
+			t = 1;
+
+		float newX = m_TabTransitionOffX + ((0 - m_TabTransitionOffX) * t);
+		m_TabTransitionNew.SetPos(newX, m_TabTransitionY, true);
+
+		if (m_TabTransitionOld)
+		{
+			float oldX = 0 + ((-m_TabTransitionOffX) * t);
+			m_TabTransitionOld.SetPos(oldX, m_TabTransitionY, true);
+		}
+
+		if (m_TabTransitionStep >= TAB_TRANSITION_STEPS)
+		{
+			// Snap and cleanup
+			m_TabTransitionNew.SetPos(0, m_TabTransitionY, true);
+			if (m_TabTransitionOld)
+			{
+				m_TabTransitionOld.SetPos(-m_TabTransitionOffX, m_TabTransitionY, true);
+				m_TabTransitionOld.Show(false);
+			}
+
+			g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(DoTabTransitionStep);
+			m_TabTransitioning = false;
+			m_TabTransitionStep = 0;
+			m_TabTransitionOld = null;
+			m_TabTransitionNew = null;
+		}
+	}
+
+	private void ScheduleTabScrollResets()
+	{
+		// Defer scroll reset so content sizes are valid.
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(ApplyTabScrollResets);
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(ApplyTabScrollResetsDelayed);
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(ApplyTabScrollResets, 0, false);
+		// Second pass: fit RichText + reset scroll after layout (HTML / tab visibility).
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(ApplyTabScrollResetsDelayed, 50, false);
+	}
+
+	private void ApplyTabScrollResets()
+	{
+		if (m_TabScroll0)
+			m_TabScroll0.VScrollToPos01(0);
+		if (m_TabScroll1)
+			m_TabScroll1.VScrollToPos01(0);
+		if (m_TabScroll2)
+			m_TabScroll2.VScrollToPos01(0);
+		if (m_TabScroll3)
+			m_TabScroll3.VScrollToPos01(0);
+	}
+
+	private void ApplyTabScrollResetsDelayed()
+	{
+		// Long HTML RichText can update its layout a frame later.
+		// Fit the RichText height to content once, per tab, when it is actually visible.
+		if (m_ActiveTabIndex == 0 && !m_TabContentFitted0)
+		{
+			FitRichTextToContent(m_TextTab0, m_TabScroll0);
+			m_TabContentFitted0 = true;
+		}
+		else if (m_ActiveTabIndex == 1 && !m_TabContentFitted1)
+		{
+			FitRichTextToContent(m_TextTab1, m_TabScroll1);
+			m_TabContentFitted1 = true;
+		}
+		else if (m_ActiveTabIndex == 2 && !m_TabContentFitted2)
+		{
+			FitRichTextToContent(m_TextTab2, m_TabScroll2);
+			m_TabContentFitted2 = true;
+		}
+		else if (m_ActiveTabIndex == 3 && !m_TabContentFitted3)
+		{
+			FitRichTextToContent(m_TextTab3, m_TabScroll3);
+			m_TabContentFitted3 = true;
+		}
+		ApplyTabScrollResets();
+	}
+
+	private void FitRichTextToContent(RichTextWidget widget, ScrollWidget scrollParent)
+	{
+		if (!widget)
+			return;
+
+		// Layout must not use "size to text v" or it overrides scripted height.
+		float wPx;
+		float hPx;
+		widget.GetScreenSize(wPx, hPx);
+		if (wPx <= 1)
+			return;
+
+		widget.ClearFlags(WidgetFlags.HEXACTSIZE | WidgetFlags.VEXACTSIZE);
+		widget.SetFlags(WidgetFlags.HEXACTSIZE | WidgetFlags.VEXACTSIZE);
+		widget.SetSize(wPx, hPx);
+		widget.Update();
+
+		float contentH = widget.GetContentHeight();
+		if (contentH <= 0)
+			return;
+
+		int numLines = widget.GetNumLines();
+		float pad = 16.0;
+		if (numLines > 0)
+		{
+			float lineH = contentH / numLines;
+			float extra = lineH * 2.0;
+			if (extra > pad)
+				pad = extra;
+		}
+
+		float targetH = Math.Ceil(contentH + pad);
+		widget.SetSize(wPx, targetH);
+		widget.Update();
+		if (scrollParent)
+			scrollParent.Update();
 	}
 
 	void Back() {
@@ -738,6 +963,12 @@ class ServerPanelMenu extends UIScriptedMenu {
 
 		super.OnShow();
 
+		// Re-fit static tab content once per menu open (per tab, when shown).
+		m_TabContentFitted0 = false;
+		m_TabContentFitted1 = false;
+		m_TabContentFitted2 = false;
+		m_TabContentFitted3 = false;
+
 		ResetSidePanelUiCache();
 
 		if (m_DisplayPlayerTab && m_PlayerInfoDisplay) {
@@ -755,9 +986,9 @@ class ServerPanelMenu extends UIScriptedMenu {
 			GetRPCManager().SendRPC("ServerPanelStatsRPC", "SyncPanelStatsRequest", new Param1<int>(0), true, NULL);
 		}
 
-		//PerformWidgetAdjustments();
-
 		layoutRoot.Show(true); // Show the layout
+
+		ScheduleTabScrollResets();
 
 		// Schedule updates and refreshing UI elements
 		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(UpdateHeader, 1000, true);
@@ -947,57 +1178,6 @@ class ServerPanelMenu extends UIScriptedMenu {
 			m_WaterIconColorsCache.Insert(-1);
 			m_FoodIconColorsCache.Insert(-1);
 		}
-	}
-
-	//Due to wrong v size with some test i've to try to set up the height by myself
-	// Fonction qui retourne la hauteur en pourcentage pour chaque ligne en fonction de son contenu
-	float GetLineHeightPercentage(string lineText) 
-	{
-		if (lineText.Contains("<h1>")) {
-			return 12.35; // 5% pour <h1>
-		} else if (lineText.Contains("<h2>")) {
-			return 9.3; // 4% pour <h2>
-		} else if (lineText.Contains("<p>")) {
-			return 6.6; // 2% pour <p>
-		} else {
-			return 4.0; // 1% par défaut pour du texte sans balises spécifiques
-		}
-
-		/*if (lineText.Contains("<h1>")) {
-			return 12.15; // 5% pour <h1>
-		} else if (lineText.Contains("<h2>")) {
-			return 9.1; // 4% pour <h2>
-		} else if (lineText.Contains("<p>")) {
-			return 6.4; // 2% pour <p>
-		} else {
-			return 4.5; // 1% par défaut pour du texte sans balises spécifiques
-		}*/
-	}
-	// Fonction pour ajuster la hauteur du widget RichText en fonction des balises HTML et du nombre de lignes
-	void AdjustRichTextWidgetHeight(RichTextWidget widget, TStringArray lines) 
-	{
-		float totalHeightPercentage = 0.0;
-
-		// On parcourt chaque ligne du tableau `lines` pour calculer la hauteur totale en %
-		for (int i = 0; i < lines.Count(); i++) {
-			string line = lines.Get(i);
-			totalHeightPercentage += GetLineHeightPercentage(line);
-		}
-
-		// Appliquer la nouvelle taille calculée au widget
-		float width, currentHeight;
-		widget.GetSize(width, currentHeight);
-		widget.SetSize(width, totalHeightPercentage/100);
-	}
-
-	// Fonction pour appeler l'ajustement des widgets, avec les variables stockant le nombre de lignes
-	void PerformWidgetAdjustments() 
-	{
-		// Ajuster en fonction du contenu de chaque widget
-		AdjustRichTextWidgetHeight(m_TextTab0, config.sServerTab0); // S'il s'agit d'un tableau de lignes
-		AdjustRichTextWidgetHeight(m_TextTab1, config.sServerTab1);
-		AdjustRichTextWidgetHeight(m_TextTab2, config.sServerTab2);
-		AdjustRichTextWidgetHeight(m_TextTab3, config.sServerTab3);
 	}
 
 	private void UpdateHeader() 
