@@ -6,11 +6,14 @@ static const string SP_DIRECTORY		= "ServerPanel";
 static const string SP_LOGS_DIRECTORY	= "Logs";
 static const string SP_FILENAME			= "ServerPanel.json";
 
-static const string SP_CONFIG_VERSION    = "1.7";
+static const string SP_CONFIG_VERSION    = "1.8";
 
 static const string SP_DIR_PATH 		= SP_PROFILE_ROOT + "/" + SP_DIRECTORY;
 static const string SP_LOG_PATH 		= SP_DIR_PATH + "/" + SP_LOGS_DIRECTORY + "/";
 static const string SP_FILE_PATH 		= SP_DIR_PATH + "/" + SP_FILENAME;
+
+// Used for client-side persistence in the DayZ profile.
+static const string SP_PROFILEKEY_AUTOOPEN_SEEN_PREFIX = "ServerPanel_AutoOpenSeen_";
 
 class ServerPanelConstants
 {

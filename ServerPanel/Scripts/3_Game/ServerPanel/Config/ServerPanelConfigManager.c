@@ -88,6 +88,7 @@ class ServerPanelConfigManager {
 
 		dest.VERSION = src.VERSION;
 		dest.SERVERNAME = src.SERVERNAME;
+		dest.AUTO_OPEN_ON_FIRST_JOIN = src.AUTO_OPEN_ON_FIRST_JOIN;
 		dest.LOGLEVEL = src.LOGLEVEL;
 		dest.DISABLE_PANEL_LOG_FILE = src.DISABLE_PANEL_LOG_FILE;
 		dest.BUTTON1NAME = src.BUTTON1NAME;
@@ -255,6 +256,7 @@ class ServerPanelConfigManager {
 	static void FixMissingOrInvalidFields(ServerPanelServerConfig config)
 	{
 		// Booleans (false by default)
+		if (config.AUTO_OPEN_ON_FIRST_JOIN != true && config.AUTO_OPEN_ON_FIRST_JOIN != false) config.AUTO_OPEN_ON_FIRST_JOIN = false;
 		if (config.DISPLAYPLAYERINFO != true && config.DISPLAYPLAYERINFO != false) config.DISPLAYPLAYERINFO = false;
 		if (config.DISPLAYPLAYERTAB != true && config.DISPLAYPLAYERTAB != false) config.DISPLAYPLAYERTAB = false;
 		if (config.DISPLAYPLAYERLIST != true && config.DISPLAYPLAYERLIST != false) config.DISPLAYPLAYERLIST = false;
@@ -324,6 +326,7 @@ class ServerPanelConfigManager {
 
 		config.VERSION = SP_CONFIG_VERSION; // Set the default version for new configs
 		config.SERVERNAME = "Welcome on MyDayZ server !! - Hosted By MyDayZ.eu";
+		config.AUTO_OPEN_ON_FIRST_JOIN = true;
 		config.LOGLEVEL = 1;
 		config.DISABLE_PANEL_LOG_FILE = false;
 		config.BUTTON1NAME = "DISCORD";
@@ -416,6 +419,10 @@ class ServerPanelConfigManager {
 		Print("[ServerPanel] 'ServerPanelConfigManager' Upgrading configuration file...");
 
 		if (config.VERSION.ToFloat() < SP_CONFIG_VERSION.ToFloat()) {			
+			// New in 1.8: missing key in old JSON often deserializes as false (valid bool), so set explicitly on migration.
+			if (config.VERSION.ToFloat() <= 1.7) {
+				config.AUTO_OPEN_ON_FIRST_JOIN = true;
+			}
 			if (config.VERSION.ToFloat() <= 1.6) {
 				if (!config.CURRENCYNAME) {
 					config.CURRENCYNAME = "Rubles";	

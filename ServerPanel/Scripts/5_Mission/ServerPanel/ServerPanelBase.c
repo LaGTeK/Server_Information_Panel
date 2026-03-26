@@ -1,6 +1,10 @@
 class ServerPanelBase 
 {
 	int m_LogLevel;
+	private int m_AutoOpenTryCount;
+	private const int SP_AUTOOPEN_MAX_TRIES = 240; // 240 * 250ms = 60s max
+	// Client: one auto-open eligibility request per mission (does not rely on modded MissionServer / InvokeOnConnect).
+	private bool m_SPAutoOpenClientRequestScheduled;
 
     void ServerPanelBase() 
 	{
@@ -43,6 +47,7 @@ class ServerPanelBase
 				ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelStatsRPC", "SyncPanelStatsRequest");
 			}
 			GetRPCManager().AddRPC("ServerPanelStatsRPC", "SyncPanelStatsRequest", this, SingeplayerExecutionType.Server);
+			GetRPCManager().AddRPC("ServerPanelAutoOpenRPC", "RequestAutoOpenIfEligible", this, SingeplayerExecutionType.Server);
 
 		}
 		else	{
@@ -52,6 +57,10 @@ class ServerPanelBase
 			}
 			GetRPCManager().AddRPC("ServerPanelConfigRPC", "GetConfigResponse", this, SingeplayerExecutionType.Client);
 			GetRPCManager().SendRPC("ServerPanelConfigRPC", "GetConfigRequest", NULL, true, NULL);
+		}
+
+		if (g_Game.IsClient()) {
+			GetRPCManager().AddRPC("ServerPanelAutoOpenRPC", "OpenPanel", this, SingeplayerExecutionType.Client);
 		}
 	}
 
@@ -97,6 +106,53 @@ class ServerPanelBase
 		if (m_LogLevel) {
 			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelConfig", "Configuration received and cached from server.");
 		}
+
+		ScheduleClientAutoOpenRequestIfNeeded(cached);
+	}
+
+	// Client: ask server to open panel once (server uses AutoOpenSeen.json + config). Works even if MissionServer.InvokeOnConnect is not chained by other mods.
+	private void ScheduleClientAutoOpenRequestIfNeeded(ServerPanelServerConfig cfg)
+	{
+		if (!cfg) {
+			return;
+		}
+		if (!cfg.AUTO_OPEN_ON_FIRST_JOIN) {
+			return;
+		}
+		if (m_SPAutoOpenClientRequestScheduled) {
+			return;
+		}
+		m_SPAutoOpenClientRequestScheduled = true;
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.SendAutoOpenRequestToServer, 4000, false);
+	}
+
+	private void SendAutoOpenRequestToServer()
+	{
+		GetRPCManager().SendRPC("ServerPanelAutoOpenRPC", "RequestAutoOpenIfEligible", NULL, true, NULL);
+	}
+
+	// Server: client asks if first-join auto-open should run; no dependency on obfuscated MissionServer overrides.
+	void RequestAutoOpenIfEligible(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if (type != CallType.Server || !g_Game.IsServer()) {
+			return;
+		}
+		if (!sender) {
+			return;
+		}
+
+		ServerPanelServerConfig cfg = ServerPanelConfigManager.GetConfig();
+		if (!cfg || !cfg.AUTO_OPEN_ON_FIRST_JOIN) {
+			return;
+		}
+
+		string pid = sender.GetId();
+		if (ServerPanelAutoOpenStateManager.HasSeen(pid)) {
+			return;
+		}
+
+		GetRPCManager().SendRPC("ServerPanelAutoOpenRPC", "OpenPanel", NULL, true, sender);
+		ServerPanelAutoOpenStateManager.MarkSeen(pid);
 	}
 
 	// Payload selon ServerPanel.json serveur : side panel (DISPLAYPLAYERINFO), onglet joueur (DISPLAYPLAYERTAB), liste (DISPLAYPLAYERLIST).
@@ -199,5 +255,91 @@ class ServerPanelBase
 			}
 			ServerPanelLogger.Log(ServerPanelLogger.LOG_LEVEL_INFO, "ServerPanelStatsRPC", logNick + " (" + playerId + ") - Panel stats sync");
 		}
+	}
+
+	// Client-side: invoked by server to open the panel.
+	void OpenPanel(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if (type != CallType.Client || !g_Game.IsClient()) {
+			return;
+		}
+
+		m_AutoOpenTryCount = 0;
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(TryOpenPanelWhenReady, 250, true);
+	}
+
+	private void TryOpenPanelWhenReady()
+	{
+		m_AutoOpenTryCount++;
+		if (m_AutoOpenTryCount > SP_AUTOOPEN_MAX_TRIES) {
+			g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(TryOpenPanelWhenReady);
+			return;
+		}
+
+		MissionGameplay gameplayMission = MissionGameplay.Cast(g_Game.GetMission());
+		if (!gameplayMission) {
+			return;
+		}
+
+		PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+		if (!player) {
+			return;
+		}
+		if (!player.IsPlayerLoaded()) {
+			return;
+		}
+		if (!player.IsAlive()) {
+			return;
+		}
+		if (!player.GetIdentity()) {
+			return;
+		}
+		if (!g_Game.GetMission() || !g_Game.GetMission().GetHud()) {
+			return;
+		}
+		if (g_Game.GetUIManager().IsMenuOpen(SERVER_PANEL)) {
+			g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(TryOpenPanelWhenReady);
+			return;
+		}
+		// LBmaster_Core / LBmaster_Spawnsystem: SpawnSelectMenu extends LBMenuBase -> UIScriptedMenu and is shown via
+		// LBMenuManager.OpenMenu -> GetUIManager().ShowScriptedMenu. GetOpenLBMenu() is Cast(GetMenu()), so any open LB menu
+		// already makes GetMenu() non-null and is blocked here (no #ifdef LBMASTER_SPAWN_SELECT needed).
+		if (g_Game.GetUIManager().GetMenu() != NULL) {
+			return;
+		}
+
+		// Expansion script-view menus use ExpansionUIManager, not vanilla UIManager (GetMenu() can be null).
+		// EXPANSIONMODCORE: 0_DayZExpansion_Core_Preload / DayZExpansion_Core_Defines.c
+		// EXPANSIONMODSPAWNSELECTION: 0_DayZExpansion_SpawnSelection_Preload / DayZExpansion_SpawnSelection_Defines.c (m_Expansion_SpawnSelect)
+#ifdef EXPANSIONMODCORE
+		DayZGame expansionDayZGame = GetDayZGame();
+		if (expansionDayZGame)
+		{
+			ExpansionGame expansionGame = expansionDayZGame.GetExpansionGame();
+			if (expansionGame)
+			{
+				ExpansionUIManager expansionUiMgr = expansionGame.GetExpansionUIManager();
+				if (expansionUiMgr && expansionUiMgr.GetMenu())
+				{
+					return;
+				}
+			}
+		}
+#ifdef EXPANSIONMODSPAWNSELECTION
+		if (player.m_Expansion_SpawnSelect)
+		{
+			return;
+		}
+#endif
+#endif
+
+		g_Game.GetUIManager().EnterScriptedMenu(SERVER_PANEL, NULL);
+		g_Game.GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
+		g_Game.GetInput().ChangeGameFocus(1);
+		g_Game.GetUIManager().ShowCursor(true);
+		g_Game.GetMission().GetHud().Show(false);
+		player.GetInputController().SetDisabled(true);
+
+		g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(TryOpenPanelWhenReady);
 	}
 };

@@ -257,19 +257,23 @@ class ServerPanelMenu extends UIScriptedMenu {
 			array<int> monies = new array<int>;
 			int playerWorth = m_MarketModule.GetPlayerWorth(PlayerBase.Cast(g_Game.GetPlayer()), monies);
 
-			// Convert playerWorth into a formatted string
 			string currencyString = ExpansionStatic.IntToCurrencyString(playerWorth, ",");
-			// Retrieve the display currency name from the market settings
-			string displayCurrencyName = config.CURRENCYNAME;  // Get the first currency in the array
+
+			ExpansionMarketSettings marketSettings = GetExpansionSettings().GetMarket();
+			string displayCurrencyName = config.CURRENCYNAME;
 
 			m_MoneyPanelWidget.Show(true);
-			
-			// Display this string on your panel, now including the display currency name
-			m_CurrencyTextWidget.SetText(currencyString + " " + displayCurrencyName);
 
-			if (GetExpansionSettings().GetMarket().CurrencyIcon != "")
-				m_CurrencyIconWidget.LoadImageFile(0, GetExpansionSettings().GetMarket().CurrencyIcon);
-			else                 
+			string moneyLine = currencyString;
+			if (displayCurrencyName != "")
+			{
+				moneyLine = moneyLine + " " + displayCurrencyName;
+			}
+			m_CurrencyTextWidget.SetText(moneyLine);
+
+			if (marketSettings.CurrencyIcon != "")
+				m_CurrencyIconWidget.LoadImageFile(0, marketSettings.CurrencyIcon);
+			else
 				m_CurrencyIconWidget.LoadImageFile(0, "set:spicons image:Money");
 		}	
 	}
